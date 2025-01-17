@@ -1,0 +1,25 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../../dist/out-tsc",
+        "types": ["node"],
+        "target": "es2015",
+        "strict": false,
+        "forceConsistentCasingInFileNames": true,
+        "noEmit": true,
+        "incremental": true,
+        "isolatedModules": true,
+        "jsx": "preserve",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
+    },
+    "exclude": [
+        "**/*.spec.ts",
+        "**/*.test.ts",
+        "**/*.e2e-spec.ts",
+        "jest.config.ts"
+    ],
+    "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "next-env.d.ts"]
+}
