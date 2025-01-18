@@ -20,9 +20,10 @@
         "baseUrl": ".",
         "allowJs": true,
         "paths": {
-            "@front/*": ["apps/front/*"],
             "@api/*": ["apps/server/*"],
-            "@lib/front/components/*": ["libs/frontend/components/src/*"]
+            "@front/*": ["apps/front/*"],
+            "@lib/front/components/*": ["libs/frontend/components/src/*"],
+            "@lib/types": ["libs/shared/types/src/index.ts"]
         }
     },
     "exclude": ["node_modules", "tmp"]
