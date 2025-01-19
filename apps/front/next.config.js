@@ -3,8 +3,6 @@ const path = require('path');
 const withNextIntl = require('next-intl/plugin')();
 const {withNx} = require('@nx/next');
 
-const i18nConfig = require('./i18n');
-
 const ENV = process.env.NEXT_PUBLIC_ENV;
 
 /**
@@ -31,7 +29,7 @@ module.exports = async (phase, context) => {
     config = withNextIntl(config);
 
     config.redirects = function () {
-        const localeRedirects = i18nConfig.locales.join('|');
+        const localeRedirects = ['pl', 'en', 'de', 'fr', 'it'].join('|');
 
         return [
             {

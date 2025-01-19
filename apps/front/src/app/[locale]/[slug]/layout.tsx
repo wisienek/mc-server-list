@@ -1,5 +1,5 @@
 import type {ReactNode} from 'react';
-import type {LocaleParams} from '@front/src/app/[locale]/layout';
+import type {LocaleParams} from '../layout';
 import {notFound} from 'next/navigation';
 import type {McServerBedrockInfo, MCServerJavaInfo} from '@lib/types';
 

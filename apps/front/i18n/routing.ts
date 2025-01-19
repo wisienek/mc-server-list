@@ -1,11 +1,15 @@
 import {createNavigation} from 'next-intl/navigation';
 import {defineRouting} from 'next-intl/routing';
 
-import i18nConfig from '../i18n';
-
 const routing = defineRouting({
-    locales: i18nConfig.locales,
-    defaultLocale: i18nConfig.defaultLocale,
+    locales: ['pl', 'en', 'de', 'fr', 'it'],
+    defaultLocale: 'en',
+    localePrefix: 'always',
+    localeDetection: true,
+    localeCookie: {
+        name: 'NEXT_LOCALE',
+        path: '/',
+    },
 });
 
 type AvailableLocales = (typeof routing.locales)[number];
