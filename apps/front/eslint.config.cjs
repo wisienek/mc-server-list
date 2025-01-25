@@ -1,35 +1,40 @@
-module.exports = {
-    root: true,
-    extends: ['next/core-web-vitals', 'eslint:recommended'],
-    settings: {
-        'import/resolver': {
-            alias: {
-                map: [['@front', './']],
-                extensions: ['.js', '.jsx', '.ts', '.tsx'],
+const js = require('@eslint/js');
+const nxPlugin = require('@nx/eslint-plugin');
+
+module.exports = [
+    js.configs.recommended,
+    {
+        files: ['**/*.{js,jsx,ts,tsx}'],
+        languageOptions: {
+            parserOptions: {
+                ecmaVersion: 'latest',
+                sourceType: 'module',
             },
         },
-    },
-    rules: {
-        '@nx/enforce-module-boundaries': [
-            'error',
-            {
-                allow: ['@front/*'],
-                depConstraints: [
-                    {
-                        sourceTag: '*',
-                        onlyDependOnLibsWithTags: ['*'],
-                    },
-                ],
+        plugins: {
+            '@nx': nxPlugin,
+        },
+        settings: {
+            'import/resolver': {
+                alias: {
+                    map: [['@front', './']],
+                    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+                },
             },
-        ],
-        'no-restricted-imports': [
-            'error',
-            {
-                patterns: ['../*', './*'],
-                message:
-                    'Use module imports like "@front/..." instead of relative paths.',
-            },
-        ],
-        'import/no-unresolved': 'error',
+        },
+        rules: {
+            '@nx/enforce-module-boundaries': [
+                'error',
+                {
+                    allow: ['@front/*'],
+                    depConstraints: [
+                        {
+                            sourceTag: '*',
+                            onlyDependOnLibsWithTags: ['*'],
+                        },
+                    ],
+                },
+            ],
+        },
     },
-};
+];
