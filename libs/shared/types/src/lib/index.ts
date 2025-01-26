@@ -1,1 +1,2 @@
-export * from './mc-server-info.type';
+export * from './ports';
+export * from './minecraft';
