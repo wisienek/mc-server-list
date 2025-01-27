@@ -1,75 +1,88 @@
-export interface McServerPlayerInfo {
+import {
+    IsString,
+    IsUUID,
+    IsInt,
+    IsArray,
+    ValidateNested,
+    IsOptional,
+} from 'class-validator';
+import {Type} from 'class-transformer';
+
+export class McServerPlayerInfo {
+    @IsUUID('4', {message: 'UUID must be a valid version 4 UUID.'})
     uuid: string;
+
+    @IsString({message: 'Raw name must be a string.'})
     name_raw: string;
+
+    @IsString({message: 'Clean name must be a string.'})
     name_clean: string;
+
+    @IsString({message: 'HTML name must be a string.'})
     name_html: string;
 }
 
-export interface McServerInfoPlayers {
+export class McServerInfoPlayers {
+    @IsInt({message: 'Online players count must be an integer.'})
     online: number;
+
+    @IsInt({message: 'Max players count must be an integer.'})
     max: number;
+
+    @IsArray({message: 'Players list must be an array.'})
+    @ValidateNested({each: true})
+    @Type(() => McServerPlayerInfo)
     list: McServerPlayerInfo[];
 }
 
-export interface McServerVersionInfo {
+export class McServerVersionInfo {
+    @IsInt({message: 'Protocol version must be an integer.'})
     protocol: number;
 }
 
-export interface McServerJavaVersionInfo extends McServerVersionInfo {
+export class McServerJavaVersionInfo extends McServerVersionInfo {
+    @IsString({message: 'Raw name must be a string.'})
     name_raw: string;
+
+    @IsString({message: 'Clean name must be a string.'})
     name_clean: string;
+
+    @IsString({message: 'HTML name must be a string.'})
     name_html: string;
 }
 
-export interface McServerBedrockVersionInfo extends McServerVersionInfo {
-    protocol: number;
-}
-
-export interface McServerMotd {
+export class McServerMotd {
+    @IsString({message: 'Raw MOTD must be a string.'})
     raw: string;
+
+    @IsString({message: 'Clean MOTD must be a string.'})
     clean: string;
+
+    @IsString({message: 'HTML MOTD must be a string.'})
     html: string;
 }
 
-export interface McServerMod {
+export class McServerMod {
+    @IsString({message: 'Mod name must be a string.'})
     name: string;
+
+    @IsString({message: 'Mod version must be a string.'})
     version: string;
 }
-export interface McServerPlugin {
+
+export class McServerPlugin {
+    @IsString({message: 'Plugin name must be a string.'})
     name: string;
+
+    @IsOptional()
+    @IsString({message: 'Plugin version must be a string or null.'})
     version: string | null;
 }
 
-export interface McServerSrvRecord {
+export class McServerSrvRecord {
+    @IsString({message: 'Host must be a string.'})
     host: string;
+
+    @IsInt({message: 'Port must be an integer.'})
     port: number;
-}
-
-export interface McServerInfo {
-    online: boolean;
-    host: string;
-    port: number;
-    ip_address: string | null;
-    eula_blocked: boolean;
-    retrieved_at: number;
-    expires_at: number;
-}
-
-export interface MCServerJavaInfo extends McServerInfo {
-    version: McServerJavaVersionInfo | null;
-    players: McServerInfoPlayers;
-    motd: McServerMotd;
-    icon: string | null;
-    mods: McServerMod[];
-    software: string | null;
-    plugins: McServerPlugin[];
-    srv_record: McServerSrvRecord;
-}
-
-export interface McServerBedrockInfo extends McServerInfo {
-    version: McServerBedrockVersionInfo | null;
-    players: Omit<McServerInfoPlayers, 'list'>;
-    gamemode: string;
-    server_id: string;
-    edition: 'MCPE' | 'MCEE';
 }

@@ -1,6 +1,8 @@
 {
     "compileOnSave": false,
     "compilerOptions": {
+        "strict": true,
+        "strictPropertyInitialization": false,
         "rootDir": ".",
         "types": ["node", "jest"],
         "jsx": "react-jsx",
@@ -26,6 +28,7 @@
             "@front/*": ["apps/front/*"],
             "@lib/front/components/*": ["libs/frontend/components/src/*"],
             "@lib/types": ["libs/shared/types/src/index.ts"],
+            "@shared/dto": ["libs/shared/dto/src/index.ts"],
             "@shared/enums": ["libs/shared/enums/src/index.ts"]
         }
     },

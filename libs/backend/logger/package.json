@@ -2,5 +2,6 @@
     "name": "@backend/logger",
     "version": "0.0.1",
     "dependencies": {},
-    "private": true
+    "private": true,
+    "type": "module"
 }
