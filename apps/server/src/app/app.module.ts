@@ -5,6 +5,7 @@ import {classes} from '@automapper/classes';
 import {CqrsModule} from '@nestjs/cqrs';
 import {ApiConfig, getConfigs, ProjectConfig} from '@backend/config';
 import {LoggerModule} from '@backend/logger';
+import {DatabaseModule} from '@api/src/database';
 
 const interceptors: Provider[] = [];
 
@@ -19,6 +20,7 @@ const configs = getConfigs(ProjectConfig, ApiConfig);
             strategyInitializer: classes(),
         }),
         ...configs,
+        DatabaseModule,
     ],
     providers: [...interceptors],
 })
