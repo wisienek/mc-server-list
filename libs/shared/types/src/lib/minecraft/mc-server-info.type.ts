@@ -28,7 +28,9 @@ export class McServerInfoPlayers {
 
     @IsInt({message: 'Max players count must be an integer.'})
     max: number;
+}
 
+export class McJavaServerInfoPlayers extends McServerInfoPlayers {
     @IsArray({message: 'Players list must be an array.'})
     @ValidateNested({each: true})
     @Type(() => McServerPlayerInfo)
@@ -38,6 +40,11 @@ export class McServerInfoPlayers {
 export class McServerVersionInfo {
     @IsInt({message: 'Protocol version must be an integer.'})
     protocol: number;
+}
+
+export class McServerBedrockVersionInfo extends McServerVersionInfo {
+    @IsString({message: 'Raw name must be a string.'})
+    name: string;
 }
 
 export class McServerJavaVersionInfo extends McServerVersionInfo {

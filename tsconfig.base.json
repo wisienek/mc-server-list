@@ -1,8 +1,6 @@
 {
     "compileOnSave": false,
     "compilerOptions": {
-        "strict": true,
-        "strictPropertyInitialization": false,
         "rootDir": ".",
         "types": ["node", "jest"],
         "jsx": "react-jsx",
@@ -24,6 +22,7 @@
         "paths": {
             "@api/*": ["apps/server/*"],
             "@backend/config": ["libs/backend/config/src/index.ts"],
+            "@backend/db": ["libs/backend/database/src/index.ts"],
             "@backend/logger": ["libs/backend/logger/src/index.ts"],
             "@front/*": ["apps/front/*"],
             "@lib/front/components/*": ["libs/frontend/components/src/*"],
