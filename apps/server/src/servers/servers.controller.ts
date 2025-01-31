@@ -1,9 +1,17 @@
-import {Body, Controller, Delete, Get, Patch, Post, Query} from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    NotImplementedException,
+    Patch,
+    Post,
+} from '@nestjs/common';
 import {ApiTags} from '@nestjs/swagger';
 import {
     CreateServerDto,
     CreateServerResponseDto,
-    ServerFilterDto,
+    VerifyServerDto,
 } from '@shared/dto';
 import {ServersService} from './servers.service';
 
@@ -13,34 +21,37 @@ export class ServersController {
     constructor(private serversService: ServersService) {}
 
     @Get()
-    async listServers(@Query() query: ServerFilterDto) {
-        return;
+    async listServers() {
+        throw new NotImplementedException();
     }
 
     @Get(':host')
     async getServer() {
-        return;
+        throw new NotImplementedException();
     }
 
     @Post()
     async createServer(
         @Body() createServerDto: CreateServerDto,
     ): Promise<CreateServerResponseDto> {
-        return;
+        return await this.serversService.createServer(
+            createServerDto,
+            'test@gmail.com',
+        );
     }
 
     @Patch(':host')
-    async verifyServer() {
-        return;
+    async verifyServer(@Body() data: VerifyServerDto) {
+        await this.serversService.verifyServer(data);
     }
 
     @Patch(':host/details')
     async createDetails() {
-        return;
+        throw new NotImplementedException();
     }
 
     @Delete(':host')
     async deleteServer() {
-        return;
+        throw new NotImplementedException();
     }
 }
