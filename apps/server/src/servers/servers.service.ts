@@ -130,17 +130,23 @@ export class ServersService {
     }): Promise<JavaServer | BedrockServer> {
         const searchData: FindOptionsWhere<JavaServer | BedrockServer> = {};
 
-        data.ip && (searchData.ip_address = data.ip);
-        data.port && (searchData.port = data.port);
-        data.hostname && (searchData.host = data.hostname);
+        if (data.ip) {
+            searchData.ip_address = data.ip;
+        }
+        if (data.port) {
+            searchData.port = data.port;
+        }
+        if (data.hostname) {
+            searchData.host = data.hostname;
+        }
 
         return (
             (await this.javaServerRepository.findOne({
-                where: {host: data.hostname, port: data.port, ip_address: data.ip},
+                where: searchData,
                 relations: {verification: true, owner: true},
             })) ??
             (await this.bedrockServerRepository.findOne({
-                where: {host: data.hostname, port: data.port, ip_address: data.ip},
+                where: searchData,
                 relations: {verification: true, owner: true},
             }))
         );
