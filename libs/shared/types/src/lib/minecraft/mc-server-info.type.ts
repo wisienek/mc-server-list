@@ -12,14 +12,8 @@ export class McServerPlayerInfo {
     @IsUUID('4', {message: 'UUID must be a valid version 4 UUID.'})
     uuid: string;
 
-    @IsString({message: 'Raw name must be a string.'})
-    name_raw: string;
-
-    @IsString({message: 'Clean name must be a string.'})
-    name_clean: string;
-
-    @IsString({message: 'HTML name must be a string.'})
-    name_html: string;
+    @IsString({message: 'Name must be a string.'})
+    name: string;
 }
 
 export class McServerInfoPlayers {
@@ -37,36 +31,15 @@ export class McJavaServerInfoPlayers extends McServerInfoPlayers {
     list: McServerPlayerInfo[];
 }
 
-export class McServerVersionInfo {
-    @IsInt({message: 'Protocol version must be an integer.'})
-    protocol: number;
-}
-
-export class McServerBedrockVersionInfo extends McServerVersionInfo {
-    @IsString({message: 'Raw name must be a string.'})
-    name: string;
-}
-
-export class McServerJavaVersionInfo extends McServerVersionInfo {
-    @IsString({message: 'Raw name must be a string.'})
-    name_raw: string;
-
-    @IsString({message: 'Clean name must be a string.'})
-    name_clean: string;
-
-    @IsString({message: 'HTML name must be a string.'})
-    name_html: string;
-}
-
 export class McServerMotd {
     @IsString({message: 'Raw MOTD must be a string.'})
-    raw: string;
+    raw: string[];
 
     @IsString({message: 'Clean MOTD must be a string.'})
-    clean: string;
+    clean: string[];
 
     @IsString({message: 'HTML MOTD must be a string.'})
-    html: string;
+    html: string[];
 }
 
 export class McServerMod {

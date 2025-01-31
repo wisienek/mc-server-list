@@ -55,4 +55,7 @@ export class Server {
 
     @OneToOne(() => ServerVerification, (verification) => verification.server)
     verification: Relation<ServerVerification>;
+
+    @Column('text', {array: true, default: '{}'})
+    versions: string[];
 }

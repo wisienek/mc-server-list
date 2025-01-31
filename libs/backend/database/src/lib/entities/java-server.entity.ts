@@ -1,7 +1,6 @@
 import {ChildEntity, Column} from 'typeorm';
 import {
     McJavaServerInfoPlayers,
-    McServerJavaVersionInfo,
     McServerMod,
     McServerMotd,
     McServerPlugin,
@@ -11,9 +10,6 @@ import {Server} from './server.entity';
 
 @ChildEntity(ServerType.JAVA)
 export class JavaServer extends Server {
-    @Column({type: 'jsonb', nullable: true})
-    version?: McServerJavaVersionInfo;
-
     @Column({type: 'jsonb', nullable: true})
     players?: McJavaServerInfoPlayers;
 

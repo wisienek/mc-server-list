@@ -6,7 +6,7 @@ import {TypeOrmModule} from '@nestjs/typeorm';
 
 @Global()
 @Module({
-    imports: [TypeOrmModule.forRoot(getConfig())],
+    imports: [TypeOrmModule.forRoot({...getConfig(), autoLoadEntities: true})],
 })
 export class DataBaseModule implements OnModuleInit {
     private readonly logger = new Logger(DataBaseModule.name);
