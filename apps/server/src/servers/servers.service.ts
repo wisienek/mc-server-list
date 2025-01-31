@@ -1,8 +1,8 @@
+import {Repository, type FindOptionsWhere} from 'typeorm';
 import {InjectRepository} from '@nestjs/typeorm';
 import {InjectMapper} from '@automapper/nestjs';
 import type {Mapper} from '@automapper/core';
 import {Injectable} from '@nestjs/common';
-import {Repository} from 'typeorm';
 import {nanoid} from 'nanoid';
 import {BedrockServer, JavaServer, ServerVerification, User} from '@backend/db';
 import {MCStatsService} from '@backend/mc-stats';
@@ -11,9 +11,16 @@ import {Logger} from '@backend/logger';
 import {
     CreateServerDto,
     CreateServerResponseDto,
+    MinecraftServerOfflineStatus,
     MinecraftServerOnlineStatus,
+    VerifyServerDto,
 } from '@shared/dto';
-import {ServerAlreadyClaimedError, ServerExistsError} from './errors';
+import {
+    ServerAlreadyClaimedError,
+    ServerExistsError,
+    ServerVerificationOfflineError,
+    ServerVerificationUnsuccessfulError,
+} from './errors';
 
 @Injectable()
 export class ServersService {
@@ -34,15 +41,7 @@ export class ServersService {
         data: CreateServerDto,
         userEmail: string,
     ): Promise<CreateServerResponseDto> {
-        const existsServer =
-            (await this.javaServerRepository.findOne({
-                where: {host: data.hostname, port: data.port, ip_address: data.ip},
-                relations: {verification: true, owner: true},
-            })) ??
-            (await this.bedrockServerRepository.findOne({
-                where: {host: data.hostname, port: data.port, ip_address: data.ip},
-                relations: {verification: true, owner: true},
-            }));
+        const existsServer = await this.getServerByHostNameOrIP(data);
 
         if (existsServer && existsServer.owner.email !== userEmail) {
             this.logger.warn(
@@ -83,6 +82,68 @@ export class ServersService {
         }
 
         return verification;
+    }
+
+    public async verifyServer(data: VerifyServerDto): Promise<void> {
+        const server = await this.getServerByHostNameOrIP(data);
+        const fetchInfo = await this.mcStatsService.fetchServerInfo(
+            `${server.host}:${server.port}`,
+            data.type === ServerType.BEDROCK,
+        );
+
+        if (fetchInfo instanceof MinecraftServerOfflineStatus) {
+            throw new ServerVerificationOfflineError();
+        }
+
+        const isVerified =
+            fetchInfo.motd.clean.includes(server.verification.code) &&
+            Date.now() <= server.verification.expiresAt &&
+            !server.isActive;
+
+        if (!isVerified) {
+            throw new ServerVerificationUnsuccessfulError();
+        }
+
+        server.isActive = true;
+
+        if (server instanceof JavaServer) {
+            await this.javaServerRepository.save(server);
+            await this.createOrUpdateJavaServer(
+                fetchInfo,
+                server.owner,
+                server.verification,
+            );
+        } else {
+            await this.bedrockServerRepository.save(server);
+            await this.createOrUpdateBedrockServer(
+                fetchInfo,
+                server.owner,
+                server.verification,
+            );
+        }
+    }
+
+    private async getServerByHostNameOrIP(data: {
+        hostname?: string;
+        port?: number;
+        ip?: string;
+    }): Promise<JavaServer | BedrockServer> {
+        const searchData: FindOptionsWhere<JavaServer | BedrockServer> = {};
+
+        data.ip && (searchData.ip_address = data.ip);
+        data.port && (searchData.port = data.port);
+        data.hostname && (searchData.host = data.hostname);
+
+        return (
+            (await this.javaServerRepository.findOne({
+                where: {host: data.hostname, port: data.port, ip_address: data.ip},
+                relations: {verification: true, owner: true},
+            })) ??
+            (await this.bedrockServerRepository.findOne({
+                where: {host: data.hostname, port: data.port, ip_address: data.ip},
+                relations: {verification: true, owner: true},
+            }))
+        );
     }
 
     private async createOrUpdateJavaServer(
