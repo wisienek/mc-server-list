@@ -21,7 +21,6 @@ import {
     MinecraftServerOfflineStatus,
     MinecraftServerOnlineStatus,
     Pagination,
-    ServerDto,
     VerifyServerDto,
 } from '@shared/dto';
 import {

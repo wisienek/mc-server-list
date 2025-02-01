@@ -114,4 +114,9 @@ export class ServersController {
     async deleteServer(@Param('host') host: string) {
         await this.serversService.deleteServer(host);
     }
+
+    @Post(':host/vote')
+    async vote(@Param('host') host: string): Promise<boolean> {
+        throw new NotImplementedException();
+    }
 }
