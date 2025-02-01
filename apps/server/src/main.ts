@@ -37,8 +37,9 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, options, {
         include: [AppModule],
         deepScanRoutes: true,
+        autoTagControllers: true,
     });
-    SwaggerModule.setup('docs', app, document);
+    SwaggerModule.setup('docs', app, document, {explorer: true});
 
     const port = configService.APP_PORT;
     await app.listen(port);

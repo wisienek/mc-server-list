@@ -27,6 +27,7 @@ import {
 import {
     ServerAlreadyClaimedError,
     ServerExistsError,
+    ServerNotFoundError,
     ServerVerificationOfflineError,
     ServerVerificationUnsuccessfulError,
 } from './errors';
@@ -125,8 +126,12 @@ export class ServersService {
         return verification;
     }
 
-    public async verifyServer(data: VerifyServerDto): Promise<void> {
+    public async verifyServer(data: VerifyServerDto): Promise<Server> {
         const server = await this.getServerByHostNameOrIP(data);
+        if (!server) {
+            throw new ServerNotFoundError(data.hostname, data.port, data.ip);
+        }
+
         const fetchInfo = await this.mcStatsService.fetchServerInfo(
             `${server.host}:${server.port}`,
             data.type === ServerType.BEDROCK,
@@ -149,26 +154,54 @@ export class ServersService {
 
         if (server instanceof JavaServer) {
             await this.javaServerRepository.save(server);
-            await this.createOrUpdateJavaServer(
+            return await this.createOrUpdateJavaServer(
+                fetchInfo,
+                server.owner,
+                server.verification,
+            );
+        } else if (server instanceof BedrockServer) {
+            await this.bedrockServerRepository.save(server);
+            return await this.createOrUpdateBedrockServer(
                 fetchInfo,
                 server.owner,
                 server.verification,
             );
         } else {
-            await this.bedrockServerRepository.save(server);
-            await this.createOrUpdateBedrockServer(
-                fetchInfo,
-                server.owner,
-                server.verification,
-            );
+            throw new Error('Unknown server type encountered during deletion.');
         }
     }
 
+    /**
+     * Deletes a server by its host name.
+     * @param host The hostname of the server to delete.
+     * @throws ServerNotFoundError if no matching server is found.
+     */
+    public async deleteServer(host: string): Promise<void> {
+        const server = await this.getServerByHostNameOrIP({hostname: host});
+
+        if (!server) {
+            throw new ServerNotFoundError(host);
+        }
+
+        if (server instanceof JavaServer) {
+            await this.javaServerRepository.remove(server);
+        } else if (server instanceof BedrockServer) {
+            await this.bedrockServerRepository.remove(server);
+        } else {
+            throw new Error('Unknown server type encountered during deletion.');
+        }
+    }
+
+    /**
+     * Retrieves a server (either JavaServer or BedrockServer) by hostname, port, or IP.
+     * @param data Object containing optional hostname, port, and ip properties.
+     * @returns The found Server entity or null if not found.
+     */
     private async getServerByHostNameOrIP(data: {
         hostname?: string;
         port?: number;
         ip?: string;
-    }): Promise<JavaServer | BedrockServer> {
+    }): Promise<Server> {
         const searchData: FindOptionsWhere<JavaServer | BedrockServer> = {};
 
         if (data.ip) {
