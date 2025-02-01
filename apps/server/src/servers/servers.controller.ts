@@ -1,3 +1,6 @@
+import {InjectMapper} from '@automapper/nestjs';
+import type {Mapper} from '@automapper/core';
+import {ApiTags} from '@nestjs/swagger';
 import {
     Body,
     Controller,
@@ -6,11 +9,14 @@ import {
     NotImplementedException,
     Patch,
     Post,
+    Query,
 } from '@nestjs/common';
-import {ApiTags} from '@nestjs/swagger';
 import {
     CreateServerDto,
     CreateServerResponseDto,
+    ListServersDto,
+    Pagination,
+    ServerDto,
     VerifyServerDto,
 } from '@shared/dto';
 import {ServersService} from './servers.service';
@@ -18,11 +24,21 @@ import {ServersService} from './servers.service';
 @ApiTags('Servers')
 @Controller('servers')
 export class ServersController {
-    constructor(private serversService: ServersService) {}
+    constructor(
+        private readonly serversService: ServersService,
+        @InjectMapper()
+        private readonly mapper: Mapper,
+    ) {}
 
+    /**
+     * Public endpoint for getting list of servers
+     * @returns {Promise<Pagination<ServerDto>>} paginated list of servers
+     */
     @Get()
-    async listServers() {
-        throw new NotImplementedException();
+    async listServers(
+        @Query() data: ListServersDto,
+    ): Promise<Pagination<ServerDto>> {
+        return await this.serversService.listServers(data);
     }
 
     @Get(':host')

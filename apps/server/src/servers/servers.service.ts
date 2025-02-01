@@ -4,15 +4,24 @@ import {InjectMapper} from '@automapper/nestjs';
 import type {Mapper} from '@automapper/core';
 import {Injectable} from '@nestjs/common';
 import {nanoid} from 'nanoid';
-import {BedrockServer, JavaServer, ServerVerification, User} from '@backend/db';
+import {
+    BedrockServer,
+    JavaServer,
+    Server,
+    ServerVerification,
+    User,
+} from '@backend/db';
 import {MCStatsService} from '@backend/mc-stats';
 import {ServerType} from '@shared/enums';
 import {Logger} from '@backend/logger';
 import {
     CreateServerDto,
     CreateServerResponseDto,
+    ListServersDto,
     MinecraftServerOfflineStatus,
     MinecraftServerOnlineStatus,
+    Pagination,
+    ServerDto,
     VerifyServerDto,
 } from '@shared/dto';
 import {
@@ -31,11 +40,43 @@ export class ServersService {
         private readonly bedrockServerRepository: Repository<BedrockServer>,
         @InjectRepository(ServerVerification)
         private readonly verificationRepository: Repository<ServerVerification>,
+        @InjectRepository(Server)
+        private readonly serverRepository: Repository<Server>,
         private readonly logger: Logger,
         private readonly mcStatsService: MCStatsService,
         @InjectMapper()
         private readonly mapper: Mapper,
     ) {}
+
+    public async listServers(filters: ListServersDto): Promise<Pagination<Server>> {
+        const query = this.serverRepository
+            .createQueryBuilder('server')
+            .where('server.isActive = :isActive', {isActive: true});
+
+        if (filters.online !== undefined) {
+            query.andWhere('server.online = :online', {online: filters.online});
+        }
+
+        if (filters.eula_blocked !== undefined) {
+            query.andWhere('server.eula_blocked = :eula_blocked', {
+                eula_blocked: filters.eula_blocked,
+            });
+        }
+
+        if (filters.versions && filters.versions.length > 0) {
+            query.andWhere('server.versions && ARRAY[:...versions]', {
+                versions: filters.versions,
+            });
+        }
+
+        const page = filters.page || 1;
+        const perPage = filters.perPage || 10;
+        query.skip((page - 1) * perPage).take(perPage);
+
+        const [items, total] = await query.getManyAndCount();
+
+        return new Pagination<Server>(items, total, perPage, page);
+    }
 
     public async createServer(
         data: CreateServerDto,
