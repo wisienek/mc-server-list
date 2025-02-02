@@ -1,9 +1,9 @@
+import {omit} from 'lodash';
 import {Repository, type FindOptionsWhere} from 'typeorm';
 import {InjectRepository} from '@nestjs/typeorm';
 import {InjectMapper} from '@automapper/nestjs';
 import type {Mapper} from '@automapper/core';
-import {Injectable} from '@nestjs/common';
-import {nanoid} from 'nanoid';
+import {Injectable, Logger} from '@nestjs/common';
 import {
     BedrockServer,
     JavaServer,
@@ -13,7 +13,6 @@ import {
 } from '@backend/db';
 import {MCStatsService} from '@backend/mc-stats';
 import {ServerType} from '@shared/enums';
-import {Logger} from '@backend/logger';
 import {
     CreateServerDto,
     CreateServerResponseDto,
@@ -21,6 +20,7 @@ import {
     MinecraftServerOfflineStatus,
     MinecraftServerOnlineStatus,
     Pagination,
+    ServerDto,
     VerifyServerDto,
 } from '@shared/dto';
 import {
@@ -30,6 +30,7 @@ import {
     ServerVerificationOfflineError,
     ServerVerificationUnsuccessfulError,
 } from './errors';
+import {randomInt} from 'crypto';
 
 @Injectable()
 export class ServersService {
@@ -48,7 +49,9 @@ export class ServersService {
         private readonly mapper: Mapper,
     ) {}
 
-    public async listServers(filters: ListServersDto): Promise<Pagination<Server>> {
+    public async listServers(
+        filters: ListServersDto,
+    ): Promise<Pagination<ServerDto>> {
         const query = this.serverRepository
             .createQueryBuilder('server')
             .where('server.isActive = :isActive', {isActive: true});
@@ -75,7 +78,12 @@ export class ServersService {
 
         const [items, total] = await query.getManyAndCount();
 
-        return new Pagination<Server>(items, total, perPage, page);
+        return new Pagination<ServerDto>(
+            this.mapper.mapArray(items, Server, ServerDto),
+            total,
+            perPage,
+            page,
+        );
     }
 
     public async createServer(
@@ -111,16 +119,31 @@ export class ServersService {
             isBedrock,
         );
 
+        if (fetchedServer instanceof MinecraftServerOfflineStatus) {
+            throw new ServerVerificationOfflineError();
+        }
+
         const verification = this.verificationRepository.create({
-            code: nanoid(),
+            code: this.generateRandomString(16),
             expiresAt: Date.now() + 1_000 * 60 * 60, // 1hr
         });
 
-        if (fetchedServer instanceof MinecraftServerOnlineStatus) {
-            await (isBedrock
-                ? this.createOrUpdateBedrockServer
-                : this.createOrUpdateJavaServer)(fetchedServer, user, verification);
+        let createdServer: Server;
+        if (isBedrock) {
+            createdServer = await this.createOrUpdateBedrockServer(
+                fetchedServer,
+                user,
+                verification,
+            );
+        } else {
+            createdServer = await this.createOrUpdateJavaServer(
+                fetchedServer,
+                user,
+                verification,
+            );
         }
+
+        console.log(createdServer);
 
         return verification;
     }
@@ -232,7 +255,7 @@ export class ServersService {
     ): Promise<JavaServer> {
         const found = await this.javaServerRepository
             .createQueryBuilder('server')
-            .where({ip: data.ip, port: data.port})
+            .where({ip_address: data.ip, port: data.port})
             .orWhere({host: data.hostname})
             .getOne();
 
@@ -241,6 +264,9 @@ export class ServersService {
             MinecraftServerOnlineStatus,
             JavaServer,
         );
+
+        console.log(omit(data, ['icon']));
+        console.log(omit(mappedData, ['icon']));
 
         if (!found) {
             return await this.javaServerRepository.save(
@@ -267,7 +293,7 @@ export class ServersService {
     ): Promise<BedrockServer> {
         const found = await this.bedrockServerRepository
             .createQueryBuilder('server')
-            .where({ip: data.ip, port: data.port})
+            .where({ip_address: data.ip, port: data.port})
             .orWhere({host: data.hostname})
             .getOne();
 
@@ -293,5 +319,25 @@ export class ServersService {
             ...found,
             ...mappedData,
         });
+    }
+
+    /**
+     * Generates a random string.
+     *
+     * @param length - The desired length of the string (default is 32).
+     * @returns A random string of the specified length using printable ASCII characters.
+     */
+    private generateRandomString(length: number = 32): string {
+        const allowedChars = Array.from({length: 95}, (_, i) =>
+            String.fromCharCode(i + 32),
+        ).join('');
+        let result = '';
+
+        for (let i = 0; i < length; i++) {
+            const randomIndex = randomInt(0, allowedChars.length);
+            result += allowedChars[randomIndex];
+        }
+
+        return result.replace(/\s/, '');
     }
 }

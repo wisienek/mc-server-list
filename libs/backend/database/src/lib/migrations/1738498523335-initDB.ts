@@ -1,7 +1,7 @@
 import type {MigrationInterface, QueryRunner} from 'typeorm';
 
-export class InitDB1738195409779 implements MigrationInterface {
-    name = 'InitDB1738195409779';
+export class InitDB1738498523335 implements MigrationInterface {
+    name = 'InitDB1738498523335';
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(
@@ -11,13 +11,10 @@ export class InitDB1738195409779 implements MigrationInterface {
             `CREATE TABLE "user" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "email" character varying NOT NULL, "discordId" character varying NOT NULL, "username" character varying NOT NULL, CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "UQ_13af5754f14d8d255fd9b3ee5c7" UNIQUE ("discordId"), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`,
         );
         await queryRunner.query(
-            `CREATE TYPE "public"."server_edition_enum" AS ENUM('MCPE', 'MCEE')`,
-        );
-        await queryRunner.query(
             `CREATE TYPE "public"."server_type_enum" AS ENUM('JAVA', 'BEDROCK')`,
         );
         await queryRunner.query(
-            `CREATE TABLE "server" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "online" boolean NOT NULL, "host" character varying NOT NULL, "port" integer NOT NULL, "ip_address" character varying, "eula_blocked" boolean NOT NULL, "retrieved_at" bigint NOT NULL, "expires_at" bigint NOT NULL, "srv_record" jsonb NOT NULL, "owner_id" uuid NOT NULL, "isActive" boolean NOT NULL DEFAULT false, "version" jsonb, "players" jsonb, "motd" jsonb, "gamemode" character varying, "server_id" character varying, "edition" "public"."server_edition_enum", "icon" character varying, "mods" jsonb, "software" character varying, "plugins" jsonb, "type" "public"."server_type_enum" NOT NULL, CONSTRAINT "PK_f8b8af38bdc23b447c0a57c7937" PRIMARY KEY ("id"))`,
+            `CREATE TABLE "server" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "online" boolean NOT NULL, "host" character varying NOT NULL, "port" integer NOT NULL, "ip_address" character varying, "eula_blocked" boolean NOT NULL, "retrieved_at" bigint NOT NULL, "expires_at" bigint NOT NULL, "srv_record" jsonb NOT NULL, "owner_id" uuid NOT NULL, "isActive" boolean NOT NULL DEFAULT false, "versions" text array NOT NULL DEFAULT '{}', "players" jsonb, "motd" jsonb, "gamemode" character varying, "server_id" character varying, "icon" character varying, "mods" jsonb, "software" character varying, "plugins" jsonb, "type" "public"."server_type_enum" NOT NULL, CONSTRAINT "PK_f8b8af38bdc23b447c0a57c7937" PRIMARY KEY ("id"))`,
         );
         await queryRunner.query(
             `CREATE INDEX "IDX_7fc10dcb332df68e818f643f50" ON "server" ("type") `,
@@ -42,7 +39,6 @@ export class InitDB1738195409779 implements MigrationInterface {
         );
         await queryRunner.query(`DROP TABLE "server"`);
         await queryRunner.query(`DROP TYPE "public"."server_type_enum"`);
-        await queryRunner.query(`DROP TYPE "public"."server_edition_enum"`);
         await queryRunner.query(`DROP TABLE "user"`);
         await queryRunner.query(`DROP TABLE "server_verification"`);
     }

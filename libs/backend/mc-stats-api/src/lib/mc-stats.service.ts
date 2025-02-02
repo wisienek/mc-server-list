@@ -1,11 +1,11 @@
+import {Injectable, Logger} from '@nestjs/common';
 import {HttpService} from '@nestjs/axios';
-import {Injectable} from '@nestjs/common';
+import {plainToClass} from 'class-transformer';
 import {firstValueFrom} from 'rxjs';
 import {
     MinecraftServerOfflineStatus,
     MinecraftServerOnlineStatus,
 } from '@shared/dto';
-import {Logger} from '@backend/logger';
 
 @Injectable()
 export class MCStatsService {
@@ -21,7 +21,7 @@ export class MCStatsService {
         const path = `${bedrock ? '/bedrock' : ''}/3/${address}`;
 
         try {
-            return (
+            const fetchedData = (
                 await firstValueFrom(
                     this.httpService.get<
                         MinecraftServerOfflineStatus | MinecraftServerOnlineStatus
@@ -33,6 +33,13 @@ export class MCStatsService {
                     }),
                 )
             ).data;
+
+            return plainToClass(
+                'players' in fetchedData && typeof fetchedData.players === 'object'
+                    ? MinecraftServerOnlineStatus
+                    : MinecraftServerOfflineStatus,
+                fetchedData,
+            );
         } catch (error) {
             this.logger.error(`Error when fetching mc-server info`, error);
             return null;

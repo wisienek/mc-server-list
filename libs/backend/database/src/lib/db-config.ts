@@ -9,7 +9,7 @@ import {
     ServerVerification,
     User,
 } from './entities';
-import {InitDB1738195409779} from './migrations';
+import {InitDB1738498523335, RemoveTimeData1738499883841} from './migrations';
 
 const getDefaultConfig = (): PostgresConnectionOptions => {
     const config = DatabaseSchema.parse(process.env);
@@ -32,7 +32,7 @@ export const getConfig = (): DataSourceOptions => {
         ...defaultConfig,
         database: 'mc-list',
         entities: [Server, BedrockServer, JavaServer, ServerVerification, User],
-        migrations: [InitDB1738195409779],
+        migrations: [InitDB1738498523335, RemoveTimeData1738499883841],
     };
 };
 

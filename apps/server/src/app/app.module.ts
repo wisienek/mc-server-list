@@ -13,11 +13,14 @@ const interceptors: Provider[] = [];
 
 const configs = getConfigs(ProjectConfig, ApiConfig);
 
-const serverModules: ModuleMetadata['imports'] = [DataBaseModule, ServersModule];
+const serverModules: ModuleMetadata['imports'] = [
+    DataBaseModule,
+    ServersModule,
+    LoggerModule,
+];
 
 @Module({
     imports: [
-        LoggerModule,
         EventEmitterModule.forRoot(),
         CqrsModule,
         AutomapperModule.forRoot({

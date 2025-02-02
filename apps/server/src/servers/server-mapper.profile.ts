@@ -44,20 +44,12 @@ export class ServerMapperProfile extends AutomapperProfile {
                     mapFrom((src) => src.ip),
                 ),
                 forMember(
-                    (dest) => dest.retrieved_at,
-                    mapFrom((src) => src.debug.cachetime),
-                ),
-                forMember(
-                    (dest) => dest.expires_at,
-                    mapFrom((src) => src.debug.cacheexpire),
-                ),
-                forMember(
                     (dest) => dest.srv_record,
                     mapFrom(
                         (src) => <McServerSrvRecord>(<unknown>{
-                                query: src.debug.query,
-                                srv: src.debug.srv,
-                                cnameinsrv: src.debug.cnameinsrv,
+                                query: src.debug?.query,
+                                srv: src.debug?.srv,
+                                cnameinsrv: src.debug?.cnameinsrv,
                             }),
                     ),
                 ),
@@ -94,7 +86,7 @@ export class ServerMapperProfile extends AutomapperProfile {
                     mapFrom((src) => ({
                         online: src.players.online,
                         max: src.players.max,
-                        list: src.players.list,
+                        list: src.players?.list ?? [],
                     })),
                 ),
                 forMember(
@@ -116,6 +108,16 @@ export class ServerMapperProfile extends AutomapperProfile {
                 forMember(
                     (dest) => dest.plugins,
                     mapFrom((src) => src.plugins ?? []),
+                ),
+                forMember(
+                    (dest) => dest.srv_record,
+                    mapFrom(
+                        (src) => <McServerSrvRecord>(<unknown>{
+                                query: src.debug?.query,
+                                srv: src.debug?.srv,
+                                cnameinsrv: src.debug?.cnameinsrv,
+                            }),
+                    ),
                 ),
             );
 
@@ -150,7 +152,7 @@ export class ServerMapperProfile extends AutomapperProfile {
                     mapFrom((src) => ({
                         online: src.players.online,
                         max: src.players.max,
-                        list: src.players.list,
+                        list: src.players?.list ?? [],
                     })),
                 ),
                 forMember(
@@ -164,6 +166,16 @@ export class ServerMapperProfile extends AutomapperProfile {
                 forMember(
                     (dest) => dest.server_id,
                     mapFrom((src) => src.serverid),
+                ),
+                forMember(
+                    (dest) => dest.srv_record,
+                    mapFrom(
+                        (src) => <McServerSrvRecord>(<unknown>{
+                                query: src.debug?.query,
+                                srv: src.debug?.srv,
+                                cnameinsrv: src.debug?.cnameinsrv,
+                            }),
+                    ),
                 ),
             );
         };

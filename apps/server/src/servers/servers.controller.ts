@@ -5,6 +5,7 @@ import {
     ApiConflictResponse,
     ApiNotFoundResponse,
     ApiOkResponse,
+    ApiParam,
 } from '@nestjs/swagger';
 import {
     Body,
@@ -54,11 +55,6 @@ export class ServersController {
         return await this.serversService.listServers(data);
     }
 
-    @Get(':host')
-    async getServer() {
-        throw new NotImplementedException();
-    }
-
     @ApiConflictResponse({
         type: ServerAlreadyClaimedError,
         description: `When server already exists in database as someones else`,
@@ -77,6 +73,21 @@ export class ServersController {
         );
     }
 
+    @ApiParam({
+        name: 'host',
+        required: true,
+        description: 'hostname of the server',
+    })
+    @Get(':host')
+    async getServer() {
+        throw new NotImplementedException();
+    }
+
+    @ApiParam({
+        name: 'host',
+        required: true,
+        description: 'hostname of the server',
+    })
     @ApiBadRequestResponse({
         type: ServerVerificationOfflineError,
         description: `When server is currently offline`,
@@ -98,11 +109,21 @@ export class ServersController {
         );
     }
 
+    @ApiParam({
+        name: 'host',
+        required: true,
+        description: 'hostname of the server',
+    })
     @Patch(':host/details')
     async createDetails() {
         throw new NotImplementedException();
     }
 
+    @ApiParam({
+        name: 'host',
+        required: true,
+        description: 'hostname of the server',
+    })
     @ApiOkResponse({
         description: 'Deleted!',
     })
@@ -115,6 +136,11 @@ export class ServersController {
         await this.serversService.deleteServer(host);
     }
 
+    @ApiParam({
+        name: 'host',
+        required: true,
+        description: 'hostname of the server',
+    })
     @Post(':host/vote')
     async vote(@Param('host') host: string): Promise<boolean> {
         throw new NotImplementedException();

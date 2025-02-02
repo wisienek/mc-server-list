@@ -1,6 +1,6 @@
-import {Logger, ValidationPipe} from '@nestjs/common';
+import {ClassSerializerInterceptor, Logger, ValidationPipe} from '@nestjs/common';
 import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
-import {NestFactory} from '@nestjs/core';
+import {NestFactory, Reflector} from '@nestjs/core';
 import {SimpleLogger} from '@backend/logger';
 import {ApiConfig} from '@backend/config';
 import {AppModule} from './app/app.module';
@@ -10,6 +10,7 @@ async function bootstrap() {
         logger: SimpleLogger.create('bootstrap'),
     });
 
+    app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
     app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
     app.enableCors({
         origin: true,

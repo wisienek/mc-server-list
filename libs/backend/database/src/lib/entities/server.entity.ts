@@ -34,12 +34,6 @@ export class Server {
     @Column()
     eula_blocked: boolean;
 
-    @Column('bigint')
-    retrieved_at: number;
-
-    @Column('bigint')
-    expires_at: number;
-
     @Column({type: 'jsonb'})
     srv_record: McServerSrvRecord;
 
