@@ -11,7 +11,7 @@ import {
 import {McServerSrvRecord} from '@lib/types';
 import {ServerType} from '@shared/enums';
 import {ServerVerification} from './server-verification.entity';
-import {User} from './user.entity';
+import {User} from '../users';
 
 @Entity()
 @TableInheritance({column: {type: 'enum', name: 'type', enum: ServerType}})

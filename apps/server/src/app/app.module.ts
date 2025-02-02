@@ -1,13 +1,15 @@
-import {ModuleMetadata} from '@nestjs/common/interfaces/modules/module-metadata.interface';
+import type {ModuleMetadata} from '@nestjs/common/interfaces/modules/module-metadata.interface';
 import {EventEmitterModule} from '@nestjs/event-emitter';
 import {Module, type Provider} from '@nestjs/common';
 import {AutomapperModule} from '@automapper/nestjs';
+import {TypeOrmModule} from '@nestjs/typeorm';
 import {classes} from '@automapper/classes';
 import {CqrsModule} from '@nestjs/cqrs';
 import {ApiConfig, getConfigs, ProjectConfig} from '@backend/config';
+import {DataBaseModule, Session} from '@backend/db';
 import {LoggerModule} from '@backend/logger';
-import {DataBaseModule} from '@backend/db';
 import {ServersModule} from '../servers';
+import {UsersModule} from '../users';
 
 const interceptors: Provider[] = [];
 
@@ -17,6 +19,7 @@ const serverModules: ModuleMetadata['imports'] = [
     DataBaseModule,
     ServersModule,
     LoggerModule,
+    UsersModule,
 ];
 
 @Module({
@@ -28,6 +31,7 @@ const serverModules: ModuleMetadata['imports'] = [
         }),
         ...configs,
         ...serverModules,
+        TypeOrmModule.forFeature([Session]),
     ],
     providers: [...interceptors],
 })

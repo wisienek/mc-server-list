@@ -4,12 +4,18 @@ import {join} from 'path';
 import {DatabaseSchema} from '@backend/config';
 import {
     BedrockServer,
+    DiscordOAuth2Credentials,
     JavaServer,
     Server,
     ServerVerification,
+    Session,
     User,
 } from './entities';
-import {InitDB1738498523335, RemoveTimeData1738499883841} from './migrations';
+import {
+    InitDB1738498523335,
+    RemoveTimeData1738499883841,
+    UserAuth1738523212153,
+} from './migrations';
 
 const getDefaultConfig = (): PostgresConnectionOptions => {
     const config = DatabaseSchema.parse(process.env);
@@ -31,8 +37,20 @@ export const getConfig = (): DataSourceOptions => {
     return {
         ...defaultConfig,
         database: 'mc-list',
-        entities: [Server, BedrockServer, JavaServer, ServerVerification, User],
-        migrations: [InitDB1738498523335, RemoveTimeData1738499883841],
+        entities: [
+            Server,
+            BedrockServer,
+            JavaServer,
+            ServerVerification,
+            User,
+            DiscordOAuth2Credentials,
+            Session,
+        ],
+        migrations: [
+            InitDB1738498523335,
+            RemoveTimeData1738499883841,
+            UserAuth1738523212153,
+        ],
     };
 };
 

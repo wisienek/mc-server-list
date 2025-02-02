@@ -1,8 +1,13 @@
 import {ClassSerializerInterceptor, Logger, ValidationPipe} from '@nestjs/common';
 import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
 import {NestFactory, Reflector} from '@nestjs/core';
+import {getRepositoryToken} from '@nestjs/typeorm';
+import {TypeormStore} from 'connect-typeorm';
+import session from 'express-session';
 import {SimpleLogger} from '@backend/logger';
 import {ApiConfig} from '@backend/config';
+import {Session} from '@backend/db';
+import {Repository} from 'typeorm';
 import {AppModule} from './app/app.module';
 
 async function bootstrap() {
@@ -20,6 +25,21 @@ async function bootstrap() {
     app.enableShutdownHooks();
 
     const configService = app.get(ApiConfig);
+
+    const sessionRepository: Repository<Session> = app.get(
+        getRepositoryToken(Session),
+    );
+    app.use(
+        session({
+            secret: configService.COOKIE_SECRET,
+            resave: false,
+            saveUninitialized: false,
+            cookie: {
+                maxAge: configService.TOKEN_EXPIRATION_HOURS,
+            },
+            store: new TypeormStore().connect(sessionRepository),
+        }),
+    );
 
     const options = new DocumentBuilder()
         .setTitle('McList Api')
