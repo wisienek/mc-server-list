@@ -2,7 +2,7 @@
 import {Fade, Tooltip} from '@mui/material';
 import {ServerSummaryDto} from '@shared/dto';
 import {useTranslations} from 'next-intl';
-import Link from 'next/link';
+import {Link} from '@front/i18n/routing';
 import {useRouter} from 'next/navigation';
 import React, {type FC, ReactNode, useState} from 'react';
 import {styled} from '@mui/material/styles';
@@ -146,12 +146,14 @@ const ServerSummary: FC<ServerSummaryProps> = ({server, onToggleFavorite}) => {
 
             <ServerDescription>
                 {server.banner && (
-                    <StyledServerBanner
-                        src={server.banner}
-                        alt="server banner"
-                        width="500"
-                        height="60"
-                    />
+                    <LinkWrapper>
+                        <StyledServerBanner
+                            src={server.banner}
+                            alt="server banner"
+                            width="500"
+                            height="60"
+                        />
+                    </LinkWrapper>
                 )}
 
                 {description && (
