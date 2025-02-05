@@ -5,7 +5,7 @@ import {
     OneToMany,
     type Relation,
 } from 'typeorm';
-import {Server} from '../servers';
+import {Server, Vote} from '../servers';
 
 @Entity()
 export class User {
@@ -29,4 +29,7 @@ export class User {
 
     @OneToMany(() => Server, (server) => server.owner)
     servers: Relation<Server>[];
+
+    @OneToMany(() => Vote, (vote) => vote.user)
+    votes: Relation<Vote>[];
 }

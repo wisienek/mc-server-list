@@ -8,7 +8,7 @@ import {
     type MappingProfile,
 } from '@automapper/core';
 import {BedrockServer, JavaServer, Server} from '@backend/db';
-import {MinecraftServerOnlineStatus} from '@shared/dto';
+import {MinecraftServerOnlineStatus, ServerDto, ServerSummaryDto} from '@shared/dto';
 import type {McServerSrvRecord} from '@lib/types';
 
 @Injectable()
@@ -178,6 +178,80 @@ export class ServerMapperProfile extends AutomapperProfile {
                     ),
                 ),
             );
+
+            // TODO: add; online, max, ranking
+            createMap(
+                mapper,
+                Server,
+                ServerDto,
+                forMember(
+                    (dest) => dest.id,
+                    mapFrom((src) => src.id),
+                ),
+                forMember(
+                    (dest) => dest.online,
+                    mapFrom((src) => src.online),
+                ),
+                forMember(
+                    (dest) => dest.host,
+                    mapFrom((src) => src.host),
+                ),
+                forMember(
+                    (dest) => dest.port,
+                    mapFrom((src) => src.port),
+                ),
+                forMember(
+                    (dest) => dest.ip_address,
+                    mapFrom((src) => src.ip_address),
+                ),
+                forMember(
+                    (dest) => dest.eula_blocked,
+                    mapFrom((src) => src.eula_blocked),
+                ),
+                forMember(
+                    (dest) => dest.srv_record,
+                    mapFrom((src) => src.srv_record),
+                ),
+                forMember(
+                    (dest) => dest.owner,
+                    mapFrom((src) => src.owner),
+                ),
+                forMember(
+                    (dest) => dest.categories,
+                    mapFrom((src) => src.categories),
+                ),
+                forMember(
+                    (dest) => dest.owner_id,
+                    mapFrom((src) => src.owner_id),
+                ),
+                forMember(
+                    (dest) => dest.isActive,
+                    mapFrom((src) => src.isActive),
+                ),
+                forMember(
+                    (dest) => dest.icon,
+                    mapFrom((src) => src.icon),
+                ),
+                forMember(
+                    (dest) => dest.banner,
+                    mapFrom((src) => src.banner),
+                ),
+                forMember(
+                    (dest) => dest.name,
+                    mapFrom((src) => src.name),
+                ),
+                forMember(
+                    (dest) => dest.description,
+                    mapFrom((src) => src.description),
+                ),
+                forMember(
+                    (dest) => dest.versions,
+                    mapFrom((src) => src.versions),
+                ),
+            );
+
+            // TODO: add votes
+            createMap(mapper, ServerDto, ServerSummaryDto);
         };
     }
 }

@@ -13,7 +13,7 @@ export class DiscordStrategy extends PassportStrategy(Strategy) {
         private readonly discordConfig: DiscordConfig,
     ) {
         super({
-            clientID: discordConfig.DISCORD_CLIENT_ID,
+            clientID: `${discordConfig.DISCORD_CLIENT_ID}`,
             clientSecret: discordConfig.DISCORD_CLIENT_SECRET,
             callbackURL: discordConfig.DISCORD_REDIRECT_URI,
             scope: ['identify', 'email', 'guilds'],

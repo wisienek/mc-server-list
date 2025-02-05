@@ -1,14 +1,21 @@
 import {MapperOmitType} from '@automapper/classes/mapped-types';
 import {AutoMap} from '@automapper/classes';
+import {ServerCategory} from '@shared/enums';
 import {Type} from 'class-transformer';
 import {
     IsArray,
     IsBoolean,
+    IsEnum,
+    IsInt,
     IsNotEmpty,
     IsNumber,
     IsOptional,
+    IsPositive,
     IsString,
+    IsUrl,
     IsUUID,
+    MaxLength,
+    MinLength,
     ValidateNested,
 } from 'class-validator';
 import {McServerSrvRecord} from '@lib/types';
@@ -60,6 +67,11 @@ export class ServerDto {
     @Type(() => UserDto)
     owner: UserDto;
 
+    @AutoMap(() => [String])
+    @IsArray()
+    @IsEnum(ServerCategory, {each: true})
+    categories: ServerCategory[];
+
     @AutoMap()
     @IsString({message: 'Owner ID must be a string.'})
     owner_id: string;
@@ -67,6 +79,43 @@ export class ServerDto {
     @AutoMap()
     @IsBoolean({message: 'isActive must be a boolean.'})
     isActive: boolean;
+
+    @AutoMap()
+    @IsInt()
+    @IsPositive()
+    onlinePlayers: number;
+
+    @AutoMap()
+    @IsInt()
+    @IsPositive()
+    maxPlayers: number;
+
+    @AutoMap()
+    @IsString()
+    @IsOptional()
+    icon?: string;
+
+    @AutoMap()
+    @IsUrl()
+    @IsOptional()
+    banner?: string;
+
+    @AutoMap()
+    @IsString()
+    @MinLength(3)
+    @MaxLength(32)
+    name: string;
+
+    @AutoMap()
+    @IsOptional()
+    @IsString()
+    @MaxLength(512)
+    description: string;
+
+    @AutoMap()
+    @IsInt()
+    @IsPositive()
+    ranking: number;
 
     @AutoMap(() => ServerVerificationNoServerDto)
     @ValidateNested()

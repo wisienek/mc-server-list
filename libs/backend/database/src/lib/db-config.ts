@@ -10,10 +10,12 @@ import {
     ServerVerification,
     Session,
     User,
+    Vote,
 } from './entities';
 import {
     InitDB1738498523335,
     RemoveTimeData1738499883841,
+    ServerAdditionalInfo1738720838341,
     UserAuth1738523212153,
 } from './migrations';
 
@@ -45,11 +47,13 @@ export const getConfig = (): DataSourceOptions => {
             User,
             DiscordOAuth2Credentials,
             Session,
+            Vote,
         ],
         migrations: [
             InitDB1738498523335,
             RemoveTimeData1738499883841,
             UserAuth1738523212153,
+            ServerAdditionalInfo1738720838341,
         ],
     };
 };

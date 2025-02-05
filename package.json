@@ -59,6 +59,7 @@
         "next": "15.1.6",
         "next-client-cookies": "^2.0.1",
         "next-intl": "^3.26.3",
+        "passport": "^0.7.0",
         "passport-discord": "^0.1.4",
         "pg": "^8.13.1",
         "pretty-error": "^4.0.0",

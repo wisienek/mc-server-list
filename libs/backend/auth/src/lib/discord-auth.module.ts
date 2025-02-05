@@ -1,3 +1,4 @@
+import {ApiConfig, DiscordConfig, getConfigs} from '@backend/config';
 import {DiscordOAuth2Credentials, Session, User} from '@backend/db';
 import {Module} from '@nestjs/common';
 import {TypeOrmModule} from '@nestjs/typeorm';
@@ -11,7 +12,10 @@ const authProvider = {
 };
 
 @Module({
-    imports: [TypeOrmModule.forFeature([User, DiscordOAuth2Credentials, Session])],
+    imports: [
+        TypeOrmModule.forFeature([User, DiscordOAuth2Credentials, Session]),
+        ...getConfigs(ApiConfig, DiscordConfig),
+    ],
     providers: [authProvider, DiscordStrategy, SessionSerializer],
     exports: [authProvider],
 })
