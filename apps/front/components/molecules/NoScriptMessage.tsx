@@ -2,7 +2,7 @@
 import Typography from '@mui/material/Typography';
 import {styled} from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import {Link} from '@front/i18n/routing';
+import {Link} from '../../i18n/routing';
 
 const NoScriptContainer = styled(Box)(({theme}) => ({
     margin: theme.spacing(3, 0),

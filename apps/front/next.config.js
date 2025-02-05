@@ -5,14 +5,23 @@ const {withNx} = require('@nx/next');
 
 const ENV = process.env.NEXT_PUBLIC_ENV;
 
-/**
- * @type {import('next').NextConfig}
- */
-
-// https://dev.to/krzysztofzuraw/migrating-nextjs-plugins-from-next-compose-plugins-2gnl
-const nextConfig = () => {
-    const plugins = [];
+module.exports = async (phase, context) => {
     const defaultConfig = {
+        images: {
+            remotePatterns: [
+                {
+                    protocol: 'https',
+                    hostname: '**',
+                },
+                {
+                    protocol: 'https',
+                    hostname: 'cdn.minecraft-server-list.com',
+                    port: '',
+                    pathname: '/**',
+                    search: '',
+                },
+            ],
+        },
         reactStrictMode: false,
         trailingSlash: false,
         env: {
@@ -21,11 +30,7 @@ const nextConfig = () => {
         swcMinify: true,
     };
 
-    return plugins.reduce((acc, next) => next(acc), defaultConfig);
-};
-
-module.exports = async (phase, context) => {
-    let config = withNx({});
+    let config = withNx(defaultConfig);
     config = withNextIntl(config);
 
     config.redirects = function () {

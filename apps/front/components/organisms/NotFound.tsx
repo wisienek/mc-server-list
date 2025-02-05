@@ -1,8 +1,10 @@
+'use client';
+import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import {styled} from '@mui/material/styles';
+import {Link} from '../../i18n/routing';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import {Link} from '@front/i18n/routing';
 
 const Container = styled(Box)(({theme}) => ({
     width: '100%',
@@ -41,4 +43,23 @@ const StyledButton = styled(Button)(({theme}) => ({
     padding: theme.spacing(1, 2),
 }));
 
-export {StyledButton, StyledLink, Text, Title, Section, Container};
+const NotFoundPage = () => {
+    return (
+        <Container>
+            <Section>
+                <Title>Not Found</Title>
+                <Text>
+                    The page that you requested could not be found, please check the
+                    address and try again.
+                </Text>
+                <StyledLink href="/">
+                    <StyledButton variant="contained" color="primary">
+                        <ChevronLeft width="24" height="24" />
+                        <span>Return Home</span>
+                    </StyledButton>
+                </StyledLink>
+            </Section>
+        </Container>
+    );
+};
+export default NotFoundPage;

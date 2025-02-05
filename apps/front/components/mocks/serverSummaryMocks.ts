@@ -1,0 +1,103 @@
+import {ServerSummaryDto} from '@shared/dto';
+import {ServerCategory} from '@shared/enums';
+
+export const fallbackServerIcon =
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==';
+
+const banner =
+    'data:image/webp;base64,UklGRhIrAABXRUJQVlA4IAYrAACwgQCdASrUATwAPkkejEQioaEWrKWoKASEtgBiTMD/gOaiv53z+o/tx+UvygVp/C/2r/Bf9P2B9VPSnks81f+L++ez7/Kf83/J+4f9D/+j3Av1t/Xz3J/7D1P/2n/pfir8BP59/qf2i91L/YfuB7jv6N/pv2m/13yEf0P+z//L2rvUZ/y3+9///uHft5/7vXW/cj4S/7J/0P3f///yOft3///YA/+/qAf//hS/Qn4OfgPyH/dX1n/Hfmn7x+Tf9S/7v+j+OX++8UfSf+z9Cf5L9rfvn9l/w3+s/uX7h/J/+r/Lvzr+I389+XH9L+QX8Z/lH+H/sX99/2/95/cL3L/8juSbP/7T1CPaT6T/mP7v+8P+E9Pf+v9Efrb/pf6z+Sv2BfyX+hf4n+5/uX/fP/x9e/8nxHvvn+/9gL+Y/2H/lf3/92v8n9NX9V/3P9Z/pf/P/s/cx+kf5b/wf5j4DP5n/X/+F/e/3q/z///+tr2Vfu17K/7T//9B5ZoRv7rjPsGhWqYZuIHAjnYlyOP3JF6szjipF0SWlbf+oERDGfruRjHn+OhfF1nLat4vidQzzoruBXNRn67+Rpj9kHr4JNKC3YWMgEHDfPNBf7PbAHu3Qe0sIA8K4fOzC68iB/J6bMPQQwYugTSXXg0XRQ9FbtLZ2TX37HScjp0sX+Y0nvVlUmD7gZx1sqdhugGIbo8F7wOmaLZtyf/85QyJKekhDVKCLJaYVM0eX8Fko/X/Fez85MoflvlCdxuCH8ZfdiY876RPfVzuqG8BehCtqKggvXj0VY7YVjwdAabf2PWKAEAZ68yFh+vA2cqe7WrnN2ILBusaIIymFKUeb8fc0nan2VxMQuVj+UexFzjG+a4az8bM+Ps31t5Ia5FIAhrKLPKPuHg5A1EIwmjNDb3rO6GhXmWTUG1dAlrymZ9jghRnvdqBY1diBVDc61fDfdT53uWATkhHb4oHn7mKxNsvPLgS8/cDgc/0vV0WCLK3cScrMN1Jlu3Q+IIh+MVs8/shiLVR5c8iHlSP+41lA1L7grHHrPtXFB0pWAigXMr8cvZQ4nN61PaVnKbM4V+vHg2UpbVb0x6H4xp2iwAQCOSWk8zEm1SBf0dpgmZ0+hJ7qAUiFzGxaw07K4KCEf8oOPxqaok0lvHDb9SZGrA/uI1c5UGY5GgIA9oLfPhIJdb6xm+SCybNkmaEVn7z9FOgPFjnhrGUZgbWF3NVgFwb40AUpoG6Cb/9M67KK3tu8EcHgr11rxoWDD2ftPjo2Jcki2q3LlQdfn2vDzqNH5DJhqPfl14196iTrgYy9yeRwlyxtB1ntR8FfJCbiubgftJqU4BcIDeN/LZOtKSW2bbyE7HN2Z9BB5KLH7xzNgA1RMK8erWbma6sG5vE7js9IAD+9ZtFLle6eCadKZAG5r1wtiCZjyTExVZSXbPLUi50jxf60k6n5m1xMs/91YFnX+ffrj46SIsMUCb7+rwmzh3l/SQZWWVQ+ImfWloa48quBwZhHGBw+z7Rj4lToIKHSJMbMEkJEzPIBVHHpC2tBKN2Gd2FSeTu/BKAKNc6HdDLdLQbo74EjZUo3mo9J3Cav+s1G/wNX3qcK8X3EEt/k5LY690oVkXkYSmNyB9N5RP2CTYt601vcc6osspZZTs1zS9OjBT28b99Ufq8QQKg0Q8U7/k8IBkub5nVOibQn91DjGbi7FkZ3GH0haOELx5+Qt7m1rgBrhZ73Js3RMmcPXo0ToX0bx9VLu3gJs01LVvuuqvdQpWxGJsRCJkbwuypI8Y2uh43139NmVFNXxtGlU43qnBunOUHrnO8HDANwdGls2F0NlcPRBnyIBKYN944SyA5yrR212YWc4Hq80/8hG+LqgPZtTHT+UZmhSzb7NM5XVv1mvAl20d70MHcKuL2TWMchjlSHYgoIR1nlxzZtpPlJk5WHbnBdRqyYyFuR11xmbRJ0fISmUU1T0S3i/zOO/Vv5R5YP4Q7tHVt81Kb6j2I8RjLJSvV8BCHPoZ7S/8QoLWySrnZDT9jsjVzJ16bUeUe7Qw2oi1I7F88RLwm8snBAlMMMhlaFnBGmMPqQFCWnPka6E+sE6QtS1tGteRXJOuRyiOAJSgiCrAgEkTqw5idAHplFY1R004ssx7m8clcn/gjsAkYMpbCXlr0mUrJJxXr12RCFTboUk/EBfJEFM85tjaGEG/eZ698VI07ZjM3hdfBFR8IIp0ntKUH/k7VOj3T+VrKBg7aAxUAJN3ueTm5ryJekAKtaCoF6Xzj5XTUcKlzu+Uf/7E2xReQlI1H+iArkr+IeL1Io67S8c4kt+dISfv6ahB2deUhQlPfdReortnysLSE9lFlfik39xyI6//L+lGKCcrT8CKqr6xY5GuvlvFIhlMyLWa83JzNmBjs81XCj0AaYESSVwcj5vE2BnLtZeE05cOVCUFTbPSXheF7YpIvZSBueeiKMPqKug35bnAVd6voR4i/gKg8xVIR2rOz4vCbqEYrIOb3dk9Z++LxQV7lpE4BZXKRGyxXQJ5iOD0ShccxacFFWENBgUu3O1V05A6SD6v9qVzSZyDtUNWcp8AeJ1UIux1frQy0HMv9l0otr5oWSHObh0J9bkv5qlN6Vvrcr3UjQL7990Uaf9hU3Tc8jsd1g4c4HS0WaCIBzgOsxjvnp7iIYJeAgeAX93AW2MCQ07SoIptmC+Q1XlPEurBcj98Qsb98bTuR81DY9ixPz0wp8my2F2lFNmA4nlCJ6mXuQ2GFfR4DWBrInMuRU9k4Rvp7Hoj40JO8KxoQ+5GcXDyeiUtkGByNcECKKk2vYF6ntYBTwHRmjOadrlpZRYDpEJ17NJ6D/JwV/FUpupYzCS0ED/KtZ4eH+9mgyd8/FGJ8/9AD7PeMTm/0HfBw80emMPoul1XSBErputWcCOvLSj4uKXP3zrChO3RUD5Ua8NrzpwnSltG3o7m3JOiScSfCfKGY76u1ZapAKGPrEjhCM324ZNNek4D+mW+idcqCS0+u/ipod9IowPrFfVPobP4jctzq8ymbyYnC18VilIKvokB+L9e2x5oddpz505J77vTon/wv9MpPdBQhqMQ1cykm1u8qyQIKzUHdeWia64Bk9AELcC47UCDsbBXMNJkPU4Ox3cXVrDMwZ9z5bfs88RYka6Kv3J5nkh5O6ctaBsNLmJaxKrTMdTqUPX5l3DTretC2L0qrUvJ8IRT9ksrhk6igOj3VK5WB+K08x6QoVW2JeXaovZz5+PWwcSUYSh64lTGaKGqWgXa0Oni71S39naPxOyp/yKU0bgVhsVPQhdTCyC1zMH6rJXgnShwz8U7IikxL1a3Ot+uKIIWcVE9KnNWxYtN1MBuKU3Tn6n/y9YfBWKgrQyx1+8TBjnF1xr678uZZv80/PBWI3e2u6zSmA18O1qofP9UAF1bRE69mM4WMIZHvdKGWAA3Q3PXvaWVzLf+Lfsso83KUdkwX9PDZEKix1hV2t8v30DwYD/yVQp3f4pY7pnRXyMm3f2qmIlUfTN/TfzGik8ctkou40lA3gBrxPVq/hzwAiv84PwhogAhw0oP/6+Rs6p7gVC8Z4kbKw81XRhU7PGxXwtTX9cXI9woukwW3Rt6hbC40HU/YiPE+W3PtZi4C0TtKAPk/vkUcT6arjkaK6XwEMtdrRgCm0uCXd2ZHUOcRVl05QsQTHzN2FeYvCVGX2oJW9Z81rjuNKfrwdYvQvKB3XYo7RF0RxtkjtgdZDQgb6fbNJI+DLWd4T9Ggz/5lU8VCdxzrFKc5pl4DNH1tVbLroR/nHP0FQl4Ccw0AhtN9+aE5qiZIwPADdNyRyZZB219NJWqCZq3eNzUClH02Iq87JsfwihAx9iq5+9NAH8gGYOneAakL2Z6J5zG73bSft2X8gkubrF15EzW1BiU7oDTH/vF9IBQq1tot/Ah2RcFGhk/N09Y3L8lrxIzTYXEpcTlDAVcIP7FDD1GBTqI0qv/U+bHnJlGRcZmrvOncEvpcxNoQjEPsMLHgPlm7lBSr5DnQ3zfb0K4gnIoZwcFiQ5iK1N+DvXaYfTqWsEPDXocTORJjYSrAVJ0K8OwSSUcal1acq7fmG542uJFlpeIYD5VO964LFAL99lA8e027/xGktEPzoCd2FKC4C0XmnnN0nhhwq4iZ6yBXsi6t6DXgfCWOfDGyOjY23fD+Uhjx0aOQCtMfFmC6X2AzuH0LCavJWgIl4Q5Ve7YHXic94/Dc/h9+gIIzhEPB0pv5KHQFk4xkh/CJmczTzYnRBIwFyepV8q3jbMfvMOu9C022toGFqk3scrnjfDdvpWy5pvisN8PcVWCCshPkRDd7DbXJEK+wl7kWqSgBxGYBTbXQEhVSBVgUbhaEzMCgKLH9ccrP4qcxGLGEphYciRj4soItCVIXuxR7kteMEWeOprANwrvyL0brhR0yvtveu6axMzbJTHrPA1pteu6wTEdqFszeb1lKcNTQiMt3gRUN5JbsZnxvuj66Tf0zpv7HxRvfRM97U/Z8uXjFJ8+hQ5OfIAlOU2yUAUlb2L3GuJ9RLpxKDY/2SGc/m5E553+N4K+Qr2oPJUCZvXwHPO5Q+r/z9hJ/OFUmtRoyuAB/v6KLFpJIFkgRiU3YIvD8LiqVx0ivb/m0sr/4rdHgvH5A+f+59SM9EazwmCJBQM5B5HYOQ6MpV6gc/lJqMJAbCW8qE5YGEFSwd3CgMEOC8nE14rDygr65/zF5KHshC/Gg7RD3EF3jXYDdgg4RSnRiKacCS4cZkjLVTyv+2fR9zH8ceNAz4q9Df0xvounlutVWO9mA0v28Mx+cEuJ538hfogK1a2elr1MpwaaJYrjlul30nDlwxbzlq5Y1XsPECS2krxG2eIUAoKryUqUJvYgoNfWgqMsU+IeyltKsZk07xgfEogOjtEc5iDzXgMt5MSzfZ15CgU1I9aV+WpOp/NeEt7PhZerT+vfaf3BjMw1GZ1/ejgHSeuWz8eOY/xwGG4QTLD5HvV7JYMjnQIXUqQXjhQsn8whqmWkrpZ0FH7s5JhEeB4/g6VdtRybKV5frQQ/HZ57P6QZggrPNGPJZQP9yMwP1i74zgleQZFNCxqVVS+Uhcw9nXwF/H8x+fAl9vqsJfoNXKnEgwwU+hmWmPl4CSsCPu4MSTQVtnytEEHdYIOTDihdxQXmhooAecaBoY60tSri3Xk3BR2DQc5B5r7Cu6PPbkt83iDlZXb05YVpeVfjI9mjTtVDgUOZxLa2GAaiC337f8JWOZSIAHxEfF917N6O4Zi/kwKUyd0FlMNzN4xgfIa43GslE2oTb58o+OPHYMqnV+RY0gI+bSANgnUiW1J6mSibUdVSszXkCXev2vjDaC9JpD2JFClzkyt3OUHqLvuFfSyROZKopIst8YTOs8sD91HG1m/Bbv79E8HHgpHa+kJZbz7B2I2LyuFedRIAZhG6zqRTk8BIVn9dfTRZmb85Sin1XY473+znpQw9MXLboYuaC53Y+ugVX+EmG/2t5sOa7zH2iL3JRUsSRgO9mUEYuspPY1rQbaB7osv5UqhQy+s2CSpqQ1NNuS2mmnslngEq0lR1SRfjrjTteL/l8Hw1ErjZbIFmIwAkMQ7a7n3PBw3u6ojoRARcp15vYU8gzfGB/yp31N+oSx28SKEYK/J1Stc+OwdYHYmzLbeD9Gcx8YsxWD6FHyZN5w8XjWvb8k3xN/ESviRy4YW51BbTT8zuJ9lj764ema/Imd/24uPHQl0AUb7r50aj/zxHig9Ky8bRjCP/3+yMCLJi8JRYgDk/gZGfg/vv9+g3ssh2kq1AzO+9MPXIy9uoENDWLq+V9IJSD9/igMj/oNv56a/ux7EoT8oY2CsOgAOYlIo/4nhhzPay18jX4qdkpMiUwu1rBw9GFXmbXZfY6oyuEWGSY0fcap9vBiXDFNjccSw/pKisFz1mpCA/0FWRlGI58QnlmSaezmcx8m6Cd6rWVL65FuX4eIPe56rg31qlnLp8npWDa73UoTwARxMkaEVBCUkCmoNFZR6S5eT6gS5Jff5CVPlhe+aCL8AbbD0vwfLhgF6WLBGc3bN5DOjpdc/ay8ESFSVppAPqF3AROHMj4TTIqBzhAcr0Yf4kMOC6aH6q/HkRaWchfOqQ7wOeGX55P1OR+C6qfcNe6TQyuVzJOz83WTwLTLdn5dcOk7zi54V9bucu1wQbp7O8UmJ9Lsp0kFr53268Qz7JVgdqLhR9nM1ZCNTl4JHS83i79jGDOG+Oel6N618unn6Y+8Zm5q0JLdXahXxa2SEOeUnpaUYCMbZ2tBjcA0HqnCy0iNVQx4NnY4rJ/iHB8LXwk/+Fjm9qaA78SPuDJcRd/XNrcvbMp7l4PG1RIsp6okrGdU9+VGtlWB41Ho7/34pjfqO1EBI1qevbspfHRMqX3IBv0gHDhNawX4q+iHYTIc3AEUN0cA3XoamoAe33xF6qC7rD3OXfmaYBEcZen7dXPDaJDlWb3JYywn8GHsdhSe74hy53qjYYXqrzG6lw8mjl4TWAMRMvEjjvPe07kiRTEbMP1G+3EPxMdJAG4tjZJz5PVDdyrhnqttEncOD2E4lQmBIjNV1AnmQxPB0qCABJWTdts3fd1rGN80IauzS486mCGuSIKoTpR4yCSBlkUqzZqNK77G9v+MWuLQKcrf+sXR9YL9ayfKcIo5TnCc6Ctaer6KRqXyJTKuajMc+zTn+J6KphlhUXSI/qjLXgfshRx0u8xRG+IeXXykt2eNtbon3ifwh4lhxiWwtaDYJz7SCDqzSGETwoYwJoCtE3btkbGW43YsdR+LE0ABJqwaCPUD1lo7RwGdRfECrv93uOMHuMoPDDq2LRcAjmjwnb5MUXQgX/5FHg5Lk45y/HPcNOPViv8myR3jWi04SZGT/0Yx0nt1sbOdbrt/8ap8ymxF9JDWnn7hVa8lb/FDup2wXR5iI3/t6lHhz00IhioyLhvlikHtm6M7tMQVlHEgZ/fpm7zqnV1mhaYBmTxSnLGxRQVUVXNnrayLru78euvfDngzTZ5NBv37R+x6OSkWC8JyMknteMfcqYyL3L6iyiPW+vDeg31VNh3da2Qlpv7gmWRKLUs6QkE8iIxiLOr9J8OqKaqrR0MlI9wzfi+UBErTQso/TlxVylQV3OSvVY4EjQ/XM2Tl/2RSNZnmDulRuNJ0vh6att+EzoZfFHuwJDJPQILkkcuiWxP+LqD4CWVygZ2r1332lwQCsIm5zayYQ7S4G/lWm0mm9TDP1lHVEiUSOq0TJDj8+1b6GV845fg/1R+DsCFyJBxWfDjC6UglhQHJdjiM3yaXxJ8dPt1RlUbq0fjMdgKjQOo8YvvGuehyK8tlcb231i1KgZwdx3CizrJefG008Gc8tXl/5K3Uy6+yh2aOOLzk2bO2MxDXeGXvSdnJ0hOWzgx/61BHtMoswfmZJU6pILDQm3FLGB4xVT2E4tnB4vYrFGRQ1V4pusrhzE7K3/cb+hecqIQR2+nrYVtzPsobcxkp2s/jeNRZ3qEK7RDd2xx+dNqgbFj6OutrFs5PUSwLOUp61mKzvwWU6mIatT8dE8M7Aqc2N7wobiVJ3bL0Zplw8TJQINTfmzruEszGUKZQogj/SPrDRSkQvegQOauFBo8d9FMHZf2UT21bd/ZZKCmtETgg/UFWDkFIWQ3YuWwSJZE0HRSYcRjyOERazVr0a0oJPAw5QfvJ8RVPgqTV3vk2VesBWGqOCMz1AUryXllQI4ysHac6YnV9uiScorGE6EuXrxOgQ07P0ZXsrRTTTWHg0ys2+q3kFTWwHOII47aPPfEaciW+u7etgaD7HHmYEytUv58MV1qrkNkh3bYqbcOWEoMrVeIwifG6MCyfERIrtjz73xOAMVGo/hVcdVmyJwTh0TaTp9x4RKku9m4rNyDjorak/Ft40ttTXhQvk0Zt8SMpnEY7rMaTfw/oPdLbIt5pUGF3QP6aE0oEtSyJ2/oUoEujKD39dbk0GjbTZ9QWmJQKmCmzBblUbtQI2zkSJGNjxKxdp4RPzKQBARdWKeY4iHpuk+jDpoRimxeYUYtZB3rM2ru5H//kaVKmbYYyMU55vaeTp+Z4/VguLX2gjRavr/pWwSlx8zYxgCmNjaBBFgq2rAbEu8QvNQmcAUC3p4GSyPJSVz5Vc6e6QRGkmk+wcsvwLZSt1LWUeVR2AE2LQznv+AtNEAazPafxrD+VJIzW9UQMcPftzw0iZN1MOBnB9+vFu2x9scrMmGBDlifzL1e98Lu6/3oNu4YM4o8q8C9qQQXzMvM3IWIA6WoJi8CTbrfS/8dzKK+t+dZc+xkBZhZBeq705Saxjol/9yVBNN41VJ6ke3nLsunAjWmW1pToO9tsKP4h+5Tcy90e3bJFjD7KQZpM/r8IFbCWQ/c4o96WuXmXmZ0VmBFvaXb368cBCpGNADXGkd34+4NB+stEtxnXj/OENfGaj2qyJv95VucyVptdtRP7vJD3XxZ+xuCG20TRPp/elv6P3Y2RwUwLlWf85X7CQhWVqMjOkTu/Sf/ASww5bDUH/xIyKZ9kf9MC62i/6/M/XQcRaW50hRwhdS2D5KPrGqH7NA4OAKsijnqx3VgNUhL4faWOCRqHYkFRKcpuB+5dsmcdtpKgNdYUWKwsvohKm6zhthYDTWneXdk91BujiMM1b4mQJlSI3Qsr24az/ff2MtctGau9QF+mlFgHJ7khy9Y7deuVR3t9tkkmabn49Neh9ziRVIs3xjRumtRP/xDTbUcdFA30CqzmdAxJi0CQe2Nk/wsKoKJfqzTBEWfHx9zyIltRhuND4Al5eesAiWaeeMNbgjKXv7dk3XN3GxD+1/a1jJ42KHkcntsa3hgYYo/RnjShhhQzMSlRyCHlL8Siu9aR5jAfQZEWoTkGLZGW45FuRHe8WYP7I4svAmc43DOYUznninf6cQV8v8za6HSAYdlb6gLWKnu/z6+byaOxUeiOUpqwe3m3f4vZvjLuvJ9sHsE4yQEzVjUMtViVF1Xop/41NoNCGS9DoN0Cm8dbT6kbMSEJmq8yZXHtGyPqVnHW5HgJxuQSHqre3JfvdogSVwtBM2+ibEFnmNUkm+5YJefuum+Fj4/eKBfcQRC8fXcDOYYoRvt5H0SpM+ouyRiuHMm44T1uURFBdAKDS1Yz+VnYnbRThUMer/9k98VzN5kYK5eQs1le5a6Z4VcicQJ6EwWbOqXYcClo6WnNTJRMs3jexwkk+/adKlaGzAslle5Ix5KEx4RMZrF0mwJKJqS+mOuhE5DpHozZRO9ZarSxv71ppyvEawjjr+v+iCSGNMq0ojacDv8PPuWP9Q/kzyn+nwq9cHNhYC9Bk7fISLp0RmA6gWbTMjiKi9CYjkBnOTaiM0dKzLw1LEvzAiBrq2Ve/4LSOykYRkh7dTp2d1U9AMOiN/4e8Z0+c1C9F9GsccE2L2ZZqv2o+iRMkgLV4ep4p/nhnIMb1abVjzzTPTTAVfseUINxHi9sb1l0t+huwref/eKS4DRHHomAu3mMcSTlP0tzB/12tsp9ViUW+uja9IGVZmoX4Qy6IFhoZbxeERGia1BJtvysekHY+bJ6W8R+Ju8W+U61ygUdRScT4mMdF8cbncPR+N/hSwblTMSWL43+Rk+lTjeGRk6hZo3G0/slKUXYMXpetabDqFipAycP+OlqePIEu/2htXeetv2DWvX/6+ijnVhFU7tn+0qyQOlCEOoIhV5IEohC2eLm5CIC31haHXHpuryfX66x/dpQC81xjClSTb9cRPvOUh24vvSWzUrqHPnbPtXYnVdMeakwc7e49wbHYMxjkoP4Q2mi8VdY9RrgV98aOdILSr+VcGv+4BiQ1QNIfDlGIoCtg9ocB+lIcC6UB/flxua4ja+MUCGJEtbyu/rEt3X+vZMoa9D9KVNMHWGznKZodBolcsqt2hKLUhmYq1WjPTV9eKqkXD6g/Ywpk0trzMnXk4IGwUnZH8wolGQg+0hpfiId5eV9SGJwAW219dnQHxyfxLFZDuZJCYvofElWY4lP5oFNjIvOmnT0GDVMQbGsq2OUOg8F6V5+7yMLLHzuSFikpjh0Be1cEJ226cXIe6ALQ8n63O6y3Vk2kQIiMFu3niK5Uzvnay9Y/tJ0m+HgW+YIqCKXVXyC3u/uCKrQDuqeqtnZtoeVNvon9+VbkvVKOxJRnZrwVB0jktnAVXnEkKco1HbQcLj4Xo5X6wTSBxrbO+ZNEvAkmXlZEBGVwsGySxlDn3xKvQR+cWKIfiEv5GfMeJq78iQ73li9WrrdiqGbXNsD69+j95uP6h0Kyu104OFCt2KeyXo1vXXR89BTlDqjr45mEod7h7F9ZjNDoPXGf1qoehi3KJltECI78GrARZtwzO5DPxVCeLwO3by+XdP/wYUbz3uQsaKGfzwqn+vdw8VAy2pjF/2tN4oahWD91VAVc32MSJ2LJtUw5gzdywXs4KgF3lxu7tK9usHAN/GOlltrTxFwICQtsuJ77ujMCZSXCQMOtjbgSXZOAUv7PZH26WxbvheM/ht8dojuYOOV7lNNzpPmjYLKWQSM4/Y5wJCaxNMb/yu4yVAS5LBr80hoZ3xurYJ/8tuAMwIAQ7s9fP0cHeex03pBzQZ44O3sBwKZw1SIK33m4Fpcv/4pKFi3TOBiUWjdbxvCceBOX39+OKY4luGzBVi6EHoUf39IMUZ7J0RFI274myD4N2YJoxl8o3Suy/mUfDiPugOJAIfrBnwwkaO49QgD/8h/O2rrshaIjMytQnl8uzkU3rJULD1St4ccXMIJT4yuyEb2Bjd/zO5rQ0VxBzS1dhJBOI5Y51/BP6iaAS7t9nlJSf9nE0Lg4OneCgOx4T2Dra5imUaMsxAPtW+04s9RpbxhyL+aENwznrogow/JD1Nxi366tl/529CcMg3/8Q5iupAwuKnr7CKXrXL/fwyNQs2AYsY6g6JnzFcXMfM0UxU7t4rnlauCjPnR3CcF/lRGGI6HjHyew1yFlxpksawLFGNLYvwyinH54ngCOMMPRclu9uvXBXY5B37l1Nr7e7lIXp/+PD4CprdMU5v2MJlNtwoBRLhx8tj4QyUdl9uZVZ7D8HrInL45qmcPZp/u+IQQ36KSoHolAX8FDTLXTAhxfu1NzThDv5A9HWen/Enn7ghq/o/LVHxx7knCqmiBr+ZjJDYMKoquutvMZG/RhNJIsxEWECnn1sC1DnjLzGtlFU6FC5lCGwEJfA2qKachbFHBcPQGDiuJr7du/tdWv7D0poCl9jUqVIV0eYftpvVcny9JF9MBEpP6cDMLVkgESmRx3IqAXJWRA+XWwsqN84TrUsieoYMmPj/x4vCNXK5vatrEfJGSZ4B4a6D66D9Ot/FPMeWBy5orT+L57Xfyc1DQItY7/DbjkL+KwN8H/TXPk0EOG+ALNyAZ2aSVRJr5tCPNl9wXaO0HInF7o3zyC13MP6u7hscuVXY/uGBpSbqIEXZlyorGcllZrPJ1RYdlF27/pK18my3mokY11sJiQydC1Knp5CBB80VPcldfxws4+nkRNyjPEvZbTwBNzP8f6BaukNdiFKDGGhdFtDZVPo9fcP9iGaHKM1vsHcycurBpnac2fQR/oquI3VgZCngelDn8PxEljzh6B3ybmncY9TaFvmfaypXmN2/burT2XKHs0gCpP6TUpXU1mHJ1xRki2WcN3NOHmBEbhJnX4WBgDChxZIi0hQ8+b9vq7LU/1/oqN7THLjYpRgi/BKffVbo3vd6j13WX0/oxNQp/czWjOqP6WpsUzQoJU5uKrpdJZTvf56vg/f8YRd98PR4/P6KwjwbLurPMlKb966Uf4yKOZ3d3jg2chQWfNkk1b8T7ApSHwaHK+Yqs+xbn5jMTR6c8Fj90Acl3roVYo7qbtsXaYyThHMk68DpjlT9jaDb/ssvUftHjKak6exmVHSYi7bv+VwPk2q6p4AKVg3ekHPo2OXrGfkCyezX/rKdOAZdIZc9SkuqQWH/Xv8kwunOQLbsGAcyt6JF6gEk06QQfusyTYDotC0fA8X74Kq987ZsrHev53hgvgN50NJEQ0Raw1+15gMJCozOfcPi37kZnPiQjOGS6zv6buAR6x67a8wQT6vmgXMX+VTjXoZ6ZL9kbYtrIo98zckLogsZii4aBZJ7Xu4q12qIRPnm2w9kE0Ne5jfgFbBl3d8hju7YqAqdwM0STv+WJoSw0p1uC1L15cY9leZ2ZhfLdTJGCKoLRLKCSfH+/EKYJ9m2WiZZ1aGHb1aZiF/HEAj1HcYSQowheydG/hh+uH/fTGGI9RF2A1/sBrTwdIbJ8BxAs9+PlhkFNSsQjv9qOhXsDlvQR8KJCG+5SHlNSLSdbkkRyWDz2tnihX5xlzy7yaHQFjtEG6uPgfQsNgbU9UjX5IYMVRcrKVFU+R3p7qtEk4ddQqtSplFTKaSOojanKauMgjjxZSzxxlGlbMhGPPuFsIDntkUzxmF2pgBOiHUMPbfRqKmuKFaR77Wim2XnRciTMdbD63p/BNXoS8JWa8/P9ZAPNa5cpOa7ULpbAl1qNzjdwFlY7Yh8A7aBTaNF2rlsqXwMy3fcolE4o8JzFthgoYUsWtwjvdtiL+SwTMfhBh2QCHt7HgZD79EV45H9PucnOMwjL2d5aZbEXca8EJXWxQl4J628OMU4xgnaNoTwPjSZAyBTyqg981Kz5+Is/3FREVpTTEtKLi8MIua8kCANCXbRZWRwXXYOFEJlfIui8G0Z2FjyPR7beZD0DnQNgPp5BcP0kbgZZwOyjwILRrMFSib09AhnomdurTxDmvhbRYdTMyK9oCz70E/vUXhxYDy7NXn0YZxA72JPuXEso9UCRSoKBdtv0WxvRBCLivdqUmnSJxKrqGmeWpETxiZmaSKJk8+4jZcm8HDdEH/sGS0NhQ5cmD31CaiyeYCgxXu3QCv49HcNlfCuEQN85z/KpCyDkV3F0JbRKPEuWkf3Gor0S7I7rxsrEEvnGqNVc7SgG/XFriwyuMSA8nHog8U5Yumj48gIzBEmtSyaEvZWh6rYu3OUeuoDmQbcFVcSJuzphzEnAxJ43QP2KUlBTu1O7qsrtmu2pa6rCkFbFPnvW3VRmY0MnqlC4Dsmr+XtG5Qtyy1Katp2ZI6V6/uvaiGVKigj8OD7KJNiGbhMtpvyZZcoGjGV0lTIguVyQ6lG5NQgcgJdFXPGBlVJIjfVe84kp8RxDvCgz3PYtzWGQdFcGkEHNLGFSIRMby9gu2nZkKEjUF0ikONE333BMuM5A/lJtdyZ2ogn9NG0Pb70Yahwcj4tTu3qFJ7SNKMFLq2xd8jeLfHf4nTTJi87AxHMJ/Dr/PGo4Fb3g0H+r9C0vPdsPzC90STPCsUFQOIVur3yS8vRTP8nUQ07/F+rOC2DukdmTOPDsvj50pq9mNSduAGlCWBCzmnKWK6r2Y34Xg39FlCuHgOGvGdOBAo2DgIFEK6n0+RY3GlpKunOpLEhtHSKByJtqCrDSNYOF/KkDvy5jCqzRenPgWf4oMJXYXjt3m7ZHhL1GhzZod8Em3gne2QK+sAARBFoGMP4cLXrILytAnL3qELiTVFBJGKnqKa5jsggOTSO42/nI2MJRNphmRpepoK+nLuGJfH9Os9WcFRcXSxW/K95aK2+MuLSIWv3M9v/EmvTixGKoB18wey7bAYp/EEC6DMXr5w6dFEUwuRd6dCldnfgYjNZz8EOBMNWVOMct0UFh2w/1T/hpg3ZpqgtBrPt6gnt81nwahrNi6L5h72l/lG4k3xShXOzHm6VyvNxefzoWDaHonzt2E3l+o51O9q2o/p0ehoiV3zFBBOk76pHyMuxvdxM07g8xu0Vq0FIRfabj9wh+DzWU8HLh869hOVx3Ph6pk5pS3hEJBivYVHYJe4czaa8R8yZfM2/7bebeklYzFTok0T+m61N+VQOLgYO/ejC3VN1Salwb98nW0WWDcuNWFUa2hvkWcWdAnsSFShTkP5hIWGqm+ye6W6TvIwQ+dK5blEagkfGc2cg+kAdwaUTnk1jUlP/ZHiXctUq/tQqZncDIIqG9lbPn4x/xUAOwtYV0nGEBMxFJDU5Yw0gFzkwTJDef5WA+3SUAAvA4vEL2Xqqhm0LwfWE4BwNhbqpQD62uu5lV5CGqUJGfNOjCGSnzpNURbAsQiE1evCw0QrLFKtVH4wjd7ayNuDWCc4zVF2wwjCB6Pi6vCW73fUbCdC+ka4fgU8LR8StMKMyNVZTaxjvhER0xmU4N6ECn2Eu7Jt1d0JYvBHwempfemt7nTuW2KoqvzOLqo8thgLJTT9GL75I0cDuzxuUwyoUzk8XBqdUF7xuRapYO6Mr1wiE01olvmYsoPIpCCJ8EecgSSMV0DFNaJSNB5A5hbj2S8C5ftZFqCdMM85rGAGc5sGAWG58TGDDnrzcF7LZfHfgSYoJi1voGl1lEOKHQ0T3aNWKFoqXDWNTSSAAbVLnMnzO4w45bcg3t3qNgz9D3g2S1c6fxhEWSQwQoIVDRSwGqHADxRR1HmIqfweA8AjPqZCKSSWQCahN/rWO1qPrD5wS0Rf/32u9g/qw3dcIVPQ21GKz8o3sxLfDC+3fh7hF4ax0Ub+omqX7RPlzVI7yigrfmk8/oUhzP7gh7lnwqOmoq7OD0EU2hPaYGGUUl4fjlJUiQbh094AIVhW2ubrhv1AAOLr6EgAqBC6Xvjv9biGyQzbPdklFO1W6HR37jOAA';
+
+export const serverSummaryMocks: ServerSummaryDto[] = [
+    {
+        id: '1',
+        online: true,
+        host: 'play.example.com',
+        ip_address: '192.168.0.1',
+        port: 25565,
+        versions: ['1.16.5', '1.17'],
+        onlinePlayers: 20,
+        maxPlayers: 100,
+        categories: [ServerCategory.Survival, ServerCategory.Adventure],
+        icon:
+            'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA' +
+            'AAAFCAYAAACNbyblAAAAHElEQVQI12P4' +
+            '//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==',
+        votes: 42,
+        name: 'Adv Surf server',
+        ranking: 1,
+        banner: banner,
+        description: `[1.21] OPBlocks is a high-quality Minecraft Prison, Skyblock, Cobblemon/Pixelmon, and Survival SMP server featuring unique content and an amazing community, friendly staff, and awesome players like you!
+
+BEDROCK SUPPORTED!
+
+The Original Candy Prison
+Fully Custom Skyblock
+Unique Survival SMP
+Parkour
+Boss Fights
+Mob Armor
+Dungeons
+Quests
+Daily Challenges`,
+    },
+    {
+        id: '2',
+        online: false,
+        host: 'mc.another.com',
+        ip_address: undefined,
+        port: 25566,
+        versions: ['1.15.2'],
+        onlinePlayers: 0,
+        maxPlayers: 50,
+        categories: [ServerCategory.Classic, ServerCategory.Vanilla],
+        icon: fallbackServerIcon,
+        votes: 10,
+        name: 'Classic MC',
+        ranking: 122,
+        banner: banner,
+        description: `IP: MCSL.MANACUBE.COM [1.20 Java/Bedrock]
+Over the past 10 years, 5 million players have enjoyed our unique game modes: Parkour, Skyblock, SMP, KitPvP, Factions, Prison, Earth Towny, Anarchy and Creative
+
+Parkour: Over 2500 unique maps.
+Olympus: A Greek mythology RPG. Grow as demi-gods through quests, mining, battles, and exploration.
+Skyblock: Build on a secluded island and explore for upgrades.
+Survival: An enhanced survival experience.
+Factions: A 1.19 base building/defending game with custom mobs.
+Earth: Create and rule towns or nations on a map based on satellite images of Earth.
+KitPvP: Classic 1.8 PVP with top-notch anticheat.
+Creative: Build freely with unlimited resources.
+Our in-game currency, Cubits, can be used across all servers. Store special items in the Season Vault that never reset. Experience the game with our custom resource pack, featuring unique items, monsters, cosmetics, and more.
+
+We host community events and offer daily chances to win Cubits and exclusive prizes. At ManaCube, we're not just a server – we're a community that promises a rich and immersive Minecraft experience. Come join us!
+`,
+    },
+    {
+        id: '3',
+        name: 'HDPW',
+        online: true,
+        host: 'server.third.com',
+        ip_address: '203.0.113.5',
+        port: 25565,
+        versions: ['1.18'],
+        onlinePlayers: 65,
+        maxPlayers: 200,
+        categories: [
+            ServerCategory.Hardcore,
+            ServerCategory.Skyblock,
+            ServerCategory.PvP,
+        ],
+        icon: fallbackServerIcon,
+        votes: 128,
+        ranking: 59221,
+        banner: banner,
+        description: `Welcome to BlossomCraft,
+        an excellent server known for its amazing experiences. We are a laid-back, no grief, economy, SMP server where we value community above all else.
+1.20+
+The server is running 1.20, and everyone is welcome as both Java and Bedrock players are free to join! We strive to have a Non-Competitive Environment which is achieved by making our server focused on PvE, having Keep-Inventory enabled, and by having No Leaderboards.
+The server offers a variety of plugins that enhance the player experience while also staying true to Minecrafts roots such as keep-inv, player warps, griefprevention, and more!
+Show your support for the server by voting to earn free ranks which grants perks such as extra homes, cool prefixes, chest shops, and more!
+Grab a seat, get comfy and stay for a while!`,
+    },
+];
+
+export default serverSummaryMocks;

@@ -1,8 +1,26 @@
 {
+    "copy": {
+        "copied": "Copied!",
+        "label": "Copy to clipboard"
+    },
+    "filters": {
+        "searchLabel": "Search name or description",
+        "categories": {
+            "show": "Show categories",
+            "hide": "Hide categories"
+        }
+    },
+    "footer": {
+        "credits": "Created and designed by <author>@Wisienek</author> 2025"
+    },
     "page": {
         "seo": {
-            "title": "Minecraft server list",
-            "description": "Website providing easy way to add and share minecraft servers!"
+            "description": "Website providing easy way to add and share minecraft servers!",
+            "title": "Minecraft server list"
+        },
+        "list": {
+            "playersOnline": "Players online:",
+            "version": "Version:"
         }
     }
 }

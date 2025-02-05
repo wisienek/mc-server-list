@@ -1,12 +1,15 @@
+import ThemingProvider from '@lib/front/components/organisms/theme/ThemingProvider';
 import {getMessages, setRequestLocale} from 'next-intl/server';
 import {Fira_Mono, Inter} from 'next/font/google';
 import {NextIntlClientProvider} from 'next-intl';
 import {notFound} from 'next/navigation';
-import {type ReactNode} from 'react';
+import {ReactElement} from 'react';
 
-import NoScriptMessage from '@front/components/molecules/no-script-message/NoScriptMessage';
-import Navbar from '@front/components/molecules/navbar/Navbar';
+import NoScriptMessage from '../../../components/molecules/NoScriptMessage';
+import Navbar from '../../../components/molecules/Navbar';
 import {routing} from '@front/i18n/routing';
+import StyledTemplateBody from '@front/components/atoms/StyledTemplateBody';
+import Footer from '../../../components/molecules/Footer';
 
 import './global.css';
 
@@ -15,7 +18,7 @@ export type LocaleParams = {
 };
 
 export type LocaleLayoutProps = {
-    children: ReactNode;
+    children: ReactElement;
     params: Promise<LocaleParams>;
 };
 
@@ -102,7 +105,7 @@ export function generateStaticParams() {
 
 async function LocaleLayout({children, params}: LocaleLayoutProps) {
     const {locale} = await params;
-    if (!routing.locales.includes(locale as any)) {
+    if (!routing.locales.includes(locale as never)) {
         notFound();
     }
 
@@ -113,9 +116,14 @@ async function LocaleLayout({children, params}: LocaleLayoutProps) {
         <html className={`dark ${interFont.className} ${firaMonoFont.className}`}>
             <body>
                 <NextIntlClientProvider messages={messages}>
-                    <Navbar />
-                    <NoScriptMessage />
-                    {children}
+                    <ThemingProvider>
+                        <StyledTemplateBody>
+                            <Navbar />
+                            <NoScriptMessage />
+                            {children}
+                            <Footer />
+                        </StyledTemplateBody>
+                    </ThemingProvider>
                 </NextIntlClientProvider>
             </body>
         </html>
