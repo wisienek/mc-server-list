@@ -1,6 +1,8 @@
 import {styled, type Theme} from '@mui/material/styles';
-import Box from '@mui/material/Box';
+import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import {useTranslations} from 'next-intl';
 import Logo from './icons/discord.svg';
 
 const StyledContainer = styled(Box)(({theme}) => ({
@@ -19,8 +21,16 @@ type DiscordProfileProps = {
 };
 
 const DiscordProfile = ({avatar}: DiscordProfileProps) => {
+    const t = useTranslations('profile');
+
     const AvatarIcon = () =>
-        avatar ? <Avatar alt="user avatar" src={avatar} /> : <LoginIcon />;
+        avatar ? (
+            <Avatar alt="user avatar" src={avatar} />
+        ) : (
+            <Tooltip arrow title={t('login')}>
+                <LoginIcon />
+            </Tooltip>
+        );
 
     return (
         <StyledContainer>

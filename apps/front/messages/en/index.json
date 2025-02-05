@@ -1,4 +1,7 @@
 {
+    "profile": {
+        "login": "Login with discord!"
+    },
     "copy": {
         "copied": "Copied!",
         "label": "Copy to clipboard"
