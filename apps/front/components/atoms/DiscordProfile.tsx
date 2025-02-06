@@ -28,7 +28,12 @@ const DiscordProfile = ({avatar}: DiscordProfileProps) => {
             <Avatar alt="user avatar" src={avatar} />
         ) : (
             <Tooltip arrow title={t('login')}>
-                <LoginIcon />
+                <a
+                    href={`${process.env.NEXT_PUBLIC_API_URL}/users/discord/redirect`}
+                    target="_blank"
+                >
+                    <LoginIcon />
+                </a>
             </Tooltip>
         );
 

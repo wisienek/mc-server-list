@@ -16,7 +16,9 @@ import {
     InitDB1738498523335,
     RemoveTimeData1738499883841,
     ServerAdditionalInfo1738720838341,
+    SessionDeletedAt1738793624563,
     UserAuth1738523212153,
+    UserAvatarNullable1738793280539,
 } from './migrations';
 
 const getDefaultConfig = (): PostgresConnectionOptions => {
@@ -54,6 +56,8 @@ export const getConfig = (): DataSourceOptions => {
             RemoveTimeData1738499883841,
             UserAuth1738523212153,
             ServerAdditionalInfo1738720838341,
+            UserAvatarNullable1738793280539,
+            SessionDeletedAt1738793624563,
         ],
     };
 };

@@ -21,12 +21,17 @@ export class DiscordAuthService implements IAuthService {
     public async validateUser(details: UserDetails): Promise<User> {
         const {discordId} = details;
         const user = await this.findUser({discordId});
-
         return user ? this.updateUser(user, details) : this.createUser(details);
     }
 
-    public async createUser(details: UserDetails) {
-        const user = this.userRepository.create(details);
+    public async createUser(details: UserDetails): Promise<User> {
+        const user = this.userRepository.create({
+            email: details.email,
+            discordTag: details.discordTag,
+            discordId: details.discordId,
+            avatar: details.avatar,
+            username: details.username,
+        });
         return this.userRepository.save(user);
     }
 

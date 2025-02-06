@@ -29,13 +29,14 @@ export class DiscordStrategy extends PassportStrategy(Strategy) {
         const encryptedAccessToken = this.encrypt(accessToken);
         const encryptedRefreshToken = this.encrypt(refreshToken);
 
-        const {id: discordId, email, discriminator, username, avatar} = profile;
+        const {id: discordId, discriminator, username, avatar} = profile;
 
         const user = await this.authService.validateUser({
             discordId,
-            email,
+            email: profile.email as string,
             discordTag: `${username}#${discriminator}`,
             avatar,
+            username,
         });
 
         await this.authService.validateOAuth2({

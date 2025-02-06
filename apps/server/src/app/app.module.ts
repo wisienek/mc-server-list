@@ -2,6 +2,7 @@ import type {ModuleMetadata} from '@nestjs/common/interfaces/modules/module-meta
 import {EventEmitterModule} from '@nestjs/event-emitter';
 import {Module, type Provider} from '@nestjs/common';
 import {AutomapperModule} from '@automapper/nestjs';
+import {PassportModule} from '@nestjs/passport';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import {classes} from '@automapper/classes';
 import {CqrsModule} from '@nestjs/cqrs';
@@ -29,6 +30,7 @@ const serverModules: ModuleMetadata['imports'] = [
         AutomapperModule.forRoot({
             strategyInitializer: classes(),
         }),
+        PassportModule.register({session: true}),
         ...configs,
         ...serverModules,
         TypeOrmModule.forFeature([Session]),

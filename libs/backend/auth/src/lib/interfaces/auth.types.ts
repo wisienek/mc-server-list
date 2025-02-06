@@ -3,8 +3,9 @@ import {User} from '@backend/db';
 export type UserDetails = {
     discordId: string;
     discordTag: string;
+    username: string;
     avatar: string | null | undefined;
-    email: string | null | undefined;
+    email: string;
 };
 
 export type OAuth2Details = {

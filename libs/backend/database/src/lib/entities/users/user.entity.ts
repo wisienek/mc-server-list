@@ -18,8 +18,8 @@ export class User {
     @Column({name: 'discord_tag'})
     discordTag: string;
 
-    @Column()
-    avatar: string;
+    @Column({nullable: true})
+    avatar?: string | null;
 
     @Column({unique: true})
     discordId: string;

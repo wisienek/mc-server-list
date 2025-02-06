@@ -3,6 +3,7 @@ import {PassportModule} from '@nestjs/passport';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import {Module} from '@nestjs/common';
 import {User} from '@backend/db';
+import {UsersController} from './users.controller';
 import {UsersService} from './users.service';
 
 @Module({
@@ -11,6 +12,7 @@ import {UsersService} from './users.service';
         TypeOrmModule.forFeature([User]),
         DiscordAuthModule,
     ],
+    controllers: [UsersController],
     providers: [UsersService],
     exports: [UsersService],
 })

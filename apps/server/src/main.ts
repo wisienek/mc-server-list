@@ -7,6 +7,7 @@ import session from 'express-session';
 import {SimpleLogger} from '@backend/logger';
 import {ApiConfig} from '@backend/config';
 import {Session} from '@backend/db';
+import passport from 'passport';
 import {Repository} from 'typeorm';
 import {AppModule} from './app/app.module';
 
@@ -31,15 +32,19 @@ async function bootstrap() {
     );
     app.use(
         session({
+            name: 'mc-list-dc',
             secret: configService.COOKIE_SECRET,
             resave: false,
             saveUninitialized: false,
             cookie: {
-                maxAge: configService.TOKEN_EXPIRATION_HOURS,
+                secure: false,
+                maxAge: configService.TOKEN_EXPIRATION_HOURS * 60 * 60 * 1_000,
             },
             store: new TypeormStore().connect(sessionRepository),
         }),
     );
+    app.use(passport.initialize());
+    app.use(passport.session());
 
     const options = new DocumentBuilder()
         .setTitle('McList Api')

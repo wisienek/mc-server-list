@@ -1,0 +1,29 @@
+{
+    "profile": {
+        "login": "Zaloguj się przez Discord!"
+    },
+    "copy": {
+        "copied": "Skopiowano!",
+        "label": "Kopiuj do schowka"
+    },
+    "filters": {
+        "searchLabel": "Szukaj nazwy lub opisu",
+        "categories": {
+            "show": "Pokaż kategorie",
+            "hide": "Ukryj kategorie"
+        }
+    },
+    "footer": {
+        "credits": "Stworzone i zaprojektowane przez <author>@Wisienek</author> 2025"
+    },
+    "page": {
+        "seo": {
+            "description": "Strona internetowa umożliwiająca łatwe dodawanie i udostępnianie serwerów Minecraft!",
+            "title": "Lista serwerów Minecraft"
+        },
+        "list": {
+            "playersOnline": "Gracze online:",
+            "version": "Wersja:"
+        }
+    }
+}
