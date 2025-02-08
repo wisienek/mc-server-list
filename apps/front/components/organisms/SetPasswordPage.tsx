@@ -114,7 +114,7 @@ export default function CredentialsPage() {
                 <ButtonContainer>
                     <Button
                         variant="outlined"
-                        onClick={() => router.back()}
+                        onClick={() => router.push('/')}
                         disabled={isSubmitting}
                     >
                         {t('cancel')}

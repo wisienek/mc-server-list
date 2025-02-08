@@ -1,14 +1,14 @@
 'use client';
 import {UserDto} from '@shared/dto';
+import {useRouter} from 'next/navigation';
 import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
 import {BroadcastingChannels} from '../../consts';
 import useUserCookie from '../helpers/getUserFromCookieOrDestroy';
 import {setIsFirstLogin, setUser} from './authSlice';
-import {useRouter} from '@front/i18n/routing';
+import {useAppDispatch} from './store';
 
 const InitializeAuth: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const {fetchUser, fetchIsFirstLogin} = useUserCookie();
     const router = useRouter();
 
@@ -39,7 +39,7 @@ const InitializeAuth: React.FC = () => {
 
             if (isFirstLogin !== undefined) {
                 dispatch(setIsFirstLogin(isFirstLogin));
-                router.push(`/set-password`);
+                router.push(`/en/set-password`);
             }
         };
 

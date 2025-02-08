@@ -2,7 +2,8 @@
     "cancel": "Cancel",
     "genericError": "An error occurred.",
     "profile": {
-        "login": "Login with discord!",
+        "loginDiscord": "Login with discord!",
+        "logout": "Logout",
         "password": {
             "setCredentials": "Set Your credentials:",
             "successfullySet": "Credentials saved successfully!",

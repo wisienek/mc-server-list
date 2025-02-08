@@ -3,13 +3,18 @@ import {useCallback} from 'react';
 import axios from 'axios';
 import {CookieNames} from '@shared/enums';
 import {UserDto} from '@shared/dto';
+import {useAppDispatch} from '../store/store';
+import {logout} from '../store/authSlice';
 
 const useUserCookie = () => {
     const cookieStore = useCookies();
+    const dispatch = useAppDispatch();
 
     const sessionId = cookieStore.get(CookieNames.SESSION_ID);
 
     const fetchUser = useCallback(async () => {
+        if (!sessionId) return;
+
         try {
             const statusResponse = await axios.get(
                 `${process.env.NEXT_PUBLIC_API_URL}/users/status`,
@@ -23,12 +28,14 @@ const useUserCookie = () => {
             const userDto: UserDto = statusResponse.data;
             return userDto;
         } catch (error) {
-            console.error('Error fetching user:', error);
+            console.error(`Error fetching user (${sessionId}):`, error);
             return;
         }
     }, [sessionId]);
 
     const fetchIsFirstLogin = useCallback(async () => {
+        if (!sessionId) return;
+
         try {
             const {data} = await axios.get(
                 `${process.env.NEXT_PUBLIC_API_URL}/users/has-credentials`,
@@ -43,7 +50,29 @@ const useUserCookie = () => {
         }
     }, [sessionId]);
 
-    return {fetchIsFirstLogin, fetchUser};
+    const internalLogout = useCallback(async () => {
+        if (!sessionId) return;
+
+        try {
+            await axios.post(
+                `${process.env.NEXT_PUBLIC_API_URL}/users/logout`,
+                {},
+                {
+                    withCredentials: true,
+                },
+            );
+            cookieStore.remove(CookieNames.SESSION_ID);
+
+            dispatch(logout());
+
+            return true;
+        } catch (error) {
+            console.error('Error logging out:', error);
+            return false;
+        }
+    }, [sessionId]);
+
+    return {fetchIsFirstLogin, fetchUser, internalLogout};
 };
 
 export default useUserCookie;

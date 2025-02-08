@@ -2,7 +2,8 @@
     "cancel": "Anuluj",
     "genericError": "Wystąpił błąd.",
     "profile": {
-        "login": "Zaloguj się przez Discord!",
+        "loginDiscord": "Zaloguj się przez Discord!",
+        "logout": "Wyloguj",
         "password": {
             "setCredentials": "Ustaw swoje dane logowania:",
             "successfullySet": "Dane logowania zapisane pomyślnie!",

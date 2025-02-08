@@ -1,7 +1,8 @@
-import {Body, Controller, Get, Post, UseGuards} from '@nestjs/common';
+import {Body, Controller, Get, Post, Req, UseGuards} from '@nestjs/common';
 import {InjectMapper} from '@automapper/nestjs';
 import type {Mapper} from '@automapper/core';
 import {ApiTags} from '@nestjs/swagger';
+import {type Request} from 'express';
 import {AuthenticatedGuard, DiscordAuthGuard, SessionUser} from '@backend/auth';
 import {User} from '@backend/db';
 import {SaveUserCredentialsDto, UserDto} from '@shared/dto';
@@ -48,7 +49,7 @@ export class UsersController {
     }
 
     @Post('logout')
-    logout() {
-        return {};
+    async logout(@Req() request: Request): Promise<any> {
+        return this.usersService.logout(request);
     }
 }

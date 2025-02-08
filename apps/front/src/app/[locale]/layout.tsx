@@ -4,11 +4,11 @@ import {Fira_Mono, Inter} from 'next/font/google';
 import {NextIntlClientProvider} from 'next-intl';
 import {notFound} from 'next/navigation';
 import type {ReactElement} from 'react';
-import NoScriptMessage from '../../../components/molecules/NoScriptMessage';
-import Navbar from '../../../components/molecules/Navbar';
+import NoScriptMessage from '@front/components/molecules/NoScriptMessage';
+import Navbar from '@front/components/molecules/Navbar';
 import {routing} from '@front/i18n/routing';
 import StyledTemplateBody from '@front/components/atoms/StyledTemplateBody';
-import Footer from '../../../components/molecules/Footer';
+import Footer from '@front/components/molecules/Footer';
 
 import './global.css';
 

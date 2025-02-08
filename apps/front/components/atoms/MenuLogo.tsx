@@ -1,6 +1,7 @@
 import Typography from '@mui/material/Typography';
 import Logo from './icons/logo.svg';
 import {styled} from '@mui/material/styles';
+import {useRouter} from '@front/i18n/routing';
 
 const StyledLogo = styled('div')(({theme}) => ({
     userSelect: 'none',
@@ -9,6 +10,8 @@ const StyledLogo = styled('div')(({theme}) => ({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: theme.spacing(1),
+    cursor: 'pointer',
+
     [theme.breakpoints.down('sm')]: {
         display: 'none',
     },
@@ -27,8 +30,10 @@ const StyledTitle = styled(Typography)(({theme}) => ({
 }));
 
 const MenuLogo = () => {
+    const router = useRouter();
+
     return (
-        <StyledLogo>
+        <StyledLogo onClick={() => router.push('/')}>
             <Logo width={60} />
             <StyledTitle variant="h6" noWrap>
                 MSL

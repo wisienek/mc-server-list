@@ -1,5 +1,6 @@
 import {DiscordOAuth2Credentials, User, UserCredentials} from '@backend/db';
 import {InjectRepository} from '@nestjs/typeorm';
+import type {Request} from 'express';
 import {IsNull, Repository} from 'typeorm';
 import {Injectable} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
@@ -15,6 +16,12 @@ export class UsersService {
         @InjectRepository(UserCredentials)
         private readonly userCredentialsRepository: Repository<UserCredentials>,
     ) {}
+
+    public async logout(request: Request) {
+        return request.session.destroy(() => {
+            return true;
+        });
+    }
 
     public async isFirstLogin(discordId: string): Promise<boolean> {
         const hasEverLoggedIn = await this.authTokensRepository.exists({
