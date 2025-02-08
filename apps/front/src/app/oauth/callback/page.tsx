@@ -1,3 +1,4 @@
+import {CookieNames} from '@shared/enums';
 import {notFound} from 'next/navigation';
 import AuthCallbackPage from '../../../../components/organisms/AuthCallbackPage';
 
@@ -9,7 +10,6 @@ type PageProps = {
 
 const Page = async ({searchParams}: PageProps) => {
     const params = await searchParams;
-
     const code = params['code'];
 
     if (!code) {
@@ -22,9 +22,7 @@ const Page = async ({searchParams}: PageProps) => {
     );
     const extractedCookie = fetchResponse.headers
         .getSetCookie()
-        .find((i) => i.includes('mc-list-dc'));
-
-    console.log(`login response`, extractedCookie);
+        .find((i) => i.includes(CookieNames.SESSION_ID));
 
     return <AuthCallbackPage cookieString={extractedCookie} />;
 };

@@ -1,6 +1,17 @@
 {
+    "cancel": "Cancel",
+    "genericError": "An error occurred.",
     "profile": {
-        "login": "Login with discord!"
+        "login": "Login with discord!",
+        "password": {
+            "setCredentials": "Set Your credentials:",
+            "successfullySet": "Credentials saved successfully!",
+            "credentialsSaveError": "An error occurred while saving credentials.",
+            "password": "Password",
+            "passwordPlaceholder": "Please enter a password",
+            "saving": "Saving",
+            "save": "Save credentials"
+        }
     },
     "copy": {
         "copied": "Copied!",

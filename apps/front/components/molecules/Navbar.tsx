@@ -5,6 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import DiscordProfile from '../atoms/DiscordProfile';
 import MenuLogo from '../atoms/MenuLogo';
+import {useAppSelector} from '../store/store';
 
 const StyledAppBar = styled(AppBar)(({theme}) => ({
     background: theme.palette.background.paper,
@@ -13,13 +14,15 @@ const StyledAppBar = styled(AppBar)(({theme}) => ({
 }));
 
 function Navbar() {
+    const profile = useAppSelector((state) => state.auth.user);
+
     return (
         <StyledAppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters sx={{justifyContent: 'space-between'}}>
                     <MenuLogo />
 
-                    <DiscordProfile />
+                    <DiscordProfile user={profile} />
                 </Toolbar>
             </Container>
         </StyledAppBar>

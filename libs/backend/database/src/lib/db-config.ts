@@ -10,6 +10,7 @@ import {
     ServerVerification,
     Session,
     User,
+    UserCredentials,
     Vote,
 } from './entities';
 import {
@@ -19,6 +20,7 @@ import {
     SessionDeletedAt1738793624563,
     UserAuth1738523212153,
     UserAvatarNullable1738793280539,
+    UserCredentials1738883140309,
 } from './migrations';
 
 const getDefaultConfig = (): PostgresConnectionOptions => {
@@ -50,6 +52,7 @@ export const getConfig = (): DataSourceOptions => {
             DiscordOAuth2Credentials,
             Session,
             Vote,
+            UserCredentials,
         ],
         migrations: [
             InitDB1738498523335,
@@ -58,6 +61,7 @@ export const getConfig = (): DataSourceOptions => {
             ServerAdditionalInfo1738720838341,
             UserAvatarNullable1738793280539,
             SessionDeletedAt1738793624563,
+            UserCredentials1738883140309,
         ],
     };
 };

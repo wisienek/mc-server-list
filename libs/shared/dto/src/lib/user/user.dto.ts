@@ -15,8 +15,16 @@ export class UserDto {
     discordId: string;
 
     @AutoMap()
+    @IsString({message: 'Discord Tag must be a string.'})
+    discordTag: string;
+
+    @AutoMap()
     @IsString({message: 'Username must be a string.'})
     username: string;
+
+    @AutoMap()
+    @IsString({message: 'Avatar must be a string.'})
+    avatar?: string;
 
     // @AutoMap(() => [SimplifiedServerDto])
     // @ValidateNested({ each: true })

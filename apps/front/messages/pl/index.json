@@ -1,6 +1,17 @@
 {
+    "cancel": "Anuluj",
+    "genericError": "Wystąpił błąd.",
     "profile": {
-        "login": "Zaloguj się przez Discord!"
+        "login": "Zaloguj się przez Discord!",
+        "password": {
+            "setCredentials": "Ustaw swoje dane logowania:",
+            "successfullySet": "Dane logowania zapisane pomyślnie!",
+            "credentialsSaveError": "Wystąpił błąd podczas zapisywania danych logowania.",
+            "password": "Hasło",
+            "passwordPlaceholder": "Wprowadź hasło",
+            "saving": "Zapisywanie...",
+            "save": "Zapisz dane logowania"
+        }
     },
     "copy": {
         "copied": "Skopiowano!",
@@ -18,7 +29,7 @@
     },
     "page": {
         "seo": {
-            "description": "Strona internetowa umożliwiająca łatwe dodawanie i udostępnianie serwerów Minecraft!",
+            "description": "Strona umożliwiająca łatwe dodawanie i udostępnianie serwerów Minecraft!",
             "title": "Lista serwerów Minecraft"
         },
         "list": {

@@ -3,8 +3,7 @@ import {getMessages, setRequestLocale} from 'next-intl/server';
 import {Fira_Mono, Inter} from 'next/font/google';
 import {NextIntlClientProvider} from 'next-intl';
 import {notFound} from 'next/navigation';
-import {ReactElement} from 'react';
-
+import type {ReactElement} from 'react';
 import NoScriptMessage from '../../../components/molecules/NoScriptMessage';
 import Navbar from '../../../components/molecules/Navbar';
 import {routing} from '@front/i18n/routing';
@@ -19,6 +18,7 @@ export type LocaleParams = {
 
 export type LocaleLayoutProps = {
     children: ReactElement;
+    modal: ReactElement;
     params: Promise<LocaleParams>;
 };
 
@@ -37,7 +37,6 @@ const firaMonoFont = Fira_Mono({
     fallback: ['Courier New', 'monospace'],
 });
 
-// TODO: change url
 export const metadata = {
     metadataBase: new URL('https://my-minecraft-servers.com'),
     title: {
@@ -103,7 +102,7 @@ export function generateStaticParams() {
     return routing.locales.map((locale) => ({locale}));
 }
 
-async function LocaleLayout({children, params}: LocaleLayoutProps) {
+async function LocaleLayout({children, modal, params}: LocaleLayoutProps) {
     const {locale} = await params;
     if (!routing.locales.includes(locale as never)) {
         notFound();
@@ -120,7 +119,9 @@ async function LocaleLayout({children, params}: LocaleLayoutProps) {
                         <StyledTemplateBody>
                             <Navbar />
                             <NoScriptMessage />
+                            <div id="modal-root" />
                             {children}
+                            {modal}
                             <Footer />
                         </StyledTemplateBody>
                     </ThemingProvider>
