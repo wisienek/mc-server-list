@@ -26,7 +26,7 @@ const serverModules: ModuleMetadata['imports'] = [
 @Module({
     imports: [
         EventEmitterModule.forRoot(),
-        CqrsModule,
+        CqrsModule.forRoot(),
         AutomapperModule.forRoot({
             strategyInitializer: classes(),
         }),

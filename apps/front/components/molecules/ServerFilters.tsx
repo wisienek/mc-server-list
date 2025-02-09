@@ -1,10 +1,12 @@
 'use client';
-import {useTranslations} from 'next-intl';
+import {FormControl, InputLabel, OutlinedInput} from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import IconButton from '@mui/material/IconButton';
 import React, {type FC, useState} from 'react';
 import {styled} from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import {useTranslations} from 'next-intl';
+import Box from '@mui/material/Box';
 import ServerCategoriesSelect, {
     useCategories,
 } from '../atoms/ServerCategoriesSelect';
@@ -39,13 +41,27 @@ const ServerFilters: FC = () => {
     return (
         <Container>
             <InputsContainer>
-                <TextField
-                    fullWidth
-                    variant="outlined"
-                    label={t('searchLabel')}
-                    value={searchText}
-                    onChange={(e) => setSearchText(e.target.value)}
-                />
+                <FormControl fullWidth variant="outlined">
+                    <InputLabel htmlFor="search-input">
+                        {t('searchLabel')}
+                    </InputLabel>
+                    <OutlinedInput
+                        id="search-input"
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value)}
+                        endAdornment={
+                            <IconButton
+                                type="button"
+                                sx={{p: '10px'}}
+                                aria-label="search"
+                                color="secondary"
+                            >
+                                <SearchIcon />
+                            </IconButton>
+                        }
+                        label={t('searchLabel')}
+                    />
+                </FormControl>
                 <Button
                     variant="contained"
                     onClick={() =>

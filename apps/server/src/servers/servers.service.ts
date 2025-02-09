@@ -1,3 +1,6 @@
+import {GetUserQuery} from '@backend/commander';
+import {QueryBus} from '@nestjs/cqrs';
+import {plainToInstance} from 'class-transformer';
 import {omit} from 'lodash';
 import {Repository, type FindOptionsWhere} from 'typeorm';
 import {InjectRepository} from '@nestjs/typeorm';
@@ -45,6 +48,7 @@ export class ServersService {
         private readonly serverRepository: Repository<Server>,
         private readonly logger: Logger,
         private readonly mcStatsService: MCStatsService,
+        private readonly queryBus: QueryBus,
         @InjectMapper()
         private readonly mapper: Mapper,
     ) {}
@@ -135,8 +139,9 @@ export class ServersService {
             );
         }
 
-        // FIXME: users service
-        const user = {} as User;
+        const user = await this.queryBus.execute(
+            plainToInstance(GetUserQuery, {email: userEmail}),
+        );
 
         const isBedrock = data.type === ServerType.BEDROCK;
 
@@ -151,7 +156,7 @@ export class ServersService {
 
         const verification = this.verificationRepository.create({
             code: this.generateRandomString(16),
-            expiresAt: Date.now() + 1_000 * 60 * 60, // 1hr
+            expiresAt: Date.now() + 1_000 * 60 * 60 * 4, // 4hr
         });
 
         let createdServer: Server;
@@ -169,9 +174,16 @@ export class ServersService {
             );
         }
 
-        console.log(createdServer);
+        await this.verificationRepository.save({
+            ...verification,
+            server: createdServer,
+        });
 
-        return verification;
+        this.logger.log(
+            `Created server: ${createdServer.host} for ${createdServer.type} and verification: ${verification.code} for user: ${userEmail}`,
+        );
+
+        return {...verification, host: createdServer.host};
     }
 
     public async verifyServer(data: VerifyServerDto): Promise<Server> {
@@ -193,6 +205,8 @@ export class ServersService {
             fetchInfo.motd.clean.includes(server.verification.code) &&
             Date.now() <= server.verification.expiresAt &&
             !server.isActive;
+
+        console.log(isVerified, fetchInfo.motd.clean);
 
         if (!isVerified) {
             throw new ServerVerificationUnsuccessfulError();
@@ -290,9 +304,6 @@ export class ServersService {
             MinecraftServerOnlineStatus,
             JavaServer,
         );
-
-        console.log(omit(data, ['icon']));
-        console.log(omit(mappedData, ['icon']));
 
         if (!found) {
             return await this.javaServerRepository.save(

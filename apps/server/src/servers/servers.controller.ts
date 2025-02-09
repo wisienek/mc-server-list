@@ -1,5 +1,6 @@
 import {InjectMapper} from '@automapper/nestjs';
 import type {Mapper} from '@automapper/core';
+import {AuthenticatedGuard, SessionUser} from '@backend/auth';
 import {
     ApiBadRequestResponse,
     ApiConflictResponse,
@@ -17,8 +18,9 @@ import {
     Patch,
     Post,
     Query,
+    UseGuards,
 } from '@nestjs/common';
-import {Server} from '@backend/db';
+import {Server, User} from '@backend/db';
 import {
     CreateServerDto,
     CreateServerResponseDto,
@@ -73,14 +75,13 @@ export class ServersController {
         type: ServerExistsError,
         description: `When server already exists in database and is owned by user`,
     })
+    @UseGuards(AuthenticatedGuard)
     @Post()
     async createServer(
+        @SessionUser() user: User,
         @Body() createServerDto: CreateServerDto,
     ): Promise<CreateServerResponseDto> {
-        return await this.serversService.createServer(
-            createServerDto,
-            'test@gmail.com',
-        );
+        return await this.serversService.createServer(createServerDto, user.email);
     }
 
     @ApiParam({
@@ -111,8 +112,10 @@ export class ServersController {
         type: ServerNotFoundError,
         description: `When server couldn't be found by ip or hostname`,
     })
+    @UseGuards(AuthenticatedGuard)
     @Patch(':host')
     async verifyServer(
+        @SessionUser() user: User,
         @Param('host') host: string,
         @Body() data: VerifyServerDto,
     ): Promise<ServerDto> {
@@ -128,8 +131,9 @@ export class ServersController {
         required: true,
         description: 'hostname of the server',
     })
+    @UseGuards(AuthenticatedGuard)
     @Patch(':host/details')
-    async createDetails(@Param('host') host: string) {
+    async createDetails(@SessionUser() user: User, @Param('host') host: string) {
         throw new NotImplementedException();
     }
 
@@ -145,8 +149,9 @@ export class ServersController {
         type: ServerNotFoundError,
         description: `When server couldn't be found by hostname`,
     })
+    @UseGuards(AuthenticatedGuard)
     @Delete(':host')
-    async deleteServer(@Param('host') host: string) {
+    async deleteServer(@SessionUser() user: User, @Param('host') host: string) {
         await this.serversService.deleteServer(host);
     }
 
@@ -155,8 +160,12 @@ export class ServersController {
         required: true,
         description: 'hostname of the server',
     })
+    @UseGuards(AuthenticatedGuard)
     @Post(':host/vote')
-    async vote(@Param('host') host: string): Promise<boolean> {
+    async vote(
+        @SessionUser() user: User,
+        @Param('host') host: string,
+    ): Promise<boolean> {
         throw new NotImplementedException();
     }
 }

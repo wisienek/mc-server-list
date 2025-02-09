@@ -1,14 +1,24 @@
-import {useTranslations} from 'next-intl';
+'use client';
+
 import React, {useState, type FC, ComponentProps} from 'react';
 import {Box, Typography, IconButton, Tooltip} from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import {useTranslations} from 'next-intl';
 
-type CopyableTypographyProps = {
+interface CopyableTypographyProps extends ComponentProps<typeof Typography> {
+    /**
+     * The plain text value that will be copied when the user triggers the copy action.
+     */
     text: string;
-} & ComponentProps<typeof Typography>;
+    /**
+     * Optional children. If provided, these will be rendered as the visible content instead of the plain text.
+     */
+    children?: React.ReactNode;
+}
 
 const CopyableTypography: FC<CopyableTypographyProps> = ({
     text,
+    children,
     ...typographyProps
 }) => {
     const t = useTranslations('copy');
@@ -31,10 +41,10 @@ const CopyableTypography: FC<CopyableTypographyProps> = ({
             <Tooltip title={tooltipTitle} placement="top" arrow>
                 <Typography
                     {...typographyProps}
-                    sx={{cursor: 'pointer'}}
+                    sx={{cursor: 'pointer', ...typographyProps.sx}}
                     onClick={handleCopy}
                 >
-                    {text}
+                    {children || text}
                 </Typography>
             </Tooltip>
             <Tooltip title={tooltipTitle} placement="top" arrow>

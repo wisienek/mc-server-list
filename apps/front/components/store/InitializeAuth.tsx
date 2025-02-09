@@ -1,11 +1,11 @@
 'use client';
-import {UserDto} from '@shared/dto';
 import {useRouter} from 'next/navigation';
 import React, {useEffect} from 'react';
-import {BroadcastingChannels} from '../../consts';
-import useUserCookie from '../helpers/getUserFromCookieOrDestroy';
-import {setIsFirstLogin, setUser} from './authSlice';
-import {useAppDispatch} from './store';
+import useUserCookie from '@front/components/helpers/getUserFromCookieOrDestroy';
+import {setIsFirstLogin, setUser} from '@lib/front/components/store/authSlice';
+import {useAppDispatch} from '@lib/front/components/store/store';
+import {BroadcastingChannels} from '@front/consts';
+import {UserDto} from '@shared/dto';
 
 const InitializeAuth: React.FC = () => {
     const dispatch = useAppDispatch();

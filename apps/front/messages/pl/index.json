@@ -3,13 +3,13 @@
     "genericError": "Wystąpił błąd.",
     "profile": {
         "loginDiscord": "Zaloguj się przez Discord!",
-        "logout": "Wyloguj",
+        "logout": "Wyloguj się",
         "password": {
             "setCredentials": "Ustaw swoje dane logowania:",
             "successfullySet": "Dane logowania zapisane pomyślnie!",
             "credentialsSaveError": "Wystąpił błąd podczas zapisywania danych logowania.",
             "password": "Hasło",
-            "passwordPlaceholder": "Wprowadź hasło",
+            "passwordPlaceholder": "Proszę podać hasło",
             "saving": "Zapisywanie...",
             "save": "Zapisz dane logowania"
         }
@@ -36,6 +36,26 @@
         "list": {
             "playersOnline": "Gracze online:",
             "version": "Wersja:"
+        }
+    },
+    "server": {
+        "add": {
+            "newServer": "Dodaj nowy serwer",
+            "title": "Utwórz serwer",
+            "hostName": "IP serwera / Nazwa hosta",
+            "port": "Port serwera",
+            "type": "Typ serwera",
+            "isSubmitting": "Tworzenie...",
+            "save": "Uzyskaj kod walidacyjny",
+            "cancel": "Anuluj",
+            "addressRequired": "Wymagany jest adres serwera.",
+            "invalidAddress": "Adres musi być poprawnym adresem IPv4 lub nazwą hosta.",
+            "portRequired": "Wymagany jest port.",
+            "portMin": "Port musi być co najmniej 1.",
+            "portMax": "Port musi być co najwyżej 65535.",
+            "verificationInstructions": "Skopiuj kod weryfikacyjny <code></code> do pliku MOTD serwera, a następnie kliknij przycisk poniżej, aby rozpocząć weryfikację.",
+            "expiresAt": "Wygasa <expirationDate></expirationDate>",
+            "startVerification": "Rozpocznij weryfikację"
         }
     }
 }

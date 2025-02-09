@@ -26,8 +26,7 @@ export class CreateServerDto {
     @IsInt()
     @IsPositive()
     @Max(65536)
-    @ValidateIf((o) => o.ip === undefined)
-    port?: number;
+    port: number;
 
     @AutoMap()
     @IsEnum(ServerType)
@@ -46,4 +45,8 @@ export class CreateServerResponseDto {
     @IsPositive()
     @AutoMap()
     expiresAt: number;
+
+    @IsString()
+    @AutoMap()
+    host: string;
 }

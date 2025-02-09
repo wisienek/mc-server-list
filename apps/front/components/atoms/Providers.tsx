@@ -1,8 +1,8 @@
 'use client';
+import {type AppStore, makeStore} from '@lib/front/components/store/store';
 import React, {useRef} from 'react';
 import {Provider} from 'react-redux';
 import InitializeAuth from '../store/InitializeAuth';
-import {type AppStore, makeStore} from '../store/store';
 
 interface ProvidersProps {
     children: React.ReactNode;

@@ -1,5 +1,5 @@
 'use client';
-import {ReactNode, useCallback, useEffect, useMemo, useState} from 'react';
+import {type ReactNode, useCallback, useEffect, useMemo, useState} from 'react';
 import {createTheme, StyledEngineProvider, ThemeProvider} from '@mui/material';
 import Cookies from 'js-cookie';
 

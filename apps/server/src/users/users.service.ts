@@ -5,6 +5,7 @@ import {IsNull, Repository} from 'typeorm';
 import {Injectable} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import {SaveUserCredentialsDto} from '@shared/dto';
+import {FindOptionsRelations} from 'typeorm/find-options/FindOptionsRelations';
 import {UserNotFoundError} from './errors';
 
 @Injectable()
@@ -16,6 +17,13 @@ export class UsersService {
         @InjectRepository(UserCredentials)
         private readonly userCredentialsRepository: Repository<UserCredentials>,
     ) {}
+
+    public async getUserByEmail(
+        email: string,
+        relations: FindOptionsRelations<User> = {votes: true, servers: true},
+    ): Promise<User> {
+        return await this.usersRepository.findOne({where: {email}, relations});
+    }
 
     public async logout(request: Request) {
         return request.session.destroy(() => {

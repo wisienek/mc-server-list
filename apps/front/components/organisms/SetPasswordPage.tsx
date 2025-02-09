@@ -122,7 +122,7 @@ export default function CredentialsPage() {
                     <Button
                         type="submit"
                         variant="contained"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !!errors.password}
                     >
                         {isSubmitting
                             ? t('profile.password.saving')

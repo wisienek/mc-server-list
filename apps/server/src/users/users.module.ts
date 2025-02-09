@@ -1,11 +1,14 @@
 import {DiscordAuthModule} from '@backend/auth';
 import {PassportModule} from '@nestjs/passport';
 import {TypeOrmModule} from '@nestjs/typeorm';
-import {Module} from '@nestjs/common';
+import {Module, type Provider} from '@nestjs/common';
 import {DiscordOAuth2Credentials, User, UserCredentials} from '@backend/db';
+import {GetUserHandler} from './handlers';
 import {UsersController} from './users.controller';
 import {UsersService} from './users.service';
 import {UserProfile} from './users.profile';
+
+const handlers: Provider[] = [GetUserHandler];
 
 @Module({
     imports: [
@@ -14,7 +17,7 @@ import {UserProfile} from './users.profile';
         DiscordAuthModule,
     ],
     controllers: [UsersController],
-    providers: [UsersService, UserProfile],
+    providers: [...handlers, UsersService, UserProfile],
     exports: [UsersService],
 })
 export class UsersModule {}

@@ -1,10 +1,10 @@
+import {logout} from '@lib/front/components/store/authSlice';
+import {useAppDispatch} from '@lib/front/components/store/store';
 import {useCookies} from 'next-client-cookies';
 import {useCallback} from 'react';
 import axios from 'axios';
 import {CookieNames} from '@shared/enums';
 import {UserDto} from '@shared/dto';
-import {useAppDispatch} from '../store/store';
-import {logout} from '../store/authSlice';
 
 const useUserCookie = () => {
     const cookieStore = useCookies();

@@ -1,3 +1,4 @@
+import NotificationsContainer from '@lib/front/components/organisms/NotificationCenter';
 import ThemingProvider from '@lib/front/components/organisms/theme/ThemingProvider';
 import {getMessages, setRequestLocale} from 'next-intl/server';
 import {Fira_Mono, Inter} from 'next/font/google';
@@ -9,6 +10,12 @@ import Navbar from '@front/components/molecules/Navbar';
 import {routing} from '@front/i18n/routing';
 import StyledTemplateBody from '@front/components/atoms/StyledTemplateBody';
 import Footer from '@front/components/molecules/Footer';
+
+import 'dayjs/locale/pl';
+import 'dayjs/locale/en';
+import 'dayjs/locale/de';
+import 'dayjs/locale/fr';
+import 'dayjs/locale/it';
 
 import './global.css';
 
@@ -122,6 +129,7 @@ async function LocaleLayout({children, modal, params}: LocaleLayoutProps) {
                             <div id="modal-root" />
                             {children}
                             {modal}
+                            <NotificationsContainer />
                             <Footer />
                         </StyledTemplateBody>
                     </ThemingProvider>
