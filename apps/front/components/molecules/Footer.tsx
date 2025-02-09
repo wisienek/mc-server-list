@@ -16,7 +16,7 @@ const Footer = () => {
 
     return (
         <Container as="footer">
-            <Typography variant="body2">
+            <Typography variant="body2" color="text.primary" noWrap>
                 {t.rich('credits', {
                     author: (bits) => (
                         <a

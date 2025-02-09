@@ -24,6 +24,15 @@ export class Server {
     id: string;
 
     @AutoMap()
+    @Column({
+        enum: ServerType,
+        type: 'enum',
+        nullable: false,
+        default: ServerType.JAVA,
+    })
+    type: ServerType;
+
+    @AutoMap()
     @Column()
     online: boolean;
 

@@ -24,6 +24,7 @@ import {
     CreateServerResponseDto,
     ListServersDto,
     Pagination,
+    ServerDetailsDto,
     ServerDto,
     VerifyServerDto,
 } from '@shared/dto';
@@ -43,6 +44,15 @@ export class ServersController {
         @InjectMapper()
         private readonly mapper: Mapper,
     ) {}
+
+    /**
+     * For static generation
+     * @returns {Promise<void>}
+     */
+    @Get('hostnames')
+    async listHostnames(): Promise<string[]> {
+        return await this.serversService.listHostnames();
+    }
 
     /**
      * Public endpoint for getting list of servers
@@ -79,8 +89,9 @@ export class ServersController {
         description: 'hostname of the server',
     })
     @Get(':host')
-    async getServer() {
-        throw new NotImplementedException();
+    async getServer(@Param('host') host: string): Promise<ServerDetailsDto> {
+        const server = await this.serversService.getServer(host);
+        return this.mapper.map(server, Server, ServerDetailsDto);
     }
 
     @ApiParam({
@@ -101,7 +112,10 @@ export class ServersController {
         description: `When server couldn't be found by ip or hostname`,
     })
     @Patch(':host')
-    async verifyServer(@Body() data: VerifyServerDto): Promise<ServerDto> {
+    async verifyServer(
+        @Param('host') host: string,
+        @Body() data: VerifyServerDto,
+    ): Promise<ServerDto> {
         return this.mapper.map(
             await this.serversService.verifyServer(data),
             Server,
@@ -115,7 +129,7 @@ export class ServersController {
         description: 'hostname of the server',
     })
     @Patch(':host/details')
-    async createDetails() {
+    async createDetails(@Param('host') host: string) {
         throw new NotImplementedException();
     }
 

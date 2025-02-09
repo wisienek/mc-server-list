@@ -49,6 +49,12 @@ export class ServersService {
         private readonly mapper: Mapper,
     ) {}
 
+    public async listHostnames(): Promise<string[]> {
+        return (await this.serverRepository.find({select: ['host']})).map(
+            (i) => i.host,
+        );
+    }
+
     public async listServers(
         filters: ListServersDto,
     ): Promise<Pagination<ServerDto>> {
@@ -84,6 +90,26 @@ export class ServersService {
             perPage,
             page,
         );
+    }
+
+    public async getServer(hostName: string): Promise<Server> {
+        const baseServer = await this.serverRepository.findOne({
+            where: {host: hostName},
+        });
+
+        switch (baseServer.type) {
+            case ServerType.JAVA: {
+                return await this.javaServerRepository.findOne({
+                    where: {host: baseServer.host},
+                });
+            }
+
+            case ServerType.BEDROCK: {
+                return await this.bedrockServerRepository.findOne({
+                    where: {host: baseServer.host},
+                });
+            }
+        }
     }
 
     public async createServer(

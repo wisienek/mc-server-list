@@ -8,7 +8,12 @@ import {
     type MappingProfile,
 } from '@automapper/core';
 import {BedrockServer, JavaServer, Server} from '@backend/db';
-import {MinecraftServerOnlineStatus, ServerDto, ServerSummaryDto} from '@shared/dto';
+import {
+    MinecraftServerOnlineStatus,
+    ServerDetailsDto,
+    ServerDto,
+    ServerSummaryDto,
+} from '@shared/dto';
 import type {McServerSrvRecord} from '@lib/types';
 
 @Injectable()
@@ -252,6 +257,7 @@ export class ServerMapperProfile extends AutomapperProfile {
 
             // TODO: add votes
             createMap(mapper, ServerDto, ServerSummaryDto);
+            createMap(mapper, Server, ServerDetailsDto);
         };
     }
 }
