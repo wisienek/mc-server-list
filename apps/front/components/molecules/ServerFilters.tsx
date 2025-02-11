@@ -64,7 +64,7 @@ const ServerFilters: FC<ServerFiltersProps> = ({setSearchData}) => {
                 categories: selectedCategories,
             });
         },
-        1500,
+        800,
         [showOwnServers, selectedCategories],
     );
 

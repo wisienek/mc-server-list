@@ -1,5 +1,11 @@
 import {ApiConfig, getConfigs} from '@backend/config';
-import {BedrockServer, JavaServer, Server, ServerVerification} from '@backend/db';
+import {
+    BedrockServer,
+    JavaServer,
+    Server,
+    ServerVerification,
+    Vote,
+} from '@backend/db';
 import {Module} from '@nestjs/common';
 import {MCStatsModule} from '@backend/mc-stats';
 import {TypeOrmModule} from '@nestjs/typeorm';
@@ -19,6 +25,7 @@ const configs = getConfigs(ApiConfig);
             JavaServer,
             BedrockServer,
             ServerVerification,
+            Vote,
         ]),
     ],
     controllers: [ServersController],

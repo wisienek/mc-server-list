@@ -27,7 +27,6 @@ import {
     ListServersDto,
     Pagination,
     ServerDetailsDto,
-    ServerDto,
     ServerSummaryDto,
     VerifyServerDto,
 } from '@shared/dto';
@@ -163,7 +162,7 @@ export class ServersController {
     async vote(
         @SessionUser() user: User,
         @Param('host') host: string,
-    ): Promise<boolean> {
-        throw new NotImplementedException();
+    ): Promise<number> {
+        return await this.serversService.voteForServer(host, user.email);
     }
 }

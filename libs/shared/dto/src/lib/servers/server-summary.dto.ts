@@ -1,5 +1,5 @@
 import {MapperPickType} from '@automapper/classes/mapped-types';
-import {IsInt, IsOptional, IsPositive, IsString} from 'class-validator';
+import {IsBoolean, IsInt, IsOptional, IsPositive, IsString} from 'class-validator';
 import {ServerDto} from './server.dto';
 
 export class ServerSummaryDto extends MapperPickType(ServerDto, [
@@ -23,6 +23,10 @@ export class ServerSummaryDto extends MapperPickType(ServerDto, [
     @IsInt()
     @IsPositive()
     votes: number;
+
+    @IsOptional()
+    @IsBoolean()
+    isLiked?: boolean;
 
     @IsString()
     @IsOptional()

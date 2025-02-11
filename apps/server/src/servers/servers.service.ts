@@ -1,21 +1,18 @@
-import {GetUserQuery} from '@backend/commander';
-import {QueryBus} from '@nestjs/cqrs';
-import {plainToInstance} from 'class-transformer';
-import {omit} from 'lodash';
-import {Repository, type FindOptionsWhere} from 'typeorm';
-import {InjectRepository} from '@nestjs/typeorm';
-import {InjectMapper} from '@automapper/nestjs';
 import type {Mapper} from '@automapper/core';
-import {Injectable, Logger} from '@nestjs/common';
+import {InjectMapper} from '@automapper/nestjs';
+import {GetUserQuery} from '@backend/commander';
 import {
     BedrockServer,
     JavaServer,
     Server,
     ServerVerification,
     User,
+    Vote,
 } from '@backend/db';
 import {MCStatsService} from '@backend/mc-stats';
-import {ServerType} from '@shared/enums';
+import {Injectable, Logger} from '@nestjs/common';
+import {QueryBus} from '@nestjs/cqrs';
+import {InjectRepository} from '@nestjs/typeorm';
 import {
     CreateServerDto,
     CreateServerResponseDto,
@@ -23,10 +20,13 @@ import {
     MinecraftServerOfflineStatus,
     MinecraftServerOnlineStatus,
     Pagination,
-    ServerDto,
     ServerSummaryDto,
     VerifyServerDto,
 } from '@shared/dto';
+import {ServerType} from '@shared/enums';
+import {plainToInstance} from 'class-transformer';
+import {randomInt} from 'crypto';
+import {type FindOptionsWhere, Repository} from 'typeorm';
 import {
     ServerAlreadyClaimedError,
     ServerExistsError,
@@ -34,7 +34,6 @@ import {
     ServerVerificationOfflineError,
     ServerVerificationUnsuccessfulError,
 } from './errors';
-import {randomInt} from 'crypto';
 
 @Injectable()
 export class ServersService {
@@ -47,12 +46,46 @@ export class ServersService {
         private readonly verificationRepository: Repository<ServerVerification>,
         @InjectRepository(Server)
         private readonly serverRepository: Repository<Server>,
+        @InjectRepository(Vote)
+        private readonly voteRepository: Repository<Vote>,
         private readonly logger: Logger,
         private readonly mcStatsService: MCStatsService,
         private readonly queryBus: QueryBus,
         @InjectMapper()
         private readonly mapper: Mapper,
     ) {}
+
+    public async voteForServer(
+        hostName: string,
+        userEmail: string,
+    ): Promise<number> {
+        const givenVote = await this.voteRepository.findOne({
+            where: {
+                server: {
+                    host: hostName,
+                },
+                user: {
+                    email: userEmail,
+                },
+            },
+        });
+
+        if (!givenVote) {
+            const user = await this.queryBus.execute(
+                plainToInstance(GetUserQuery, {email: userEmail}),
+            );
+            const server = await this.getServer(hostName);
+
+            await this.voteRepository.save({
+                server,
+                user,
+            });
+        } else {
+            await this.voteRepository.remove(givenVote);
+        }
+
+        return await this.voteRepository.count({where: {server: {host: hostName}}});
+    }
 
     public async listHostnames(): Promise<string[]> {
         return (await this.serverRepository.find({select: ['host']})).map(
@@ -109,12 +142,24 @@ export class ServersService {
 
         const [items, total] = await query.getManyAndCount();
 
-        return new Pagination<ServerSummaryDto>(
-            this.mapper.mapArray(items, Server, ServerSummaryDto),
-            total,
-            perPage,
-            page,
+        const mapped = await Promise.all(
+            items.map(async (item) => {
+                const dto = this.mapper.map(item, Server, ServerSummaryDto);
+                const votesCount = await this.voteRepository.count({
+                    where: {server_id: item.id},
+                });
+
+                dto.isLiked =
+                    userId &&
+                    (await this.voteRepository.exists({
+                        where: {server_id: item.id, user_id: userId},
+                    }));
+                dto.votes = votesCount;
+                return dto;
+            }),
         );
+
+        return new Pagination<ServerSummaryDto>(mapped, total, perPage, page);
     }
 
     public async getServer(hostName: string): Promise<Server> {

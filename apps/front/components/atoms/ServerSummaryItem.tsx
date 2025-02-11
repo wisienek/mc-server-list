@@ -18,6 +18,7 @@ import {shortenText} from '@core';
 import ServerCategoryMapper from '../consts/ServerCategoryMapper';
 import {defaultServerIcon} from '../mocks/serverSummaryMocks';
 import {useVerifyServer} from '../queries/servers/verifyServer';
+import {useVoteForServer} from '../queries/servers/voteForServer';
 import CopyableTypography from './CopyableTypography';
 import {Link} from '@front/i18n/routing';
 
@@ -98,15 +99,14 @@ const InactiveOverlay = styled(Box)(({theme}) => ({
 
 type ServerSummaryProps = {
     server: ServerSummaryDto;
-    onToggleFavorite?: (serverId: string) => void;
 };
 
-const ServerSummaryItem: FC<ServerSummaryProps> = ({server, onToggleFavorite}) => {
+const ServerSummaryItem: FC<ServerSummaryProps> = ({server}) => {
     const t = useTranslations('page.list');
     const router = useRouter();
     const dispatch = useAppDispatch();
 
-    const [isLikedByUser, setIsLikedByUser] = useState<boolean>(false);
+    const [isLikedByUser, setIsLikedByUser] = useState<boolean>(server.isLiked);
     const [votes, setVotes] = useState<number>(server.votes ?? 0);
     const {
         mutate: verifyServer,
@@ -114,14 +114,32 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server, onToggleFavorite}) =
         isError: isVerificationError,
         error: verificationError,
     } = useVerifyServer();
+    const {mutateAsync: voteForServer} = useVoteForServer();
 
     const handleFavoriteClick = () => {
         const newLiked = !isLikedByUser;
         setIsLikedByUser(newLiked);
-        setVotes((prev) => prev + (newLiked ? 1 : -1));
-        if (onToggleFavorite) {
-            onToggleFavorite(server.id);
-        }
+        const delta = newLiked ? 1 : -1;
+
+        setVotes(votes + delta);
+
+        voteForServer(server.host)
+            .then((serverVotes) => {
+                if (serverVotes !== votes) {
+                    setVotes(serverVotes);
+                }
+            })
+            .catch((error) => {
+                setVotes(votes - delta);
+                dispatch(
+                    addNotification({
+                        id: server.id,
+                        level: 'Error',
+                        description: error.message,
+                        title: error.name,
+                    }),
+                );
+            });
     };
 
     const handleVerifyServer = () => {
@@ -150,24 +168,21 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server, onToggleFavorite}) =
     const description = shortenText(server?.description ?? '', 320);
     const linkTo = `/${server.host}`;
 
-    const LinkWrapper = ({children}: {children: ReactNode}) => {
-        return (
-            <Link
-                prefetch={false}
-                href={linkTo}
-                onMouseEnter={() => router.prefetch(linkTo)}
-                className="cursor-pointer"
-            >
-                {children}
-            </Link>
-        );
-    };
+    const LinkWrapper = ({children}: {children: ReactNode}) => (
+        <Link
+            prefetch={false}
+            href={linkTo}
+            onMouseEnter={() => router.prefetch(linkTo)}
+            className="cursor-pointer"
+        >
+            {children}
+        </Link>
+    );
 
     const NotVerifiedOverlay = useMemo(() => {
         if (isServerVerified || server.isActive) {
             return <></>;
         }
-
         return (
             <InactiveOverlay>
                 <Button variant="contained" onClick={handleVerifyServer}>
@@ -281,7 +296,6 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server, onToggleFavorite}) =
                     <Typography variant="caption">{votes}</Typography>
                 </Box>
             </StatsContainer>
-
             {NotVerifiedOverlay}
         </StyledServerSummary>
     );
