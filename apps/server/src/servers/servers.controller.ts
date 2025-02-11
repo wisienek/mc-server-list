@@ -115,12 +115,12 @@ export class ServersController {
         description: `When server couldn't be found by ip or hostname`,
     })
     @UseGuards(AuthenticatedGuard)
-    @Patch(':host')
-    async verifyServer(@Body() data: VerifyServerDto): Promise<ServerDto> {
+    @Patch(':host/verify')
+    async verifyServer(@Body() data: VerifyServerDto): Promise<ServerSummaryDto> {
         return this.mapper.map(
             await this.serversService.verifyServer(data),
             Server,
-            ServerDto,
+            ServerSummaryDto,
         );
     }
 

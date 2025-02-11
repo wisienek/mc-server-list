@@ -1,6 +1,8 @@
 'use client';
+import {addNotification} from '@lib/front/components/store/notificationsSlice';
+import {useAppDispatch} from '@lib/front/components/store/store';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import {Fade, Tooltip} from '@mui/material';
+import {Fade, Tooltip, Button} from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -11,10 +13,11 @@ import {ServerSummaryDto} from '@shared/dto';
 import {useTranslations} from 'next-intl';
 import Image from 'next/image';
 import {useRouter} from 'next/navigation';
-import {type FC, type ReactNode, useState} from 'react';
+import {type FC, type ReactNode, useEffect, useMemo, useState} from 'react';
 import {shortenText} from '@core';
 import ServerCategoryMapper from '../consts/ServerCategoryMapper';
-import {defaultServerBanner, defaultServerIcon} from '../mocks/serverSummaryMocks';
+import {defaultServerIcon} from '../mocks/serverSummaryMocks';
+import {useVerifyServer} from '../queries/servers/verifyServer';
 import CopyableTypography from './CopyableTypography';
 import {Link} from '@front/i18n/routing';
 
@@ -25,6 +28,7 @@ const StyledServerSummary = styled(Paper)(({theme}) => ({
     gridTemplateColumns: '1fr 6fr 1fr',
     minWidth: 'min-content',
     gap: theme.spacing(1),
+    position: 'relative',
 }));
 
 const IconContainer = styled(Box)(({theme}) => ({
@@ -78,6 +82,20 @@ const StyledCategoryIcon = styled(Avatar)(({theme}) => ({
     fontSize: '1rem',
 }));
 
+const InactiveOverlay = styled(Box)(({theme}) => ({
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(128,128,128,0.7)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: theme.zIndex.speedDial,
+    borderRadius: theme.shape.borderRadius,
+}));
+
 type ServerSummaryProps = {
     server: ServerSummaryDto;
     onToggleFavorite?: (serverId: string) => void;
@@ -86,8 +104,16 @@ type ServerSummaryProps = {
 const ServerSummaryItem: FC<ServerSummaryProps> = ({server, onToggleFavorite}) => {
     const t = useTranslations('page.list');
     const router = useRouter();
+    const dispatch = useAppDispatch();
+
     const [isLikedByUser, setIsLikedByUser] = useState<boolean>(false);
     const [votes, setVotes] = useState<number>(server.votes ?? 0);
+    const {
+        mutate: verifyServer,
+        isSuccess: isServerVerified,
+        isError: isVerificationError,
+        error: verificationError,
+    } = useVerifyServer();
 
     const handleFavoriteClick = () => {
         const newLiked = !isLikedByUser;
@@ -98,15 +124,30 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server, onToggleFavorite}) =
         }
     };
 
+    const handleVerifyServer = () => {
+        verifyServer(server);
+    };
+
+    useEffect(() => {
+        if (isVerificationError) {
+            dispatch(
+                addNotification({
+                    id: server.id,
+                    level: 'Error',
+                    description: verificationError.message,
+                    title: verificationError.name,
+                }),
+            );
+        }
+    }, [isVerificationError]);
+
     const displayName = server.ip_address ? server.ip_address : server.host;
     const displayPort = server.port ? `:${server.port}` : '';
     const serverVersion = server.versions?.[0] ?? 'N/A';
     const onlinePlayers = server.onlinePlayers ?? 0;
     const maxPlayers = server.maxPlayers ?? 0;
     const categories = server.categories ?? [];
-
     const description = shortenText(server?.description ?? '', 320);
-
     const linkTo = `/${server.host}`;
 
     const LinkWrapper = ({children}: {children: ReactNode}) => {
@@ -121,6 +162,26 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server, onToggleFavorite}) =
             </Link>
         );
     };
+
+    const NotVerifiedOverlay = useMemo(() => {
+        if (isServerVerified || server.isActive) {
+            return <></>;
+        }
+
+        return (
+            <InactiveOverlay>
+                <Button variant="contained" onClick={handleVerifyServer}>
+                    {t.rich('verify', {
+                        code: () => (
+                            <Typography variant="body2" ml={1}>
+                                {server.verificationCode}
+                            </Typography>
+                        ),
+                    })}
+                </Button>
+            </InactiveOverlay>
+        );
+    }, [server.isActive, isServerVerified]);
 
     return (
         <StyledServerSummary elevation={3}>
@@ -142,7 +203,6 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server, onToggleFavorite}) =
                     </Typography>
                 </StyledNameAndRankingContainer>
             </IconContainer>
-
             <ServerDescription>
                 {server.banner && (
                     <LinkWrapper>
@@ -154,7 +214,6 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server, onToggleFavorite}) =
                         />
                     </LinkWrapper>
                 )}
-
                 {description && (
                     <Typography
                         variant="body2"
@@ -170,7 +229,6 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server, onToggleFavorite}) =
                     </Typography>
                 )}
             </ServerDescription>
-
             <StatsContainer>
                 <Box
                     display="flex"
@@ -198,12 +256,8 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server, onToggleFavorite}) =
                                     key={cat}
                                     title={cat}
                                     arrow
-                                    slots={{
-                                        transition: Fade,
-                                    }}
-                                    slotProps={{
-                                        transition: {timeout: 500},
-                                    }}
+                                    slots={{transition: Fade}}
+                                    slotProps={{transition: {timeout: 500}}}
                                 >
                                     <StyledCategoryIcon
                                         sx={{backgroundColor: config.color}}
@@ -227,6 +281,8 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server, onToggleFavorite}) =
                     <Typography variant="caption">{votes}</Typography>
                 </Box>
             </StatsContainer>
+
+            {NotVerifiedOverlay}
         </StyledServerSummary>
     );
 };

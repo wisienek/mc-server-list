@@ -36,7 +36,8 @@
         },
         "list": {
             "playersOnline": "Gracze online:",
-            "version": "Wersja:"
+            "version": "Wersja:",
+            "verify": "Zweryfikuj serwerowy kod w MOTD: <code></code>"
         }
     },
     "server": {

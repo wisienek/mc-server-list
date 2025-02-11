@@ -64,9 +64,17 @@ export class ServersService {
         filters: ListServersDto,
         userId?: string,
     ): Promise<Pagination<ServerSummaryDto>> {
-        const query = this.serverRepository
-            .createQueryBuilder('server')
-            .where('server.isActive = :isActive', {isActive: true});
+        const query = this.serverRepository.createQueryBuilder('server');
+
+        if (userId) {
+            query.leftJoinAndSelect('server.verification', 'verification');
+            query.where('(server.isActive = :active OR server.owner_id = :userId)', {
+                active: true,
+                userId,
+            });
+        } else {
+            query.where('server.isActive = :active', {active: true});
+        }
 
         if (filters.online !== undefined) {
             query.andWhere('server.online = :online', {online: filters.online});
@@ -214,12 +222,11 @@ export class ServersService {
             throw new ServerVerificationOfflineError();
         }
 
-        const isVerified =
-            fetchInfo.motd.clean.includes(server.verification.code) &&
-            Date.now() <= server.verification.expiresAt &&
-            !server.isActive;
-
-        console.log(isVerified, fetchInfo.motd.clean);
+        const includesCode = fetchInfo.motd.clean
+            .join(' ')
+            .toLowerCase()
+            .includes(server.verification.code.toLowerCase());
+        const isVerified = includesCode && !server.isActive;
 
         if (!isVerified) {
             throw new ServerVerificationUnsuccessfulError();

@@ -7,7 +7,7 @@ import ServerSummaryList from '../molecules/ServerSummary';
 import {serverListQuery} from '../queries/servers/serverListQuery';
 
 const ServerListPage = () => {
-    const [searchData, setSearchData] = useState<ListServersDto>({});
+    const [searchData, setSearchData] = useState<ListServersDto>({isOwn: false});
     const {isLoading, data: fetchedServers} = serverListQuery(searchData);
 
     return (

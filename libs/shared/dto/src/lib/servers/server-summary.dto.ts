@@ -1,10 +1,11 @@
 import {MapperPickType} from '@automapper/classes/mapped-types';
-import {IsInt, IsPositive} from 'class-validator';
+import {IsInt, IsOptional, IsPositive, IsString} from 'class-validator';
 import {ServerDto} from './server.dto';
 
 export class ServerSummaryDto extends MapperPickType(ServerDto, [
     'id',
     'online',
+    'type',
     'host',
     'ip_address',
     'port',
@@ -17,8 +18,13 @@ export class ServerSummaryDto extends MapperPickType(ServerDto, [
     'ranking',
     'banner',
     'description',
+    'isActive',
 ]) {
     @IsInt()
     @IsPositive()
     votes: number;
+
+    @IsString()
+    @IsOptional()
+    verificationCode?: string;
 }

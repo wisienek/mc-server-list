@@ -3,7 +3,7 @@ import {FormControl, InputLabel, OutlinedInput} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
 import {ListServersDto} from '@shared/dto';
-import {Dispatch, type FC, useEffect, useState} from 'react';
+import {type Dispatch, type FC, useEffect, useRef, useState} from 'react';
 import {styled} from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import {useTranslations} from 'next-intl';
@@ -16,7 +16,6 @@ import ServerCategoriesSelect, {
 } from '@front/components/atoms/ServerCategoriesSelect';
 import CreateServerModal from '@front/components/organisms/CreateServerModal';
 import {useAppSelector} from '@lib/front/components/store/store';
-import {serverListQuery} from '../queries/servers/serverListQuery';
 import {useDebounce} from 'react-use';
 
 const Container = styled(Box)(({theme}) => ({
@@ -41,6 +40,7 @@ type ServerFiltersProps = {
 const ServerFilters: FC<ServerFiltersProps> = ({setSearchData}) => {
     const t = useTranslations('filters');
     const profile = useAppSelector((state) => state.auth.user);
+
     const [showingCreateModal, setShowingCreateModal] = useState<boolean>(false);
     const [modalContainer, setModalContainer] = useState<HTMLElement | null>(null);
     const [showOwnServers, setShowOwnServers] = useState<boolean>(false);
@@ -51,14 +51,20 @@ const ServerFilters: FC<ServerFiltersProps> = ({setSearchData}) => {
         setShowCategoriesContainer,
     } = useCategories();
 
+    const isFirstRun = useRef(true);
     useDebounce(
         () => {
+            if (isFirstRun.current) {
+                isFirstRun.current = false;
+                return;
+            }
+
             setSearchData({
                 isOwn: showOwnServers,
                 categories: selectedCategories,
             });
         },
-        1_500,
+        1500,
         [showOwnServers, selectedCategories],
     );
 

@@ -280,6 +280,10 @@ export class ServerMapperProfile extends AutomapperProfile {
                     (dest) => dest.versions,
                     mapFrom((src) => src.versions),
                 ),
+                forMember(
+                    (dest) => dest.verificationCode,
+                    mapFrom((src) => src?.verification?.code),
+                ),
             );
 
             createMap(mapper, ServerDto, ServerSummaryDto);

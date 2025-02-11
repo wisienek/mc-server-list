@@ -1,6 +1,6 @@
 import {MapperOmitType} from '@automapper/classes/mapped-types';
 import {AutoMap} from '@automapper/classes';
-import {ServerCategory} from '@shared/enums';
+import {ServerCategory, ServerType} from '@shared/enums';
 import {Type} from 'class-transformer';
 import {
     IsArray,
@@ -27,6 +27,10 @@ export class ServerDto {
     @IsUUID()
     @IsNotEmpty()
     id: string;
+
+    @AutoMap()
+    @IsEnum(ServerType)
+    type: ServerType;
 
     @AutoMap()
     @IsBoolean({message: 'Online must be a boolean.'})
