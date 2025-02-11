@@ -1,5 +1,5 @@
 import {Column, ChildEntity} from 'typeorm';
-import {McServerInfoPlayers, McServerMotd} from '@lib/types';
+import {McServerInfoPlayers} from '@lib/types';
 import {ServerType} from '@shared/enums';
 import {Server} from './server.entity';
 
@@ -7,9 +7,6 @@ import {Server} from './server.entity';
 export class BedrockServer extends Server {
     @Column({type: 'jsonb', nullable: true})
     players?: McServerInfoPlayers;
-
-    @Column({type: 'jsonb', nullable: true})
-    motd?: McServerMotd;
 
     @Column()
     gamemode!: string;

@@ -10,7 +10,7 @@ import {
     TableInheritance,
     OneToMany,
 } from 'typeorm';
-import {McServerSrvRecord} from '@lib/types';
+import {McServerMotd, McServerSrvRecord} from '@lib/types';
 import {ServerCategory, ServerType} from '@shared/enums';
 import {ServerVerification} from './server-verification.entity';
 import {User} from '../users';
@@ -55,6 +55,10 @@ export class Server {
     @AutoMap()
     @Column({type: 'jsonb'})
     srv_record: McServerSrvRecord;
+
+    @AutoMap()
+    @Column({type: 'jsonb'})
+    motd: McServerMotd;
 
     @AutoMap()
     @ManyToOne(() => User, (user) => user.servers)

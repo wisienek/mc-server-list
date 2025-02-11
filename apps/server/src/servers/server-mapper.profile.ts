@@ -256,6 +256,32 @@ export class ServerMapperProfile extends AutomapperProfile {
             );
 
             // TODO: add votes
+            createMap(
+                mapper,
+                Server,
+                ServerSummaryDto,
+                forMember(
+                    (dest) => dest.name,
+                    mapFrom((src) => src.name ?? src.host),
+                ),
+                forMember(
+                    (dest) => dest.description,
+                    mapFrom((src) => src.description ?? src.motd.clean),
+                ),
+                forMember(
+                    (dest) => dest.onlinePlayers,
+                    mapFrom((src) => src['players']['online'] ?? 0),
+                ),
+                forMember(
+                    (dest) => dest.maxPlayers,
+                    mapFrom((src) => src['players']['max'] ?? 0),
+                ),
+                forMember(
+                    (dest) => dest.versions,
+                    mapFrom((src) => src.versions),
+                ),
+            );
+
             createMap(mapper, ServerDto, ServerSummaryDto);
             createMap(mapper, Server, ServerDetailsDto);
         };

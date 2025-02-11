@@ -20,6 +20,7 @@
     },
     "filters": {
         "searchLabel": "Szukaj nazwy lub opisu",
+        "showMyServers": "Moje serwery",
         "categories": {
             "show": "Pokaż kategorie",
             "hide": "Ukryj kategorie"

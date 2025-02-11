@@ -3,6 +3,7 @@ import {EventEmitterModule} from '@nestjs/event-emitter';
 import {Module, type Provider} from '@nestjs/common';
 import {AutomapperModule} from '@automapper/nestjs';
 import {PassportModule} from '@nestjs/passport';
+import {ScheduleModule} from '@nestjs/schedule';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import {classes} from '@automapper/classes';
 import {CqrsModule} from '@nestjs/cqrs';
@@ -31,6 +32,7 @@ const serverModules: ModuleMetadata['imports'] = [
             strategyInitializer: classes(),
         }),
         PassportModule.register({session: true}),
+        ScheduleModule.forRoot(),
         ...configs,
         ...serverModules,
         TypeOrmModule.forFeature([Session]),

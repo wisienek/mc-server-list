@@ -2,14 +2,22 @@
 import {FormControl, InputLabel, OutlinedInput} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
-import React, {type FC, useState} from 'react';
+import {ListServersDto} from '@shared/dto';
+import {Dispatch, type FC, useEffect, useState} from 'react';
 import {styled} from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import {useTranslations} from 'next-intl';
+import {createPortal} from 'react-dom';
 import Box from '@mui/material/Box';
+import CreateServerButton from '@front/components/atoms/AddServerButton';
+import OwnServersFilter from '@front/components/atoms/OwnServersFilter';
 import ServerCategoriesSelect, {
     useCategories,
-} from '../atoms/ServerCategoriesSelect';
+} from '@front/components/atoms/ServerCategoriesSelect';
+import CreateServerModal from '@front/components/organisms/CreateServerModal';
+import {useAppSelector} from '@lib/front/components/store/store';
+import {serverListQuery} from '../queries/servers/serverListQuery';
+import {useDebounce} from 'react-use';
 
 const Container = styled(Box)(({theme}) => ({
     width: '100%',
@@ -26,25 +34,74 @@ const InputsContainer = styled(Box)(({theme}) => ({
     marginBottom: theme.spacing(2),
 }));
 
-const ServerFilters: FC = () => {
-    const t = useTranslations('filters');
+type ServerFiltersProps = {
+    setSearchData: Dispatch<ListServersDto>;
+};
 
+const ServerFilters: FC<ServerFiltersProps> = ({setSearchData}) => {
+    const t = useTranslations('filters');
+    const profile = useAppSelector((state) => state.auth.user);
+    const [showingCreateModal, setShowingCreateModal] = useState<boolean>(false);
+    const [modalContainer, setModalContainer] = useState<HTMLElement | null>(null);
+    const [showOwnServers, setShowOwnServers] = useState<boolean>(false);
     const {
         selectedCategories,
-        triggerCategory,
         showCategoriesContainer,
+        triggerCategory,
         setShowCategoriesContainer,
     } = useCategories();
 
+    useDebounce(
+        () => {
+            setSearchData({
+                isOwn: showOwnServers,
+                categories: selectedCategories,
+            });
+        },
+        1_500,
+        [showOwnServers, selectedCategories],
+    );
+
+    useEffect(() => {
+        setModalContainer(document.getElementById('modal-root'));
+    }, []);
+
     const [searchText, setSearchText] = useState<string>('');
+
+    const ProfileSpecificFilters = () => {
+        if (!profile) {
+            return <></>;
+        }
+
+        return (
+            <>
+                <CreateServerButton handleOpen={() => setShowingCreateModal(true)} />
+                <OwnServersFilter
+                    showOwnServers={showOwnServers}
+                    toggleOwnServers={() => setShowOwnServers((prev) => !prev)}
+                />
+            </>
+        );
+    };
 
     return (
         <Container>
+            {showingCreateModal &&
+                modalContainer &&
+                createPortal(
+                    <CreateServerModal
+                        open={showingCreateModal}
+                        handleClose={() => setShowingCreateModal(false)}
+                    />,
+                    modalContainer,
+                )}
+
             <InputsContainer>
                 <FormControl fullWidth variant="outlined">
                     <InputLabel htmlFor="search-input">
                         {t('searchLabel')}
                     </InputLabel>
+
                     <OutlinedInput
                         id="search-input"
                         value={searchText}
@@ -62,6 +119,7 @@ const ServerFilters: FC = () => {
                         label={t('searchLabel')}
                     />
                 </FormControl>
+
                 <Button
                     variant="contained"
                     onClick={() =>
@@ -72,6 +130,10 @@ const ServerFilters: FC = () => {
                         ? t('categories.hide')
                         : t('categories.show')}
                 </Button>
+            </InputsContainer>
+
+            <InputsContainer>
+                <ProfileSpecificFilters />
             </InputsContainer>
 
             {showCategoriesContainer && (

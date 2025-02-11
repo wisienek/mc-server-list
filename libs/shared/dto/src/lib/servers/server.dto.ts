@@ -67,6 +67,7 @@ export class ServerDto {
     @Type(() => UserDto)
     owner: UserDto;
 
+    @Type(() => String)
     @AutoMap(() => [String])
     @IsArray()
     @IsEnum(ServerCategory, {each: true})

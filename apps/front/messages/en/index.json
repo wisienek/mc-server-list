@@ -20,6 +20,7 @@
     },
     "filters": {
         "searchLabel": "Search name or description",
+        "showMyServers": "Show my servers",
         "categories": {
             "show": "Show categories",
             "hide": "Hide categories"

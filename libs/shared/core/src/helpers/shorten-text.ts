@@ -7,7 +7,7 @@
  * @param maxLength - The maximum allowed length for the returned string.
  * @returns The shortened text.
  */
-export default function shortenText(text: string, maxLength: number): string {
+export function shortenText(text: string, maxLength: number): string {
     if (text.length <= maxLength) {
         return text;
     }

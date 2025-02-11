@@ -1,10 +1,5 @@
 import {ChildEntity, Column} from 'typeorm';
-import {
-    McJavaServerInfoPlayers,
-    McServerMod,
-    McServerMotd,
-    McServerPlugin,
-} from '@lib/types';
+import {McJavaServerInfoPlayers, McServerMod, McServerPlugin} from '@lib/types';
 import {ServerType} from '@shared/enums';
 import {Server} from './server.entity';
 
@@ -12,9 +7,6 @@ import {Server} from './server.entity';
 export class JavaServer extends Server {
     @Column({type: 'jsonb', nullable: true})
     players?: McJavaServerInfoPlayers;
-
-    @Column({type: 'jsonb'})
-    motd: McServerMotd;
 
     @Column()
     icon: string;

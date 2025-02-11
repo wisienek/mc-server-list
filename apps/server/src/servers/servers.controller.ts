@@ -28,6 +28,7 @@ import {
     Pagination,
     ServerDetailsDto,
     ServerDto,
+    ServerSummaryDto,
     VerifyServerDto,
 } from '@shared/dto';
 import {
@@ -58,13 +59,14 @@ export class ServersController {
 
     /**
      * Public endpoint for getting list of servers
-     * @returns {Promise<Pagination<ServerDto>>} paginated list of servers
+     * @returns {Promise<Pagination<ServerSummaryDto>>} paginated list of servers
      */
     @Get()
     async listServers(
+        @SessionUser() user: User,
         @Query() data: ListServersDto,
-    ): Promise<Pagination<ServerDto>> {
-        return await this.serversService.listServers(data);
+    ): Promise<Pagination<ServerSummaryDto>> {
+        return await this.serversService.listServers(data, user?.id);
     }
 
     @ApiConflictResponse({
@@ -114,11 +116,7 @@ export class ServersController {
     })
     @UseGuards(AuthenticatedGuard)
     @Patch(':host')
-    async verifyServer(
-        @SessionUser() user: User,
-        @Param('host') host: string,
-        @Body() data: VerifyServerDto,
-    ): Promise<ServerDto> {
+    async verifyServer(@Body() data: VerifyServerDto): Promise<ServerDto> {
         return this.mapper.map(
             await this.serversService.verifyServer(data),
             Server,

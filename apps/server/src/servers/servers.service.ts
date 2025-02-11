@@ -24,6 +24,7 @@ import {
     MinecraftServerOnlineStatus,
     Pagination,
     ServerDto,
+    ServerSummaryDto,
     VerifyServerDto,
 } from '@shared/dto';
 import {
@@ -61,7 +62,8 @@ export class ServersService {
 
     public async listServers(
         filters: ListServersDto,
-    ): Promise<Pagination<ServerDto>> {
+        userId?: string,
+    ): Promise<Pagination<ServerSummaryDto>> {
         const query = this.serverRepository
             .createQueryBuilder('server')
             .where('server.isActive = :isActive', {isActive: true});
@@ -82,14 +84,25 @@ export class ServersService {
             });
         }
 
+        if (filters?.isOwn === true && userId) {
+            query.andWhere('server.owner_id = :owner', {owner: userId});
+        }
+
+        if (filters.categories && filters.categories.length > 0) {
+            query.andWhere(
+                'server.categories && ARRAY[:...categories]::server_categories_enum[]',
+                {categories: filters.categories},
+            );
+        }
+
         const page = filters.page || 1;
         const perPage = filters.perPage || 10;
         query.skip((page - 1) * perPage).take(perPage);
 
         const [items, total] = await query.getManyAndCount();
 
-        return new Pagination<ServerDto>(
-            this.mapper.mapArray(items, Server, ServerDto),
+        return new Pagination<ServerSummaryDto>(
+            this.mapper.mapArray(items, Server, ServerSummaryDto),
             total,
             perPage,
             page,
