@@ -1,6 +1,6 @@
 'use client';
 import {addNotification} from '@lib/front/components/store/notificationsSlice';
-import {useAppDispatch} from '@lib/front/components/store/store';
+import {useAppDispatch, useAppSelector} from '@lib/front/components/store/store';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import {Fade, Tooltip, Button} from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -13,7 +13,7 @@ import {ServerSummaryDto} from '@shared/dto';
 import {useTranslations} from 'next-intl';
 import Image from 'next/image';
 import {useRouter} from 'next/navigation';
-import {type FC, type ReactNode, useEffect, useMemo, useState} from 'react';
+import {type FC, type ReactNode, useMemo, useState} from 'react';
 import {shortenText} from '@core';
 import ServerCategoryMapper from '../consts/ServerCategoryMapper';
 import {defaultServerIcon} from '../mocks/serverSummaryMocks';
@@ -105,18 +105,19 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server}) => {
     const t = useTranslations('page.list');
     const router = useRouter();
     const dispatch = useAppDispatch();
+    const profile = useAppSelector((store) => store.auth.user);
 
     const [isLikedByUser, setIsLikedByUser] = useState<boolean>(server.isLiked);
     const [votes, setVotes] = useState<number>(server.votes ?? 0);
-    const {
-        mutate: verifyServer,
-        isSuccess: isServerVerified,
-        isError: isVerificationError,
-        error: verificationError,
-    } = useVerifyServer();
+    const {mutateAsync: verifyServer, isSuccess: isServerVerified} =
+        useVerifyServer();
     const {mutateAsync: voteForServer} = useVoteForServer();
 
     const handleFavoriteClick = () => {
+        if (!profile) {
+            return;
+        }
+
         const newLiked = !isLikedByUser;
         setIsLikedByUser(newLiked);
         const delta = newLiked ? 1 : -1;
@@ -143,11 +144,11 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server}) => {
     };
 
     const handleVerifyServer = () => {
-        verifyServer(server);
-    };
+        if (!profile) {
+            return;
+        }
 
-    useEffect(() => {
-        if (isVerificationError) {
+        verifyServer(server).catch((verificationError) => {
             dispatch(
                 addNotification({
                     id: server.id,
@@ -156,8 +157,8 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server}) => {
                     title: verificationError.name,
                 }),
             );
-        }
-    }, [isVerificationError]);
+        });
+    };
 
     const displayName = server.ip_address ? server.ip_address : server.host;
     const displayPort = server.port ? `:${server.port}` : '';
@@ -165,7 +166,7 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server}) => {
     const onlinePlayers = server.onlinePlayers ?? 0;
     const maxPlayers = server.maxPlayers ?? 0;
     const categories = server.categories ?? [];
-    const description = shortenText(server?.description ?? '', 320);
+    const description = shortenText(server?.description ?? '', 640);
     const linkTo = `/${server.host}`;
 
     const LinkWrapper = ({children}: {children: ReactNode}) => (
@@ -235,7 +236,7 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server}) => {
                         sx={{
                             display: '-webkit-box',
                             whiteSpace: 'pre-line',
-                            WebkitLineClamp: server.banner ? 2 : 4,
+                            WebkitLineClamp: server.banner ? 2 : 6,
                             WebkitBoxOrient: 'vertical',
                             overflow: 'hidden',
                         }}
@@ -290,7 +291,12 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server}) => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <IconButton onClick={handleFavoriteClick} size="small">
+                    <IconButton
+                        onClick={handleFavoriteClick}
+                        size="small"
+                        sx={{cursor: profile ? 'pointer' : 'not-allowed'}}
+                        disabled={!profile}
+                    >
                         <FavoriteIcon sx={{color: isLikedByUser ? 'red' : 'grey'}} />
                     </IconButton>
                     <Typography variant="caption">{votes}</Typography>

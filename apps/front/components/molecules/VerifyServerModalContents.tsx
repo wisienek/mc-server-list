@@ -13,6 +13,8 @@ import CopyableTypography from '@front/components/atoms/CopyableTypography';
 import {CreateServerDto, CreateServerResponseDto, ServerDto} from '@shared/dto';
 
 const StyledCode = styled('code')(({theme}) => ({
+    wordBreak: 'normal',
+    textColor: theme.palette.text.primary,
     fontFamily: theme.typography.fontFamily,
     backgroundColor: theme.palette.grey[200],
     padding: theme.spacing(0.5, 1),
@@ -59,7 +61,7 @@ const VerifyServerModalContents: FC<VerifyServerModalContentsProps> = ({
 
     return (
         <Box sx={{p: 4, textAlign: 'center'}}>
-            <Typography variant="h5" gutterBottom>
+            <Typography variant="h5" gutterBottom color="textPrimary">
                 {t('newServer')}
             </Typography>
 
@@ -69,7 +71,7 @@ const VerifyServerModalContents: FC<VerifyServerModalContentsProps> = ({
                 })}
             </CopyableTypography>
 
-            <Typography variant="subtitle1" gutterBottom>
+            <Typography variant="subtitle1" gutterBottom color="textPrimary">
                 {t.rich('expiresAt', {
                     expirationDate: () => (
                         <StyledCode>
@@ -87,7 +89,9 @@ const VerifyServerModalContents: FC<VerifyServerModalContentsProps> = ({
                 onClick={onStartVerification}
                 sx={{mt: 3}}
             >
-                {t('startVerification')}
+                <Typography variant="button" color="textPrimary">
+                    {t('startVerification')}
+                </Typography>
             </Button>
         </Box>
     );

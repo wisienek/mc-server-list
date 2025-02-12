@@ -27,10 +27,14 @@ export const useVerifyServer = () => {
                 );
                 return response.data;
             },
-            onSuccess: () => {
+            onSuccess: (_, input) => {
                 queryClient.invalidateQueries({
-                    queryKey: '/servers',
+                    queryKey: ['/servers'],
                     exact: false,
+                });
+                queryClient.invalidateQueries({
+                    queryKey: ['/servers', input],
+                    exact: true,
                 });
             },
         },

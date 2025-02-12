@@ -5,10 +5,13 @@ import {useCallback} from 'react';
 import axios from 'axios';
 import {CookieNames} from '@shared/enums';
 import {UserDto} from '@shared/dto';
+import {useUserLogout} from '../queries/user/userLogout';
 
 const useUserCookie = () => {
     const cookieStore = useCookies();
     const dispatch = useAppDispatch();
+
+    const {mutate: sendLogoutRequest} = useUserLogout();
 
     const sessionId = cookieStore.get(CookieNames.SESSION_ID);
 
@@ -54,15 +57,8 @@ const useUserCookie = () => {
         if (!sessionId) return;
 
         try {
-            await axios.post(
-                `${process.env.NEXT_PUBLIC_API_URL}/users/logout`,
-                {},
-                {
-                    withCredentials: true,
-                },
-            );
+            sendLogoutRequest();
             cookieStore.remove(CookieNames.SESSION_ID);
-
             dispatch(logout());
 
             return true;

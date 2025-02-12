@@ -17,6 +17,7 @@ import {CreateServerDto, CreateServerResponseDto} from '@shared/dto';
 import {hostnameRegex, ipv4Regex} from '@core';
 import {ServerType} from '@shared/enums';
 import ServerTypeOption from '@front/components/atoms/ServerTypeOption';
+import {useCreateServer} from '../queries/servers/createServer';
 
 const FormContainer = styled('form')(({theme}) => ({
     display: 'flex',
@@ -70,6 +71,8 @@ const CreateServerModalContents = ({
 }: CreateServerModalContentsProps) => {
     const t = useTranslations('server.add');
     const dispatch = useAppDispatch();
+
+    const {mutateAsync: sendCreateServer, isPending} = useCreateServer();
 
     const createServerSchema = z.object({
         address: z
@@ -125,19 +128,12 @@ const CreateServerModalContents = ({
             pushData.hostname = data.address;
         }
 
-        axios
-            .post<CreateServerResponseDto>(
-                `${process.env.NEXT_PUBLIC_API_URL}/servers`,
-                pushData,
-                {
-                    withCredentials: true,
-                },
-            )
-            .then((response) => {
-                setServerResponse(response.data);
+        sendCreateServer(pushData)
+            .then((data) => {
+                setServerResponse(data);
             })
             .catch((error: AxiosError) => {
-                console.log(error);
+                console.error(error);
                 dispatch(
                     addNotification({
                         description: error.response.data['message'] ?? error.message,
@@ -151,7 +147,7 @@ const CreateServerModalContents = ({
 
     return (
         <>
-            <Typography variant="h5" component="h2" gutterBottom>
+            <Typography variant="h5" component="h2" gutterBottom color="textPrimary">
                 {t('title')}
             </Typography>
             <FormContainer onSubmit={handleSubmit(onSubmit)}>
@@ -174,7 +170,9 @@ const CreateServerModalContents = ({
                     helperText={errors.port?.message}
                 />
 
-                <Typography variant="subtitle1">{t('type')}</Typography>
+                <Typography variant="subtitle1" color="textPrimary">
+                    {t('type')}
+                </Typography>
 
                 <StyledToggleButtonGroup
                     value={serverType}

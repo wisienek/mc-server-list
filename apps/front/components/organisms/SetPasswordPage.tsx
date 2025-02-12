@@ -1,5 +1,6 @@
 'use client';
 
+import {useAppSelector} from '@lib/front/components/store/store';
 import {useTranslations} from 'next-intl';
 import React, {useState} from 'react';
 import axios from 'axios';
@@ -9,7 +10,6 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import {useAppSelector} from '../store/store';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useRouter} from '@front/i18n/routing';
@@ -88,7 +88,7 @@ export default function CredentialsPage() {
 
     return (
         <PageWrapper>
-            <Typography variant="h4" component="h1" gutterBottom>
+            <Typography variant="h4" component="h1" gutterBottom color="textPrimary">
                 {t('profile.password.setCredentials')}
             </Typography>
             <FormContainer onSubmit={handleSubmit(onSubmit)}>
