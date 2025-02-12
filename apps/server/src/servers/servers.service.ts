@@ -5,6 +5,7 @@ import {
     BedrockServer,
     JavaServer,
     Server,
+    ServerRanking,
     ServerVerification,
     User,
     Vote,
@@ -59,29 +60,33 @@ export class ServersService {
         hostName: string,
         userEmail: string,
     ): Promise<number> {
-        const givenVote = await this.voteRepository.findOne({
-            where: {
-                server: {
-                    host: hostName,
-                },
-                user: {
-                    email: userEmail,
-                },
-            },
-        });
+        const server = await this.getServer(hostName);
 
-        if (!givenVote) {
-            const user = await this.queryBus.execute(
-                plainToInstance(GetUserQuery, {email: userEmail}),
-            );
-            const server = await this.getServer(hostName);
-
-            await this.voteRepository.save({
-                server,
-                user,
+        if (server.isActive) {
+            const givenVote = await this.voteRepository.findOne({
+                where: {
+                    server: {
+                        isActive: true,
+                        host: hostName,
+                    },
+                    user: {
+                        email: userEmail,
+                    },
+                },
             });
-        } else {
-            await this.voteRepository.remove(givenVote);
+
+            if (!givenVote) {
+                const user = await this.queryBus.execute(
+                    plainToInstance(GetUserQuery, {email: userEmail}),
+                );
+
+                await this.voteRepository.save({
+                    server,
+                    user,
+                });
+            } else {
+                await this.voteRepository.remove(givenVote);
+            }
         }
 
         return await this.voteRepository.count({where: {server: {host: hostName}}});
@@ -136,6 +141,14 @@ export class ServersService {
             );
         }
 
+        query.leftJoinAndMapOne(
+            'server.rankingData',
+            ServerRanking,
+            'sr',
+            'sr.serverId = server.id',
+        );
+        query.orderBy('sr.ranking', 'ASC');
+
         const page = filters.page || 1;
         const perPage = filters.perPage || 10;
         query.skip((page - 1) * perPage).take(perPage);
@@ -148,13 +161,15 @@ export class ServersService {
                 const votesCount = await this.voteRepository.count({
                     where: {server_id: item.id},
                 });
-
                 dto.isLiked =
                     userId &&
                     (await this.voteRepository.exists({
                         where: {server_id: item.id, user_id: userId},
                     }));
                 dto.votes = votesCount;
+                dto.ranking = item.rankingData
+                    ? item.rankingData.ranking
+                    : undefined;
                 return dto;
             }),
         );

@@ -9,12 +9,14 @@ import {
     type Relation,
     TableInheritance,
     OneToMany,
+    CreateDateColumn,
 } from 'typeorm';
 import {McServerMotd, McServerSrvRecord} from '@lib/types';
 import {ServerCategory, ServerType} from '@shared/enums';
+import {ServerRanking} from './ranking-view.entity';
 import {ServerVerification} from './server-verification.entity';
-import {User} from '../users';
 import {Vote} from './vote.entity';
+import {User} from '../users';
 
 @Entity()
 @TableInheritance({column: {type: 'enum', name: 'type', enum: ServerType}})
@@ -104,4 +106,11 @@ export class Server {
 
     @OneToMany(() => Vote, (vote) => vote.server)
     votes: Relation<Vote>[];
+
+    @OneToOne(() => ServerRanking, {nullable: true})
+    @JoinColumn({name: 'id', referencedColumnName: 'serverId'})
+    rankingData: ServerRanking;
+
+    @CreateDateColumn()
+    createdAt: Date;
 }

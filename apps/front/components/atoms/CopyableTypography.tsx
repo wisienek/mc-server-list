@@ -43,6 +43,7 @@ const CopyableTypography: FC<CopyableTypographyProps> = ({
                     {...typographyProps}
                     sx={{cursor: 'pointer', ...typographyProps.sx}}
                     onClick={handleCopy}
+                    color="textPrimary"
                 >
                     {children || text}
                 </Typography>

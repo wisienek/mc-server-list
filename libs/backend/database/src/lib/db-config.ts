@@ -7,6 +7,7 @@ import {
     DiscordOAuth2Credentials,
     JavaServer,
     Server,
+    ServerRanking,
     ServerVerification,
     Session,
     User,
@@ -21,6 +22,7 @@ import {
     UserAuth1738523212153,
     UserAvatarNullable1738793280539,
     UserCredentials1738883140309,
+    ServerRanking1739314805437,
 } from './migrations';
 
 const getDefaultConfig = (): PostgresConnectionOptions => {
@@ -53,6 +55,7 @@ export const getConfig = (): DataSourceOptions => {
             Session,
             Vote,
             UserCredentials,
+            ServerRanking,
         ],
         migrations: [
             InitDB1738498523335,
@@ -62,6 +65,7 @@ export const getConfig = (): DataSourceOptions => {
             UserAvatarNullable1738793280539,
             SessionDeletedAt1738793624563,
             UserCredentials1738883140309,
+            ServerRanking1739314805437,
         ],
     };
 };

@@ -4,6 +4,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import {styled} from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import {useTranslations} from 'next-intl';
 import {type FC} from 'react';
 
@@ -34,7 +35,11 @@ const OwnServersFilter: FC<OwnServersFilterProps> = ({
                         color="primary"
                     />
                 }
-                label={t('showMyServers')}
+                label={
+                    <Typography variant="body2" color="textPrimary">
+                        {t('showMyServers')}
+                    </Typography>
+                }
                 sx={{
                     userSelect: 'none',
                 }}

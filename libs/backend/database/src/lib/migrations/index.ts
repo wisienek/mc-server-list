@@ -5,3 +5,4 @@ export * from './1738720838341-ServerAdditionalInfo';
 export * from './1738793280539-UserAvatarNullable';
 export * from './1738793624563-SessionDeletedAt';
 export * from './1738883140309-UserCredentials';
+export * from './1739314805437-ServerRanking';

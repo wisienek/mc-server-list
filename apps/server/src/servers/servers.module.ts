@@ -3,6 +3,7 @@ import {
     BedrockServer,
     JavaServer,
     Server,
+    ServerRanking,
     ServerVerification,
     Vote,
 } from '@backend/db';
@@ -26,6 +27,7 @@ const configs = getConfigs(ApiConfig);
             BedrockServer,
             ServerVerification,
             Vote,
+            ServerRanking,
         ]),
     ],
     controllers: [ServersController],
