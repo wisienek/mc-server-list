@@ -3,7 +3,7 @@
 import {addNotification} from '@lib/front/components/store/notificationsSlice';
 import {useAppDispatch} from '@lib/front/components/store/store';
 import {useForm, type SubmitHandler} from 'react-hook-form';
-import axios, {AxiosError} from 'axios';
+import {AxiosError} from 'axios';
 import {z} from 'zod';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
