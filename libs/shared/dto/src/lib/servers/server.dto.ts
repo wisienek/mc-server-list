@@ -120,6 +120,7 @@ export class ServerDto {
     @AutoMap()
     @IsInt()
     @IsPositive()
+    @Type(() => Number)
     ranking: number;
 
     @AutoMap(() => ServerVerificationNoServerDto)

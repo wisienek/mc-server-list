@@ -27,6 +27,7 @@
             "@backend/db": ["libs/backend/database/src/index.ts"],
             "@backend/logger": ["libs/backend/logger/src/index.ts"],
             "@backend/mc-stats": ["libs/backend/mc-stats-api/src/index.ts"],
+            "@backend/redis": ["libs/backend/redis/src/index.ts"],
             "@core": ["libs/shared/core/src/index.ts"],
             "@front/*": ["apps/front/*"],
             "@lib/front/components/*": ["libs/frontend/components/src/*"],

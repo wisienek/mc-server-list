@@ -15,6 +15,7 @@ import {
     ServerSummaryDto,
 } from '@shared/dto';
 import type {McServerSrvRecord} from '@lib/types';
+import {ServerType} from '@shared/enums';
 
 @Injectable()
 export class ServerMapperProfile extends AutomapperProfile {
@@ -64,6 +65,10 @@ export class ServerMapperProfile extends AutomapperProfile {
                 mapper,
                 MinecraftServerOnlineStatus,
                 JavaServer,
+                forMember(
+                    (dest) => dest.type,
+                    mapFrom(() => ServerType.JAVA),
+                ),
                 forMember(
                     (dest) => dest.host,
                     mapFrom((src) => src.hostname),
@@ -130,6 +135,10 @@ export class ServerMapperProfile extends AutomapperProfile {
                 mapper,
                 MinecraftServerOnlineStatus,
                 BedrockServer,
+                forMember(
+                    (dest) => dest.type,
+                    mapFrom(() => ServerType.BEDROCK),
+                ),
                 forMember(
                     (dest) => dest.host,
                     mapFrom((src) => src.hostname),

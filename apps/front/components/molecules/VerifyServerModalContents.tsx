@@ -10,7 +10,13 @@ import {styled} from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import CopyableTypography from '@front/components/atoms/CopyableTypography';
-import {CreateServerDto, CreateServerResponseDto, ServerDto} from '@shared/dto';
+import {
+    CreateServerDto,
+    CreateServerResponseDto,
+    ServerDto,
+    ServerSummaryDto,
+} from '@shared/dto';
+import {useVerifyServer} from '../queries/servers/verifyServer';
 
 const StyledCode = styled('code')(({theme}) => ({
     wordBreak: 'normal',
@@ -34,29 +40,20 @@ const VerifyServerModalContents: FC<VerifyServerModalContentsProps> = ({
     const language = useLocale();
     const dispatch = useAppDispatch();
 
+    const {mutateAsync: verifyServer} = useVerifyServer();
+
     const onStartVerification = () => {
-        axios
-            .post<ServerDto>(
-                `${process.env.NEXT_PUBLIC_API_URL}/servers/${serverResponse.host}`,
-                createData,
-                {
-                    withCredentials: true,
-                },
-            )
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error: AxiosError) => {
-                console.error(error);
-                dispatch(
-                    addNotification({
-                        description: error.response.data['message'] ?? error.message,
-                        id: `${error.status}`,
-                        level: 'Error',
-                        title: error.response.statusText,
-                    }),
-                );
-            });
+        verifyServer(createData as ServerSummaryDto).catch((error: AxiosError) => {
+            console.error(error);
+            dispatch(
+                addNotification({
+                    description: error.response.data['message'] ?? error.message,
+                    id: `${error.status}`,
+                    level: 'Error',
+                    title: error.response.statusText,
+                }),
+            );
+        });
     };
 
     return (

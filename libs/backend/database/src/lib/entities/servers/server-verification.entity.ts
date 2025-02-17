@@ -16,9 +16,6 @@ export class ServerVerification {
     @Column()
     code: string;
 
-    @Column('bigint')
-    expiresAt: number;
-
     @Column({type: 'boolean', default: false})
     verified: boolean;
 

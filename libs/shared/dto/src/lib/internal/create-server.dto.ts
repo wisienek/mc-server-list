@@ -1,14 +1,6 @@
+import {IsEnum, IsInt, IsPositive, IsString, Max, ValidateIf} from 'class-validator';
 import {ApiProperty} from '@nestjs/swagger';
 import {AutoMap} from '@automapper/classes';
-import {
-    IsEnum,
-    IsInt,
-    IsNumber,
-    IsPositive,
-    IsString,
-    Max,
-    ValidateIf,
-} from 'class-validator';
 import {ServerType} from '@shared/enums';
 
 export class CreateServerDto {
@@ -40,11 +32,6 @@ export class CreateServerResponseDto {
     @IsString()
     @AutoMap()
     code: string;
-
-    @IsNumber()
-    @IsPositive()
-    @AutoMap()
-    expiresAt: number;
 
     @IsString()
     @AutoMap()

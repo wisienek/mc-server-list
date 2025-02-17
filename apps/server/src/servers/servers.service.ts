@@ -1,16 +1,7 @@
 import type {Mapper} from '@automapper/core';
 import {InjectMapper} from '@automapper/nestjs';
-import {GetUserQuery} from '@backend/commander';
-import {
-    BedrockServer,
-    JavaServer,
-    Server,
-    ServerRanking,
-    ServerVerification,
-    User,
-    Vote,
-} from '@backend/db';
-import {MCStatsService} from '@backend/mc-stats';
+import {GetServerStatsQuery, GetUserQuery} from '@backend/commander';
+import {BedrockServer, JavaServer, Server, ServerRanking, Vote} from '@backend/db';
 import {Injectable, Logger} from '@nestjs/common';
 import {QueryBus} from '@nestjs/cqrs';
 import {InjectRepository} from '@nestjs/typeorm';
@@ -18,23 +9,18 @@ import {
     CreateServerDto,
     CreateServerResponseDto,
     ListServersDto,
-    MinecraftServerOfflineStatus,
-    MinecraftServerOnlineStatus,
     Pagination,
     ServerSummaryDto,
-    VerifyServerDto,
 } from '@shared/dto';
 import {ServerType} from '@shared/enums';
 import {plainToInstance} from 'class-transformer';
-import {randomInt} from 'crypto';
 import {type FindOptionsWhere, Repository} from 'typeorm';
 import {
-    ServerAlreadyClaimedError,
     ServerExistsError,
     ServerNotFoundError,
     ServerVerificationOfflineError,
-    ServerVerificationUnsuccessfulError,
 } from './errors';
+import type {GetServerStatsQueryHandlerReturnType} from './handlers';
 
 @Injectable()
 export class ServersService {
@@ -43,14 +29,11 @@ export class ServersService {
         private readonly javaServerRepository: Repository<JavaServer>,
         @InjectRepository(BedrockServer)
         private readonly bedrockServerRepository: Repository<BedrockServer>,
-        @InjectRepository(ServerVerification)
-        private readonly verificationRepository: Repository<ServerVerification>,
         @InjectRepository(Server)
         private readonly serverRepository: Repository<Server>,
         @InjectRepository(Vote)
         private readonly voteRepository: Repository<Vote>,
         private readonly logger: Logger,
-        private readonly mcStatsService: MCStatsService,
         private readonly queryBus: QueryBus,
         @InjectMapper()
         private readonly mapper: Mapper,
@@ -102,16 +85,12 @@ export class ServersService {
         filters: ListServersDto,
         userId?: string,
     ): Promise<Pagination<ServerSummaryDto>> {
-        const query = this.serverRepository.createQueryBuilder('server');
+        const query = this.serverRepository
+            .createQueryBuilder('server')
+            .leftJoinAndSelect('server.verification', 'verification');
 
-        if (userId) {
-            query.leftJoinAndSelect('server.verification', 'verification');
-            query.where('(server.isActive = :active OR server.owner_id = :userId)', {
-                active: true,
-                userId,
-            });
-        } else {
-            query.where('server.isActive = :active', {active: true});
+        if (filters.isActive !== undefined) {
+            query.where('server.isActive = :active', {active: filters.isActive});
         }
 
         if (filters.online !== undefined) {
@@ -199,18 +178,8 @@ export class ServersService {
 
     public async createServer(
         data: CreateServerDto,
-        userEmail: string,
     ): Promise<CreateServerResponseDto> {
         const existsServer = await this.getServerByHostNameOrIP(data);
-
-        if (existsServer && existsServer.owner.email !== userEmail) {
-            this.logger.warn(
-                `User ${userEmail} tried to claim server ${data.hostname}:${
-                    data.port ?? '...'
-                } for it's own, when it's claimed by: ${existsServer.owner.email}`,
-            );
-            throw new ServerAlreadyClaimedError();
-        }
 
         if (existsServer) {
             throw new ServerExistsError(
@@ -220,97 +189,26 @@ export class ServersService {
             );
         }
 
-        const user = await this.queryBus.execute(
-            plainToInstance(GetUserQuery, {email: userEmail}),
-        );
+        const fetchedServer: GetServerStatsQueryHandlerReturnType =
+            await this.queryBus.execute(
+                plainToInstance(GetServerStatsQuery, {
+                    type: data.type,
+                    host: data.hostname,
+                }),
+            );
 
-        const isBedrock = data.type === ServerType.BEDROCK;
-
-        const fetchedServer = await this.mcStatsService.fetchServerInfo(
-            `${data.hostname}:${data.port}`,
-            isBedrock,
-        );
-
-        if (fetchedServer instanceof MinecraftServerOfflineStatus) {
+        if (!fetchedServer.server) {
             throw new ServerVerificationOfflineError();
         }
-
-        const verification = this.verificationRepository.create({
-            code: this.generateRandomString(16),
-            expiresAt: Date.now() + 1_000 * 60 * 60 * 4, // 4hr
-        });
-
-        let createdServer: Server;
-        if (isBedrock) {
-            createdServer = await this.createOrUpdateBedrockServer(
-                fetchedServer,
-                user,
-                verification,
-            );
-        } else {
-            createdServer = await this.createOrUpdateJavaServer(
-                fetchedServer,
-                user,
-                verification,
-            );
-        }
-
-        await this.verificationRepository.save({
-            ...verification,
-            server: createdServer,
-        });
 
         this.logger.log(
-            `Created server: ${createdServer.host} for ${createdServer.type} and verification: ${verification.code} for user: ${userEmail}`,
+            `Created server: ${fetchedServer.server.host} for ${fetchedServer.server.type} and verification: ${fetchedServer.server.verification.code}`,
         );
 
-        return {...verification, host: createdServer.host};
-    }
-
-    public async verifyServer(data: VerifyServerDto): Promise<Server> {
-        const server = await this.getServerByHostNameOrIP(data);
-        if (!server) {
-            throw new ServerNotFoundError(data.hostname, data.port, data.ip);
-        }
-
-        const fetchInfo = await this.mcStatsService.fetchServerInfo(
-            `${server.host}:${server.port}`,
-            data.type === ServerType.BEDROCK,
-        );
-
-        if (fetchInfo instanceof MinecraftServerOfflineStatus) {
-            throw new ServerVerificationOfflineError();
-        }
-
-        const includesCode = fetchInfo.motd.clean
-            .join(' ')
-            .toLowerCase()
-            .includes(server.verification.code.toLowerCase());
-        const isVerified = includesCode && !server.isActive;
-
-        if (!isVerified) {
-            throw new ServerVerificationUnsuccessfulError();
-        }
-
-        server.isActive = true;
-
-        if (server instanceof JavaServer) {
-            await this.javaServerRepository.save(server);
-            return await this.createOrUpdateJavaServer(
-                fetchInfo,
-                server.owner,
-                server.verification,
-            );
-        } else if (server instanceof BedrockServer) {
-            await this.bedrockServerRepository.save(server);
-            return await this.createOrUpdateBedrockServer(
-                fetchInfo,
-                server.owner,
-                server.verification,
-            );
-        } else {
-            throw new Error('Unknown server type encountered during deletion.');
-        }
+        return {
+            ...fetchedServer.server.verification,
+            host: fetchedServer.server.host,
+        };
     }
 
     /**
@@ -366,95 +264,5 @@ export class ServersService {
                 relations: {verification: true, owner: true},
             }))
         );
-    }
-
-    private async createOrUpdateJavaServer(
-        data: MinecraftServerOnlineStatus,
-        user: User,
-        verification: ServerVerification,
-    ): Promise<JavaServer> {
-        const found = await this.javaServerRepository
-            .createQueryBuilder('server')
-            .where({ip_address: data.ip, port: data.port})
-            .orWhere({host: data.hostname})
-            .getOne();
-
-        const mappedData = this.mapper.map(
-            data,
-            MinecraftServerOnlineStatus,
-            JavaServer,
-        );
-
-        if (!found) {
-            return await this.javaServerRepository.save(
-                {
-                    ...mappedData,
-                    owner: user,
-                    owner_id: user.id,
-                    verification: verification,
-                },
-                {reload: true},
-            );
-        }
-
-        return await this.javaServerRepository.save({
-            ...found,
-            ...mappedData,
-        });
-    }
-
-    private async createOrUpdateBedrockServer(
-        data: MinecraftServerOnlineStatus,
-        user: User,
-        verification: ServerVerification,
-    ): Promise<BedrockServer> {
-        const found = await this.bedrockServerRepository
-            .createQueryBuilder('server')
-            .where({ip_address: data.ip, port: data.port})
-            .orWhere({host: data.hostname})
-            .getOne();
-
-        const mappedData = this.mapper.map(
-            data,
-            MinecraftServerOnlineStatus,
-            BedrockServer,
-        );
-
-        if (!found) {
-            return await this.bedrockServerRepository.save(
-                {
-                    ...mappedData,
-                    owner: user,
-                    owner_id: user.id,
-                    verification: verification,
-                },
-                {reload: true},
-            );
-        }
-
-        return await this.bedrockServerRepository.save({
-            ...found,
-            ...mappedData,
-        });
-    }
-
-    /**
-     * Generates a random string.
-     *
-     * @param length - The desired length of the string (default is 32).
-     * @returns A random string of the specified length using printable ASCII characters.
-     */
-    private generateRandomString(length: number = 32): string {
-        const allowedChars = Array.from({length: 95}, (_, i) =>
-            String.fromCharCode(i + 32),
-        ).join('');
-        let result = '';
-
-        for (let i = 0; i < length; i++) {
-            const randomIndex = randomInt(0, allowedChars.length);
-            result += allowedChars[randomIndex];
-        }
-
-        return result.replace(/\s/, '');
     }
 }

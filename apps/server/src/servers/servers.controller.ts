@@ -1,6 +1,8 @@
 import {InjectMapper} from '@automapper/nestjs';
 import type {Mapper} from '@automapper/core';
 import {AuthenticatedGuard, SessionUser} from '@backend/auth';
+import {VerifyServerCommand} from '@backend/commander';
+import {CommandBus} from '@nestjs/cqrs';
 import {
     ApiBadRequestResponse,
     ApiConflictResponse,
@@ -45,6 +47,7 @@ export class ServersController {
         private readonly serversService: ServersService,
         @InjectMapper()
         private readonly mapper: Mapper,
+        private readonly commandBus: CommandBus,
     ) {}
 
     /**
@@ -79,10 +82,9 @@ export class ServersController {
     @UseGuards(AuthenticatedGuard)
     @Post()
     async createServer(
-        @SessionUser() user: User,
         @Body() createServerDto: CreateServerDto,
     ): Promise<CreateServerResponseDto> {
-        return await this.serversService.createServer(createServerDto, user.email);
+        return await this.serversService.createServer(createServerDto);
     }
 
     @ApiParam({
@@ -116,8 +118,10 @@ export class ServersController {
     @UseGuards(AuthenticatedGuard)
     @Patch(':host/verify')
     async verifyServer(@Body() data: VerifyServerDto): Promise<ServerSummaryDto> {
+        await this.commandBus.execute(new VerifyServerCommand(data.hostname));
+
         return this.mapper.map(
-            await this.serversService.verifyServer(data),
+            await this.serversService.getServer(data.hostname),
             Server,
             ServerSummaryDto,
         );

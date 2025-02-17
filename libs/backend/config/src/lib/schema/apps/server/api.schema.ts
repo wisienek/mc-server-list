@@ -20,6 +20,8 @@ export const ApiSchema = z.object({
         .max(35 * 24, `Maximum of 35 days (fib no.)`)
         .default(14 * 24),
     AUTOMATIC_VERIFICATION: z.boolean().default(true),
+    AUTOMATIC_SERVER_TIMEOUT_TIMES: z.number().gt(0),
+    AUTOMATIC_SERVER_TIMEOUT_BATCH: z.number().gt(20),
 });
 
 @Injectable()

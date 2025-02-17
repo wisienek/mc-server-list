@@ -23,6 +23,7 @@ import {
     UserAvatarNullable1738793280539,
     UserCredentials1738883140309,
     ServerRanking1739314805437,
+    OptionalOwner1739827957429,
 } from './migrations';
 
 const getDefaultConfig = (): PostgresConnectionOptions => {
@@ -66,6 +67,7 @@ export const getConfig = (): DataSourceOptions => {
             SessionDeletedAt1738793624563,
             UserCredentials1738883140309,
             ServerRanking1739314805437,
+            OptionalOwner1739827957429,
         ],
     };
 };

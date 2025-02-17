@@ -24,7 +24,7 @@ export abstract class Logger implements LoggerService, LoggerPort {
         if (context) {
             const _context = typeof context === 'string' ? context : context?.name;
             this.loggerContext =
-                _context.slice(0, 1).toUpperCase() + _context.slice(1);
+                _context.slice(0, 1)?.toUpperCase() + _context.slice(1);
         }
     }
 

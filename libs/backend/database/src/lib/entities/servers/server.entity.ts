@@ -13,8 +13,8 @@ import {
 } from 'typeorm';
 import {McServerMotd, McServerSrvRecord} from '@lib/types';
 import {ServerCategory, ServerType} from '@shared/enums';
-import {ServerRanking} from './ranking-view.entity';
 import {ServerVerification} from './server-verification.entity';
+import {ServerRanking} from './ranking-view.entity';
 import {Vote} from './vote.entity';
 import {User} from '../users';
 
@@ -63,13 +63,13 @@ export class Server {
     motd: McServerMotd;
 
     @AutoMap()
-    @ManyToOne(() => User, (user) => user.servers)
+    @ManyToOne(() => User, (user) => user.servers, {nullable: true})
     @JoinColumn({name: 'owner_id', referencedColumnName: 'id'})
-    owner: Relation<User>;
+    owner?: Relation<User>;
 
     @AutoMap()
-    @Column()
-    owner_id: string;
+    @Column({nullable: true})
+    owner_id?: string;
 
     @AutoMap()
     @Column({default: false, type: 'boolean'})
@@ -109,7 +109,10 @@ export class Server {
 
     @OneToOne(() => ServerRanking, {nullable: true})
     @JoinColumn({name: 'id', referencedColumnName: 'serverId'})
-    rankingData: ServerRanking;
+    rankingData: Relation<ServerRanking>;
+
+    @Column({default: false})
+    isTimedOut: boolean = false;
 
     @CreateDateColumn()
     createdAt: Date;

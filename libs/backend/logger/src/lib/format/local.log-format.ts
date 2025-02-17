@@ -41,8 +41,8 @@ export class LocalLogFormat {
             const color = colorSchema[level];
             const yellow = clc.yellow;
 
-            let logEntry = `${color(`[${app.toUpperCase()}]`)} `;
-            logEntry += `${yellow(level.toUpperCase().padEnd('VERBOSE'.length))} `;
+            let logEntry = `${color(`[${app?.toUpperCase()}]`)} `;
+            logEntry += `${yellow(level?.toUpperCase().padEnd('VERBOSE'.length))} `;
             if (timestamp) {
                 logEntry += `${timestamp}\t`;
             }
