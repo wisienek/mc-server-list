@@ -90,6 +90,19 @@ export class ServersService {
             query.where('server.isActive = :active', {active: filters.isActive});
         }
 
+        if (filters.q && filters.q.length > 0) {
+            const searchTerm = `%${filters.q}%`;
+            query.andWhere(
+                `(server.description ILIKE :searchTerm
+          OR server.name ILIKE :searchTerm
+          OR server.ip_address ILIKE :searchTerm
+          OR server.host ILIKE :searchTerm
+          OR CAST(server.port AS TEXT) ILIKE :searchTerm
+          OR CAST(server.motd AS TEXT) ILIKE :searchTerm)`,
+                {searchTerm},
+            );
+        }
+
         if (filters.online !== undefined) {
             query.andWhere('server.online = :online', {online: filters.online});
         }
