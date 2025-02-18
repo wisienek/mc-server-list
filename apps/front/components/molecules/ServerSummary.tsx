@@ -29,9 +29,9 @@ const ServerSummaryAwaited: FC<ServerSummaryAwaitedProps> = ({
 }) => {
     const data = fetchedServers.data;
 
-    return (
-        <>
-            {data.items.length > 0 && (
+    const PaginationInputs = () => {
+        return (
+            data.items.length > 0 && (
                 <PaginationWrapped
                     items={data.items}
                     currentPage={data.currentPage}
@@ -39,7 +39,13 @@ const ServerSummaryAwaited: FC<ServerSummaryAwaitedProps> = ({
                     totalItems={data.total}
                     setCurrentPage={() => {}}
                 />
-            )}
+            )
+        );
+    };
+
+    return (
+        <>
+            <PaginationInputs />
 
             {data.items.map((server) => (
                 <Grid key={server.id}>
@@ -49,6 +55,8 @@ const ServerSummaryAwaited: FC<ServerSummaryAwaitedProps> = ({
                     />
                 </Grid>
             ))}
+
+            <PaginationInputs />
         </>
     );
 };
