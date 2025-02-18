@@ -1,16 +1,16 @@
 'use client';
 import {addNotification} from '@lib/front/components/store/notificationsSlice';
 import {useAppDispatch} from '@lib/front/components/store/store';
-import {AxiosError} from 'axios';
 import {useTranslations} from 'next-intl';
+import {AxiosError} from 'axios';
 import type {FC} from 'react';
 import Typography from '@mui/material/Typography';
 import {styled} from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import CopyableTypography from '@front/components/atoms/CopyableTypography';
+import {useVerifyServer} from '@front/components/queries/servers/verifyServer';
 import {ServerSummaryDto} from '@shared/dto';
-import {useVerifyServer} from '../queries/servers/verifyServer';
 
 const StyledCode = styled('code')(({theme}) => ({
     wordBreak: 'normal',
@@ -48,7 +48,7 @@ const VerifyServerModalContents: FC<VerifyServerModalContentsProps> = ({server})
     return (
         <Box sx={{p: 4, textAlign: 'center'}}>
             <Typography variant="h5" gutterBottom color="textPrimary">
-                {t('newServer')}
+                {t('serverVerificationTitle')}
             </Typography>
 
             <CopyableTypography text={server?.verificationCode}>

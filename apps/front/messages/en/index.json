@@ -43,7 +43,7 @@
     },
     "server": {
         "add": {
-            "newServer": "Claim the server",
+            "newServer": "Create new server",
             "title": "Add server to the list",
             "hostName": "Server IP / Hostname",
             "port": "Server Port",
@@ -58,7 +58,8 @@
             "portMax": "Port must be at most 65535.",
             "verificationInstructions": "Copy the verification code <code></code> into your server MOTD file, then click the button below to start the verification process.",
             "expiresAt": "Expires at <expirationDate></expirationDate>",
-            "startVerification": "Start Verification"
+            "startVerification": "Start Verification",
+            "serverVerificationTitle": "Verify server with code"
         }
     }
 }

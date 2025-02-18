@@ -43,7 +43,7 @@
     },
     "server": {
         "add": {
-            "newServer": "Odbierz serwer",
+            "newServer": "Stwórz nowy serwer",
             "title": "Dodaj serwer do listy",
             "hostName": "IP serwera / Nazwa hosta",
             "port": "Port serwera",
@@ -58,7 +58,8 @@
             "portMax": "Port musi być co najwyżej 65535.",
             "verificationInstructions": "Skopiuj kod weryfikacyjny <code></code> do pliku MOTD serwera, następnie kliknij poniższy przycisk, aby rozpocząć proces weryfikacji.",
             "expiresAt": "Wygasa: <expirationDate></expirationDate>",
-            "startVerification": "Rozpocznij weryfikację"
+            "startVerification": "Rozpocznij weryfikację",
+            "serverVerificationTitle": "Weryfikuj serwer kodem"
         }
     }
 }

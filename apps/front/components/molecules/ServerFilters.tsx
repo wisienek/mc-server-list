@@ -2,19 +2,20 @@
 import {FormControl, InputLabel, OutlinedInput} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
-import {ListServersDto} from '@shared/dto';
 import {type Dispatch, type FC, type SetStateAction, useRef, useState} from 'react';
 import {styled} from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import {useTranslations} from 'next-intl';
+import {useDebounce} from 'react-use';
 import Box from '@mui/material/Box';
+import SelectedCategoriesSummary from '@front/components/atoms/SelectedCategoriesSummary';
 import CreateServerButton from '@front/components/atoms/AddServerButton';
 import OwnServersFilter from '@front/components/atoms/OwnServersFilter';
 import ServerCategoriesSelect, {
     useCategories,
 } from '@front/components/atoms/ServerCategoriesSelect';
 import {useAppSelector} from '@lib/front/components/store/store';
-import {useDebounce} from 'react-use';
+import {ListServersDto} from '@shared/dto';
 
 const Container = styled(Box)(({theme}) => ({
     width: '100%',
@@ -43,6 +44,7 @@ const ServerFilters: FC<ServerFiltersProps> = ({
     const t = useTranslations('filters');
     const profile = useAppSelector((state) => state.auth.user);
 
+    const isFirstRun = useRef<boolean>(true);
     const [searchText, setSearchText] = useState<string>('');
     const [showOwnServers, setShowOwnServers] = useState<boolean>(false);
     const {
@@ -52,7 +54,6 @@ const ServerFilters: FC<ServerFiltersProps> = ({
         setShowCategoriesContainer,
     } = useCategories();
 
-    const isFirstRun = useRef(true);
     useDebounce(
         () => {
             if (isFirstRun.current) {
@@ -126,6 +127,14 @@ const ServerFilters: FC<ServerFiltersProps> = ({
             <InputsContainer>
                 <ProfileSpecificFilters />
             </InputsContainer>
+
+            {selectedCategories.length > 0 && (
+                <InputsContainer>
+                    <SelectedCategoriesSummary
+                        selectedCategories={selectedCategories}
+                    />
+                </InputsContainer>
+            )}
 
             {showCategoriesContainer && (
                 <ServerCategoriesSelect

@@ -2,9 +2,7 @@
 import {addNotification} from '@lib/front/components/store/notificationsSlice';
 import {useAppDispatch, useAppSelector} from '@lib/front/components/store/store';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import Fade from '@mui/material/Fade';
 import Tooltip from '@mui/material/Tooltip';
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
@@ -16,9 +14,9 @@ import Image from 'next/image';
 import {useRouter} from 'next/navigation';
 import {type FC, type ReactNode, useState} from 'react';
 import {shortenText} from '@core';
-import ServerCategoryMapper from '../consts/ServerCategoryMapper';
 import {defaultServerIcon} from '../mocks/serverSummaryMocks';
 import {useVoteForServer} from '../queries/servers/voteForServer';
+import CategoryIcon from './CategoryIcon';
 import CopyableTypography from './CopyableTypography';
 import {Link} from '@front/i18n/routing';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -76,12 +74,6 @@ const CategoriesContainer = styled(Box)(({theme}) => ({
     display: 'flex',
     flexDirection: 'row',
     gap: theme.spacing(0.5),
-}));
-
-const StyledCategoryIcon = styled(Avatar)(({theme}) => ({
-    width: theme.spacing(3),
-    height: theme.spacing(3),
-    fontSize: '1rem',
 }));
 
 type ServerSummaryProps = {
@@ -234,24 +226,12 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
                         </Typography>
                     </Box>
                     <CategoriesContainer>
-                        {categories.map((cat) => {
-                            const config = ServerCategoryMapper[cat];
-                            return (
-                                <Tooltip
-                                    key={cat}
-                                    title={cat}
-                                    arrow
-                                    slots={{transition: Fade}}
-                                    slotProps={{transition: {timeout: 500}}}
-                                >
-                                    <StyledCategoryIcon
-                                        sx={{backgroundColor: config.color}}
-                                    >
-                                        {config.icon}
-                                    </StyledCategoryIcon>
-                                </Tooltip>
-                            );
-                        })}
+                        {categories.map((cat) => (
+                            <CategoryIcon
+                                key={`${server.id}-${cat}`}
+                                category={cat}
+                            />
+                        ))}
                     </CategoriesContainer>
                 </Box>
                 <Box

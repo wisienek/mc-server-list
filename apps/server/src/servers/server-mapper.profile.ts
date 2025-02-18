@@ -274,6 +274,10 @@ export class ServerMapperProfile extends AutomapperProfile {
                     mapFrom((src) => src.name ?? src.host),
                 ),
                 forMember(
+                    (dest) => dest.categories,
+                    mapFrom((src) => src.categories),
+                ),
+                forMember(
                     (dest) => dest.description,
                     mapFrom((src) => src.description ?? src.motd.clean),
                 ),
