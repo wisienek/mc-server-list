@@ -1,0 +1,64 @@
+{
+    "cancel": "Annuler",
+    "genericError": "Une erreur s'est produite.",
+    "profile": {
+        "loginDiscord": "Connectez-vous avec Discord !",
+        "logout": "Déconnexion",
+        "password": {
+            "setCredentials": "Définissez vos identifiants :",
+            "successfullySet": "Identifiants enregistrés avec succès !",
+            "credentialsSaveError": "Une erreur s'est produite lors de l'enregistrement des identifiants.",
+            "password": "Mot de passe",
+            "passwordPlaceholder": "Veuillez entrer un mot de passe",
+            "saving": "Enregistrement",
+            "save": "Enregistrer les identifiants"
+        }
+    },
+    "copy": {
+        "copied": "Copié !",
+        "label": "Copier dans le presse-papiers"
+    },
+    "filters": {
+        "searchLabel": "Rechercher par nom ou description",
+        "showMyServers": "Afficher mes serveurs",
+        "categories": {
+            "show": "Afficher les catégories",
+            "hide": "Masquer les catégories"
+        }
+    },
+    "footer": {
+        "credits": "Créé et conçu par <author>@Wisienek</author> 2025"
+    },
+    "page": {
+        "seo": {
+            "description": "Site web offrant un moyen facile d'ajouter et de partager des serveurs Minecraft !",
+            "title": "Liste des serveurs Minecraft"
+        },
+        "list": {
+            "playersOnline": "Joueurs en ligne :",
+            "version": "Version :",
+            "verify": "Vérifiez le serveur avec le code MOTD : <code></code>",
+            "claimServer": "Le serveur n'a pas encore de propriétaire. Si c'est vous, cliquez sur ce bouton !"
+        }
+    },
+    "server": {
+        "add": {
+            "newServer": "Réclamer le serveur",
+            "title": "Ajouter un serveur à la liste",
+            "hostName": "IP/Nom d'hôte du serveur",
+            "port": "Port du serveur",
+            "type": "Type de serveur",
+            "isSubmitting": "Création...",
+            "save": "Obtenir le code de validation",
+            "cancel": "Annuler",
+            "addressRequired": "L'adresse du serveur est requise.",
+            "invalidAddress": "Doit être une adresse IPv4 ou un nom d'hôte valide.",
+            "portRequired": "Le port est requis.",
+            "portMin": "Le port doit être au moins 1.",
+            "portMax": "Le port doit être au maximum 65535.",
+            "verificationInstructions": "Copiez le code de vérification <code></code> dans le fichier MOTD de votre serveur, puis cliquez sur le bouton ci-dessous pour démarrer le processus de vérification.",
+            "expiresAt": "Expire le <expirationDate></expirationDate>",
+            "startVerification": "Démarrer la vérification"
+        }
+    }
+}

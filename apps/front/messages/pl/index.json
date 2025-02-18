@@ -5,13 +5,13 @@
         "loginDiscord": "Zaloguj się przez Discord!",
         "logout": "Wyloguj się",
         "password": {
-            "setCredentials": "Ustaw swoje dane logowania:",
-            "successfullySet": "Dane logowania zapisane pomyślnie!",
-            "credentialsSaveError": "Wystąpił błąd podczas zapisywania danych logowania.",
+            "setCredentials": "Ustaw swoje dane:",
+            "successfullySet": "Dane zapisane pomyślnie!",
+            "credentialsSaveError": "Wystąpił błąd podczas zapisywania danych.",
             "password": "Hasło",
-            "passwordPlaceholder": "Proszę podać hasło",
-            "saving": "Zapisywanie...",
-            "save": "Zapisz dane logowania"
+            "passwordPlaceholder": "Proszę wprowadź hasło",
+            "saving": "Zapisywanie",
+            "save": "Zapisz dane"
         }
     },
     "copy": {
@@ -20,7 +20,7 @@
     },
     "filters": {
         "searchLabel": "Szukaj nazwy lub opisu",
-        "showMyServers": "Moje serwery",
+        "showMyServers": "Pokaż moje serwery",
         "categories": {
             "show": "Pokaż kategorie",
             "hide": "Ukryj kategorie"
@@ -37,26 +37,27 @@
         "list": {
             "playersOnline": "Gracze online:",
             "version": "Wersja:",
-            "verify": "Zweryfikuj serwerowy kod w MOTD: <code></code>"
+            "verify": "Zweryfikuj serwer za pomocą kodu MOTD: <code></code>",
+            "claimServer": "Serwer nie ma jeszcze właściciela. Jeśli to Ty, kliknij ten przycisk!"
         }
     },
     "server": {
         "add": {
-            "newServer": "Dodaj nowy serwer",
-            "title": "Utwórz serwer",
+            "newServer": "Odbierz serwer",
+            "title": "Dodaj serwer do listy",
             "hostName": "IP serwera / Nazwa hosta",
             "port": "Port serwera",
             "type": "Typ serwera",
             "isSubmitting": "Tworzenie...",
-            "save": "Uzyskaj kod walidacyjny",
+            "save": "Pobierz kod weryfikacyjny",
             "cancel": "Anuluj",
-            "addressRequired": "Wymagany jest adres serwera.",
-            "invalidAddress": "Adres musi być poprawnym adresem IPv4 lub nazwą hosta.",
-            "portRequired": "Wymagany jest port.",
+            "addressRequired": "Adres serwera jest wymagany.",
+            "invalidAddress": "Musi być poprawnym adresem IPv4 lub nazwą hosta.",
+            "portRequired": "Port jest wymagany.",
             "portMin": "Port musi być co najmniej 1.",
             "portMax": "Port musi być co najwyżej 65535.",
-            "verificationInstructions": "Skopiuj kod weryfikacyjny <code></code> do pliku MOTD serwera, a następnie kliknij przycisk poniżej, aby rozpocząć weryfikację.",
-            "expiresAt": "Wygasa <expirationDate></expirationDate>",
+            "verificationInstructions": "Skopiuj kod weryfikacyjny <code></code> do pliku MOTD serwera, następnie kliknij poniższy przycisk, aby rozpocząć proces weryfikacji.",
+            "expiresAt": "Wygasa: <expirationDate></expirationDate>",
             "startVerification": "Rozpocznij weryfikację"
         }
     }
