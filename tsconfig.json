@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.base.json",
+  "ts-node": {
+    // Do not forget to `yarn add -D tsconfig-paths`
+    "require": ["tsconfig-paths/register"]
+  }
+}

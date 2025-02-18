@@ -21,9 +21,19 @@
         "allowJs": true,
         "paths": {
             "@api/*": ["apps/server/*"],
+            "@backend/auth": ["libs/backend/auth/src/index.ts"],
+            "@backend/commander": ["libs/backend/commander/src/index.ts"],
+            "@backend/config": ["libs/backend/config/src/index.ts"],
+            "@backend/db": ["libs/backend/database/src/index.ts"],
+            "@backend/logger": ["libs/backend/logger/src/index.ts"],
+            "@backend/mc-stats": ["libs/backend/mc-stats-api/src/index.ts"],
+            "@backend/redis": ["libs/backend/redis/src/index.ts"],
+            "@core": ["libs/shared/core/src/index.ts"],
             "@front/*": ["apps/front/*"],
             "@lib/front/components/*": ["libs/frontend/components/src/*"],
-            "@lib/types": ["libs/shared/types/src/index.ts"]
+            "@lib/types": ["libs/shared/types/src/index.ts"],
+            "@shared/dto": ["libs/shared/dto/src/index.ts"],
+            "@shared/enums": ["libs/shared/enums/src/index.ts"]
         }
     },
     "exclude": ["node_modules", "tmp"]

@@ -10,18 +10,22 @@ body {
     }
 }
 
-html,
-body,
-#__next,
-.app {
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    height: 100%;
-    width: 100%;
-
-    display: flex;
+#modal-root {
+    isolation: isolate;
 }
+
+/*html,*/
+/*body,*/
+/*#__next,*/
+/*.app {*/
+/*    overflow-y: auto;*/
+/*    overflow-x: hidden;*/
+
+/*    height: 100%;*/
+/*    width: 100%;*/
+
+/*    display: flex;*/
+/*}*/
 
 * {
     font-family: 'Inter', Arial, Helvetica, sans-serif;

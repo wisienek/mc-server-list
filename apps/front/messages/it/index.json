@@ -1,0 +1,64 @@
+{
+    "cancel": "Annulla",
+    "genericError": "Si è verificato un errore.",
+    "profile": {
+        "loginDiscord": "Accedi con Discord!",
+        "logout": "Disconnetti",
+        "password": {
+            "setCredentials": "Imposta le tue credenziali:",
+            "successfullySet": "Credenziali salvate con successo!",
+            "credentialsSaveError": "Si è verificato un errore durante il salvataggio delle credenziali.",
+            "password": "Password",
+            "passwordPlaceholder": "Inserisci una password",
+            "saving": "Salvataggio in corso",
+            "save": "Salva credenziali"
+        }
+    },
+    "copy": {
+        "copied": "Copiato!",
+        "label": "Copia negli appunti"
+    },
+    "filters": {
+        "searchLabel": "Cerca per nome o descrizione",
+        "showMyServers": "Mostra i miei server",
+        "categories": {
+            "show": "Mostra categorie",
+            "hide": "Nascondi categorie"
+        }
+    },
+    "footer": {
+        "credits": "Creato e progettato da <author>@Wisienek</author> 2025"
+    },
+    "page": {
+        "seo": {
+            "description": "Sito web che offre un modo semplice per aggiungere e condividere server Minecraft!",
+            "title": "Elenco server Minecraft"
+        },
+        "list": {
+            "playersOnline": "Giocatori online:",
+            "version": "Versione:",
+            "verify": "Verifica il server con il codice MOTD: <code></code>",
+            "claimServer": "Il server non ha ancora un proprietario. Se sei tu, clicca questo pulsante!"
+        }
+    },
+    "server": {
+        "add": {
+            "newServer": "Rivendica il server",
+            "title": "Aggiungi server all'elenco",
+            "hostName": "IP del server / Nome host",
+            "port": "Porta del server",
+            "type": "Tipo di server",
+            "isSubmitting": "Creazione in corso...",
+            "save": "Ottieni il codice di validazione",
+            "cancel": "Annulla",
+            "addressRequired": "L'indirizzo del server è richiesto.",
+            "invalidAddress": "Deve essere un indirizzo IPv4 o un nome host valido.",
+            "portRequired": "La porta è richiesta.",
+            "portMin": "La porta deve essere almeno 1.",
+            "portMax": "La porta deve essere al massimo 65535.",
+            "verificationInstructions": "Copia il codice di verifica <code></code> nel file MOTD del tuo server, quindi clicca sul pulsante sottostante per iniziare il processo di verifica.",
+            "expiresAt": "Scade il <expirationDate></expirationDate>",
+            "startVerification": "Avvia la verifica"
+        }
+    }
+}

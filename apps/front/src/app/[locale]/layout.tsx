@@ -1,12 +1,21 @@
+import NotificationsContainer from '@lib/front/components/organisms/NotificationCenter';
+import ThemingProvider from '@lib/front/components/organisms/theme/ThemingProvider';
 import {getMessages, setRequestLocale} from 'next-intl/server';
 import {Fira_Mono, Inter} from 'next/font/google';
 import {NextIntlClientProvider} from 'next-intl';
 import {notFound} from 'next/navigation';
-import {type ReactNode} from 'react';
-
-import NoScriptMessage from '@front/components/molecules/no-script-message/NoScriptMessage';
-import Navbar from '@front/components/molecules/navbar/Navbar';
+import type {ReactElement} from 'react';
+import NoScriptMessage from '@front/components/molecules/NoScriptMessage';
+import Navbar from '@front/components/molecules/Navbar';
 import {routing} from '@front/i18n/routing';
+import StyledTemplateBody from '@front/components/atoms/StyledTemplateBody';
+import Footer from '@front/components/molecules/Footer';
+
+import 'dayjs/locale/pl';
+import 'dayjs/locale/en';
+import 'dayjs/locale/de';
+import 'dayjs/locale/fr';
+import 'dayjs/locale/it';
 
 import './global.css';
 
@@ -15,7 +24,8 @@ export type LocaleParams = {
 };
 
 export type LocaleLayoutProps = {
-    children: ReactNode;
+    children: ReactElement;
+    modal: ReactElement;
     params: Promise<LocaleParams>;
 };
 
@@ -34,7 +44,6 @@ const firaMonoFont = Fira_Mono({
     fallback: ['Courier New', 'monospace'],
 });
 
-// TODO: change url
 export const metadata = {
     metadataBase: new URL('https://my-minecraft-servers.com'),
     title: {
@@ -100,9 +109,9 @@ export function generateStaticParams() {
     return routing.locales.map((locale) => ({locale}));
 }
 
-async function LocaleLayout({children, params}: LocaleLayoutProps) {
+async function LocaleLayout({children, modal, params}: LocaleLayoutProps) {
     const {locale} = await params;
-    if (!routing.locales.includes(locale as any)) {
+    if (!routing.locales.includes(locale as never)) {
         notFound();
     }
 
@@ -113,9 +122,17 @@ async function LocaleLayout({children, params}: LocaleLayoutProps) {
         <html className={`dark ${interFont.className} ${firaMonoFont.className}`}>
             <body>
                 <NextIntlClientProvider messages={messages}>
-                    <Navbar />
-                    <NoScriptMessage />
-                    {children}
+                    <ThemingProvider>
+                        <StyledTemplateBody>
+                            <Navbar />
+                            <NoScriptMessage />
+                            <div id="modal-root" />
+                            {children}
+                            {modal}
+                            <NotificationsContainer />
+                            <Footer />
+                        </StyledTemplateBody>
+                    </ThemingProvider>
                 </NextIntlClientProvider>
             </body>
         </html>

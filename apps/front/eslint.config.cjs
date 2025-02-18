@@ -1,14 +1,19 @@
 const js = require('@eslint/js');
 const nxPlugin = require('@nx/eslint-plugin');
+const tsEslint = require('typescript-eslint');
 
 module.exports = [
     js.configs.recommended,
+    ...tsEslint.configs.recommended,
     {
         files: ['**/*.{js,jsx,ts,tsx}'],
         languageOptions: {
             parserOptions: {
                 ecmaVersion: 'latest',
                 sourceType: 'module',
+                ecmaFeatures: {
+                    jsx: true,
+                },
             },
         },
         plugins: {
@@ -22,19 +27,6 @@ module.exports = [
                 },
             },
         },
-        rules: {
-            '@nx/enforce-module-boundaries': [
-                'error',
-                {
-                    allow: ['@front/*'],
-                    depConstraints: [
-                        {
-                            sourceTag: '*',
-                            onlyDependOnLibsWithTags: ['*'],
-                        },
-                    ],
-                },
-            ],
-        },
+        rules: {},
     },
 ];

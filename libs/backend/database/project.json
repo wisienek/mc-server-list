@@ -1,0 +1,54 @@
+{
+    "name": "database",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/backend/database/src",
+    "projectType": "library",
+    "tags": [],
+    "// targets": "to see all targets run: nx show project database --web",
+    "targets": {
+        "migration": {
+            "executor": "nx:run-commands",
+            "configurations": {
+                "generate": {
+                    "forwardAllArgs": false,
+                    "commands": [
+                        "yarn run typeorm -d libs/backend/database/src/config/cli-data-source/app.ts migration:generate libs/backend/database/src/migrations/{args.name}"
+                    ]
+                },
+                "run": {
+                    "forwardAllArgs": false,
+                    "commands": [
+                        "yarn run typeorm -d libs/backend/database/src/config/cli-data-source/app.ts migration:run"
+                    ]
+                },
+                "revert": {
+                    "forwardAllArgs": false,
+                    "commands": [
+                        "yarn run typeorm -d libs/backend/database/src/config/cli-data-source/app.ts migration:revert"
+                    ]
+                }
+            }
+        },
+        "typeorm": {
+            "executor": "nx:run-commands",
+            "configurations": {
+                "forwardAllArgs": false,
+                "drop": {
+                    "commands": [
+                        "yarn run typeorm -d libs/backend/database/src/config/cli-data-source/app.ts schema:drop"
+                    ]
+                },
+                "sync": {
+                    "commands": [
+                        "yarn run typeorm -d libs/backend/database/src/config/cli-data-source/app.ts schema:sync"
+                    ]
+                },
+                "log": {
+                    "commands": [
+                        "yarn run typeorm -d libs/backend/database/src/config/cli-data-source/app.ts schema:log"
+                    ]
+                }
+            }
+        }
+    }
+}

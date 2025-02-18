@@ -1,0 +1,65 @@
+{
+    "cancel": "Anuluj",
+    "genericError": "Wystąpił błąd.",
+    "profile": {
+        "loginDiscord": "Zaloguj się przez Discord!",
+        "logout": "Wyloguj się",
+        "password": {
+            "setCredentials": "Ustaw swoje dane:",
+            "successfullySet": "Dane zapisane pomyślnie!",
+            "credentialsSaveError": "Wystąpił błąd podczas zapisywania danych.",
+            "password": "Hasło",
+            "passwordPlaceholder": "Proszę wprowadź hasło",
+            "saving": "Zapisywanie",
+            "save": "Zapisz dane"
+        }
+    },
+    "copy": {
+        "copied": "Skopiowano!",
+        "label": "Kopiuj do schowka"
+    },
+    "filters": {
+        "searchLabel": "Szukaj nazwy lub opisu",
+        "showMyServers": "Pokaż moje serwery",
+        "categories": {
+            "show": "Pokaż kategorie",
+            "hide": "Ukryj kategorie"
+        }
+    },
+    "footer": {
+        "credits": "Stworzone i zaprojektowane przez <author>@Wisienek</author> 2025"
+    },
+    "page": {
+        "seo": {
+            "description": "Strona umożliwiająca łatwe dodawanie i udostępnianie serwerów Minecraft!",
+            "title": "Lista serwerów Minecraft"
+        },
+        "list": {
+            "playersOnline": "Gracze online:",
+            "version": "Wersja:",
+            "verify": "Zweryfikuj serwer za pomocą kodu MOTD: <code></code>",
+            "claimServer": "Serwer nie ma jeszcze właściciela. Jeśli to Ty, kliknij ten przycisk!"
+        }
+    },
+    "server": {
+        "add": {
+            "newServer": "Stwórz nowy serwer",
+            "title": "Dodaj serwer do listy",
+            "hostName": "IP serwera / Nazwa hosta",
+            "port": "Port serwera",
+            "type": "Typ serwera",
+            "isSubmitting": "Tworzenie...",
+            "save": "Pobierz kod weryfikacyjny",
+            "cancel": "Anuluj",
+            "addressRequired": "Adres serwera jest wymagany.",
+            "invalidAddress": "Musi być poprawnym adresem IPv4 lub nazwą hosta.",
+            "portRequired": "Port jest wymagany.",
+            "portMin": "Port musi być co najmniej 1.",
+            "portMax": "Port musi być co najwyżej 65535.",
+            "verificationInstructions": "Skopiuj kod weryfikacyjny <code></code> do pliku MOTD serwera, następnie kliknij poniższy przycisk, aby rozpocząć proces weryfikacji.",
+            "expiresAt": "Wygasa: <expirationDate></expirationDate>",
+            "startVerification": "Rozpocznij weryfikację",
+            "serverVerificationTitle": "Weryfikuj serwer kodem"
+        }
+    }
+}
