@@ -19,6 +19,8 @@ export class ServerSummaryDto extends MapperPickType(ServerDto, [
     'banner',
     'description',
     'isActive',
+    'verification',
+    'isTimedOut',
 ]) {
     @IsInt()
     @IsPositive()

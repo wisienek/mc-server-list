@@ -2,11 +2,13 @@ import {RedisModule} from '@backend/redis';
 import {createKeyv, Keyv} from '@keyv/redis';
 import {CacheModule} from '@nestjs/cache-manager';
 import type {ModuleMetadata} from '@nestjs/common/interfaces/modules/module-metadata.interface';
+import {APP_GUARD} from '@nestjs/core';
 import {EventEmitterModule} from '@nestjs/event-emitter';
 import {Module, type Provider} from '@nestjs/common';
 import {AutomapperModule} from '@automapper/nestjs';
 import {PassportModule} from '@nestjs/passport';
 import {ScheduleModule} from '@nestjs/schedule';
+import {seconds, ThrottlerGuard, ThrottlerModule} from '@nestjs/throttler';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import {classes} from '@automapper/classes';
 import {CqrsModule} from '@nestjs/cqrs';
@@ -18,6 +20,12 @@ import {ServersModule} from '../servers';
 import {UsersModule} from '../users';
 
 const interceptors: Provider[] = [];
+const guards: Provider[] = [
+    {
+        provide: APP_GUARD,
+        useClass: ThrottlerGuard,
+    },
+];
 
 const configs = getConfigs(ProjectConfig, ApiConfig, RedisConfig);
 
@@ -37,6 +45,15 @@ const serverModules: ModuleMetadata['imports'] = [
         }),
         PassportModule.register({session: true}),
         ScheduleModule.forRoot(),
+        ThrottlerModule.forRoot({
+            throttlers: [
+                {
+                    name: 'default',
+                    ttl: seconds(60),
+                    limit: 10,
+                },
+            ],
+        }),
         ...configs,
         ...serverModules,
         TypeOrmModule.forFeature([Session]),
@@ -62,6 +79,6 @@ const serverModules: ModuleMetadata['imports'] = [
             inject: [RedisConfig],
         }),
     ],
-    providers: [...interceptors],
+    providers: [...interceptors, ...guards],
 })
 export class AppModule {}

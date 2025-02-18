@@ -37,13 +37,14 @@
         "list": {
             "playersOnline": "Players online:",
             "version": "Version:",
-            "verify": "Verify server with MOTD code: <code></code>"
+            "verify": "Verify server with MOTD code: <code></code>",
+            "claimServer": "Server doesn't have an owner yet. If it's you click this button!"
         }
     },
     "server": {
         "add": {
-            "newServer": "Add new server",
-            "title": "Create Server",
+            "newServer": "Claim the server",
+            "title": "Add server to the list",
             "hostName": "Server IP / Hostname",
             "port": "Server Port",
             "type": "Server Type",

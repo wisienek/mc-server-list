@@ -111,6 +111,7 @@ export class Server {
     @JoinColumn({name: 'id', referencedColumnName: 'serverId'})
     rankingData: Relation<ServerRanking>;
 
+    @AutoMap()
     @Column({default: false})
     isTimedOut: boolean = false;
 

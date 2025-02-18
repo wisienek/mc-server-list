@@ -2,7 +2,8 @@
 import {addNotification} from '@lib/front/components/store/notificationsSlice';
 import {useAppDispatch, useAppSelector} from '@lib/front/components/store/store';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import {Fade, Tooltip, Button} from '@mui/material';
+import Fade from '@mui/material/Fade';
+import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -13,14 +14,14 @@ import {ServerSummaryDto} from '@shared/dto';
 import {useTranslations} from 'next-intl';
 import Image from 'next/image';
 import {useRouter} from 'next/navigation';
-import {type FC, type ReactNode, useMemo, useState} from 'react';
+import {type FC, type ReactNode, useState} from 'react';
 import {shortenText} from '@core';
 import ServerCategoryMapper from '../consts/ServerCategoryMapper';
 import {defaultServerIcon} from '../mocks/serverSummaryMocks';
-import {useVerifyServer} from '../queries/servers/verifyServer';
 import {useVoteForServer} from '../queries/servers/voteForServer';
 import CopyableTypography from './CopyableTypography';
 import {Link} from '@front/i18n/routing';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 const StyledServerSummary = styled(Paper)(({theme}) => ({
     padding: theme.spacing(1),
@@ -83,25 +84,15 @@ const StyledCategoryIcon = styled(Avatar)(({theme}) => ({
     fontSize: '1rem',
 }));
 
-const InactiveOverlay = styled(Box)(({theme}) => ({
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(128,128,128,0.7)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: theme.zIndex.speedDial,
-    borderRadius: theme.shape.borderRadius,
-}));
-
 type ServerSummaryProps = {
     server: ServerSummaryDto;
+    setShowVerificationModal: (server: ServerSummaryDto) => void;
 };
 
-const ServerSummaryItem: FC<ServerSummaryProps> = ({server}) => {
+const ServerSummaryItem: FC<ServerSummaryProps> = ({
+    server,
+    setShowVerificationModal,
+}) => {
     const t = useTranslations('page.list');
     const router = useRouter();
     const dispatch = useAppDispatch();
@@ -109,19 +100,13 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server}) => {
 
     const [isLikedByUser, setIsLikedByUser] = useState<boolean>(server.isLiked);
     const [votes, setVotes] = useState<number>(server.votes ?? 0);
-    const {mutateAsync: verifyServer, isSuccess: isServerVerified} =
-        useVerifyServer();
     const {mutateAsync: voteForServer} = useVoteForServer();
 
     const handleFavoriteClick = () => {
-        if (!profile) {
-            return;
-        }
-
+        if (!profile) return;
         const newLiked = !isLikedByUser;
         setIsLikedByUser(newLiked);
         const delta = newLiked ? 1 : -1;
-
         setVotes(votes + delta);
 
         voteForServer(server.host)
@@ -143,22 +128,25 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server}) => {
             });
     };
 
-    const handleVerifyServer = () => {
-        if (!profile) {
-            return;
-        }
-
-        verifyServer(server).catch((verificationError) => {
-            dispatch(
-                addNotification({
-                    id: server.id,
-                    level: 'Error',
-                    description: verificationError.message,
-                    title: verificationError.name,
-                }),
-            );
-        });
+    const handleVerifyServerClick = () => {
+        setShowVerificationModal(server);
     };
+
+    const unverifiedIcon = !server.isActive && (
+        <Box
+            sx={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                cursor: 'pointer',
+            }}
+            onClick={handleVerifyServerClick}
+        >
+            <Tooltip arrow title={t('claimServer')}>
+                <ErrorOutlineIcon color="warning" />
+            </Tooltip>
+        </Box>
+    );
 
     const displayName = server.ip_address ? server.ip_address : server.host;
     const displayPort = server.port ? `:${server.port}` : '';
@@ -179,25 +167,6 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server}) => {
             {children}
         </Link>
     );
-
-    const NotVerifiedOverlay = useMemo(() => {
-        if (isServerVerified || server.isActive) {
-            return <></>;
-        }
-        return (
-            <InactiveOverlay>
-                <Button variant="contained" onClick={handleVerifyServer}>
-                    {t.rich('verify', {
-                        code: () => (
-                            <Typography variant="body2" ml={1}>
-                                {server.verificationCode}
-                            </Typography>
-                        ),
-                    })}
-                </Button>
-            </InactiveOverlay>
-        );
-    }, [server.isActive, isServerVerified]);
 
     return (
         <StyledServerSummary elevation={3}>
@@ -302,7 +271,7 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({server}) => {
                     <Typography variant="caption">{votes}</Typography>
                 </Box>
             </StatsContainer>
-            {NotVerifiedOverlay}
+            {unverifiedIcon}
         </StyledServerSummary>
     );
 };

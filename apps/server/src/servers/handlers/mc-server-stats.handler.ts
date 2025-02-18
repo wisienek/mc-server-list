@@ -74,15 +74,21 @@ export class GetServerStatsQueryHandler
         }
 
         if (!found) {
-            return await this.serverRepository.save(
+            const verification = this.verificationRepository.create({
+                code: this.generateRandomString(16),
+            });
+            const server = await this.serverRepository.save(
                 {
                     ...mappedData,
-                    verification: this.verificationRepository.create({
-                        code: this.generateRandomString(16),
-                    }),
+                    verification: verification,
                 },
                 {reload: true},
             );
+
+            verification.server_id = server.id;
+            await this.verificationRepository.save(verification);
+
+            return server;
         }
 
         return await this.serverRepository.save({
@@ -108,6 +114,6 @@ export class GetServerStatsQueryHandler
             result += allowedChars[randomIndex];
         }
 
-        return result.replace(/\s/, '');
+        return result.replace(/\s|&|§/, '');
     }
 }

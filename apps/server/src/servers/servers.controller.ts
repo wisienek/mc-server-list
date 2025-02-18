@@ -23,6 +23,7 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import {Server, User} from '@backend/db';
+import {seconds, Throttle} from '@nestjs/throttler';
 import {
     CreateServerDto,
     CreateServerResponseDto,
@@ -114,6 +115,13 @@ export class ServersController {
     @ApiNotFoundResponse({
         type: ServerNotFoundError,
         description: `When server couldn't be found by ip or hostname`,
+    })
+    @Throttle({
+        default: {
+            limit: 1,
+            ttl: seconds(60),
+            getTracker: (req) => req.user?.id || req.ip,
+        },
     })
     @UseGuards(AuthenticatedGuard)
     @Patch(':host/verify')

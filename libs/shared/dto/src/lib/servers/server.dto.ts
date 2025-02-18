@@ -86,6 +86,10 @@ export class ServerDto {
     isActive: boolean;
 
     @AutoMap()
+    @IsBoolean({message: 'isTimedOut must be a boolean.'})
+    isTimedOut: boolean;
+
+    @AutoMap()
     @IsInt()
     @IsPositive()
     onlinePlayers: number;

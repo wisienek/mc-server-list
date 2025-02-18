@@ -1,6 +1,6 @@
 import {setRequestLocale} from 'next-intl/server';
-import {routing} from '../../../i18n/routing';
-import ServerListPage from '../../../components/organisms/ServerListPage';
+import {routing} from '@front/i18n/routing';
+import ServerListPage from '@front/components/organisms/ServerListPage';
 import type {LocaleParams} from './layout';
 
 type PageProps = {

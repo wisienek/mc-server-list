@@ -16,11 +16,13 @@ const ServerSummaryListContainer = styled(Grid)(({theme}) => ({
 type ServerSummaryListProps = {
     isLoading: boolean;
     servers: ServerSummaryDto[];
+    setShowVerificationModal: (server: ServerSummaryDto) => void;
 };
 
 export const ServerSummaryList: FC<ServerSummaryListProps> = ({
     servers,
     isLoading,
+    setShowVerificationModal,
 }) => {
     const ServerSummaryItems = () => {
         if (isLoading) {
@@ -37,7 +39,10 @@ export const ServerSummaryList: FC<ServerSummaryListProps> = ({
 
         return servers.map((server) => (
             <Grid key={server.id}>
-                <ServerSummaryItem server={server} />
+                <ServerSummaryItem
+                    server={server}
+                    setShowVerificationModal={setShowVerificationModal}
+                />
             </Grid>
         ));
     };

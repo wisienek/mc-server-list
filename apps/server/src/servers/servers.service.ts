@@ -45,31 +45,28 @@ export class ServersService {
     ): Promise<number> {
         const server = await this.getServer(hostName);
 
-        if (server.isActive) {
-            const givenVote = await this.voteRepository.findOne({
-                where: {
-                    server: {
-                        isActive: true,
-                        host: hostName,
-                    },
-                    user: {
-                        email: userEmail,
-                    },
+        const givenVote = await this.voteRepository.findOne({
+            where: {
+                server: {
+                    host: hostName,
                 },
+                user: {
+                    email: userEmail,
+                },
+            },
+        });
+
+        if (!givenVote) {
+            const user = await this.queryBus.execute(
+                plainToInstance(GetUserQuery, {email: userEmail}),
+            );
+
+            await this.voteRepository.save({
+                server,
+                user,
             });
-
-            if (!givenVote) {
-                const user = await this.queryBus.execute(
-                    plainToInstance(GetUserQuery, {email: userEmail}),
-                );
-
-                await this.voteRepository.save({
-                    server,
-                    user,
-                });
-            } else {
-                await this.voteRepository.remove(givenVote);
-            }
+        } else {
+            await this.voteRepository.remove(givenVote);
         }
 
         return await this.voteRepository.count({where: {server: {host: hostName}}});

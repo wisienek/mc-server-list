@@ -1,21 +1,15 @@
 'use client';
 import {addNotification} from '@lib/front/components/store/notificationsSlice';
 import {useAppDispatch} from '@lib/front/components/store/store';
-import axios, {AxiosError} from 'axios';
-import {useLocale, useTranslations} from 'next-intl';
+import {AxiosError} from 'axios';
+import {useTranslations} from 'next-intl';
 import type {FC} from 'react';
-import dayjs from 'dayjs';
 import Typography from '@mui/material/Typography';
 import {styled} from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import CopyableTypography from '@front/components/atoms/CopyableTypography';
-import {
-    CreateServerDto,
-    CreateServerResponseDto,
-    ServerDto,
-    ServerSummaryDto,
-} from '@shared/dto';
+import {ServerSummaryDto} from '@shared/dto';
 import {useVerifyServer} from '../queries/servers/verifyServer';
 
 const StyledCode = styled('code')(({theme}) => ({
@@ -28,22 +22,17 @@ const StyledCode = styled('code')(({theme}) => ({
 }));
 
 interface VerifyServerModalContentsProps {
-    serverResponse: CreateServerResponseDto;
-    createData: CreateServerDto;
+    server: ServerSummaryDto;
 }
 
-const VerifyServerModalContents: FC<VerifyServerModalContentsProps> = ({
-    serverResponse,
-    createData,
-}) => {
+const VerifyServerModalContents: FC<VerifyServerModalContentsProps> = ({server}) => {
     const t = useTranslations('server.add');
-    const language = useLocale();
     const dispatch = useAppDispatch();
 
     const {mutateAsync: verifyServer} = useVerifyServer();
 
     const onStartVerification = () => {
-        verifyServer(createData as ServerSummaryDto).catch((error: AxiosError) => {
+        verifyServer(server).catch((error: AxiosError) => {
             console.error(error);
             dispatch(
                 addNotification({
@@ -62,23 +51,11 @@ const VerifyServerModalContents: FC<VerifyServerModalContentsProps> = ({
                 {t('newServer')}
             </Typography>
 
-            <CopyableTypography text={serverResponse.code}>
+            <CopyableTypography text={server?.verificationCode}>
                 {t.rich('verificationInstructions', {
-                    code: () => <StyledCode>{serverResponse.code}</StyledCode>,
+                    code: () => <StyledCode>{server?.verificationCode}</StyledCode>,
                 })}
             </CopyableTypography>
-
-            <Typography variant="subtitle1" gutterBottom color="textPrimary">
-                {t.rich('expiresAt', {
-                    expirationDate: () => (
-                        <StyledCode>
-                            {dayjs(serverResponse.expiresAt)
-                                .locale(language)
-                                .format('DD MMM YYYY, HH:mm')}
-                        </StyledCode>
-                    ),
-                })}
-            </Typography>
 
             <Button
                 variant="contained"

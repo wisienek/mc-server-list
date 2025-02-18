@@ -3,18 +3,16 @@ import {FormControl, InputLabel, OutlinedInput} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
 import {ListServersDto} from '@shared/dto';
-import {type Dispatch, type FC, useEffect, useRef, useState} from 'react';
+import {type Dispatch, type FC, type SetStateAction, useRef, useState} from 'react';
 import {styled} from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import {useTranslations} from 'next-intl';
-import {createPortal} from 'react-dom';
 import Box from '@mui/material/Box';
 import CreateServerButton from '@front/components/atoms/AddServerButton';
 import OwnServersFilter from '@front/components/atoms/OwnServersFilter';
 import ServerCategoriesSelect, {
     useCategories,
 } from '@front/components/atoms/ServerCategoriesSelect';
-import CreateServerModal from '@front/components/organisms/CreateServerModal';
 import {useAppSelector} from '@lib/front/components/store/store';
 import {useDebounce} from 'react-use';
 
@@ -35,14 +33,17 @@ const InputsContainer = styled(Box)(({theme}) => ({
 
 type ServerFiltersProps = {
     setSearchData: Dispatch<ListServersDto>;
+    setShowingCreateModal: Dispatch<SetStateAction<boolean>>;
 };
 
-const ServerFilters: FC<ServerFiltersProps> = ({setSearchData}) => {
+const ServerFilters: FC<ServerFiltersProps> = ({
+    setSearchData,
+    setShowingCreateModal,
+}) => {
     const t = useTranslations('filters');
     const profile = useAppSelector((state) => state.auth.user);
 
-    const [showingCreateModal, setShowingCreateModal] = useState<boolean>(false);
-    const [modalContainer, setModalContainer] = useState<HTMLElement | null>(null);
+    const [searchText, setSearchText] = useState<string>('');
     const [showOwnServers, setShowOwnServers] = useState<boolean>(false);
     const {
         selectedCategories,
@@ -68,12 +69,6 @@ const ServerFilters: FC<ServerFiltersProps> = ({setSearchData}) => {
         [showOwnServers, selectedCategories],
     );
 
-    useEffect(() => {
-        setModalContainer(document.getElementById('modal-root'));
-    }, []);
-
-    const [searchText, setSearchText] = useState<string>('');
-
     const ProfileSpecificFilters = () => {
         if (!profile) {
             return <></>;
@@ -92,16 +87,6 @@ const ServerFilters: FC<ServerFiltersProps> = ({setSearchData}) => {
 
     return (
         <Container>
-            {showingCreateModal &&
-                modalContainer &&
-                createPortal(
-                    <CreateServerModal
-                        open={showingCreateModal}
-                        handleClose={() => setShowingCreateModal(false)}
-                    />,
-                    modalContainer,
-                )}
-
             <InputsContainer>
                 <FormControl fullWidth variant="outlined">
                     <InputLabel htmlFor="search-input">

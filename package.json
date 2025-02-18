@@ -48,6 +48,7 @@
         "@nestjs/platform-express": "^10.0.2",
         "@nestjs/schedule": "^5.0.1",
         "@nestjs/swagger": "^11.0.3",
+        "@nestjs/throttler": "^6.4.0",
         "@nestjs/typeorm": "^11.0.0",
         "@reduxjs/toolkit": "^2.5.1",
         "@svgr/webpack": "^8.1.0",
