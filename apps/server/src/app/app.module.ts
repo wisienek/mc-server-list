@@ -50,7 +50,7 @@ const serverModules: ModuleMetadata['imports'] = [
                 {
                     name: 'default',
                     ttl: seconds(60),
-                    limit: 10,
+                    limit: 20,
                 },
             ],
         }),

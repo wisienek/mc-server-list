@@ -10,7 +10,7 @@ import ServerModal, {type ModalMode} from './CreateServerModal';
 
 const ServerListPage = () => {
     const [searchData, setSearchData] = useState<ListServersDto>({isOwn: false});
-    const {isLoading, data: fetchedServers} = serverListQuery(searchData);
+    const fetchServersQuery = serverListQuery(searchData);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [modalMode, setModalMode] = useState<ModalMode>('create');
     const [modalContainer, setModalContainer] = useState<HTMLElement | null>(null);
@@ -54,8 +54,7 @@ const ServerListPage = () => {
                 }}
             />
             <ServerSummaryList
-                servers={fetchedServers?.items}
-                isLoading={isLoading}
+                fetchServersQuery={fetchServersQuery}
                 setShowVerificationModal={handleOpenVerifyModal}
             />
         </StyledPageContainer>

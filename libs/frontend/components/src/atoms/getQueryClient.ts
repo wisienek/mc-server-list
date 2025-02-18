@@ -9,6 +9,7 @@ function makeQueryClient() {
         defaultOptions: {
             queries: {
                 staleTime: 60 * 1_000,
+                experimental_prefetchInRender: true,
             },
             dehydrate: {
                 shouldDehydrateQuery: (query) =>

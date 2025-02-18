@@ -23,7 +23,7 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import {Server, User} from '@backend/db';
-import {seconds, Throttle} from '@nestjs/throttler';
+import {seconds, SkipThrottle, Throttle} from '@nestjs/throttler';
 import {
     CreateServerDto,
     CreateServerResponseDto,
@@ -55,6 +55,7 @@ export class ServersController {
      * For static generation
      * @returns {Promise<void>}
      */
+    @SkipThrottle()
     @Get('hostnames')
     async listHostnames(): Promise<string[]> {
         return await this.serversService.listHostnames();
@@ -64,6 +65,7 @@ export class ServersController {
      * Public endpoint for getting list of servers
      * @returns {Promise<Pagination<ServerSummaryDto>>} paginated list of servers
      */
+    @SkipThrottle()
     @Get()
     async listServers(
         @SessionUser() user: User,
