@@ -2,7 +2,14 @@ import {MapperPickType} from '@automapper/classes/mapped-types';
 import {ApiPropertyOptional, IntersectionType, PartialType} from '@nestjs/swagger';
 import {ServerCategory} from '@shared/enums';
 import {Transform, Type} from 'class-transformer';
-import {IsArray, IsBoolean, IsEnum, IsOptional} from 'class-validator';
+import {
+    IsArray,
+    IsBoolean,
+    IsEnum,
+    IsOptional,
+    IsString,
+    NotEquals,
+} from 'class-validator';
 import {PaginatedInputDto} from '../pagination';
 import {ServerDto} from '../servers';
 
@@ -39,4 +46,11 @@ export class ListServersDto extends PartialType(
     @IsEnum(ServerCategory, {each: true})
     @IsOptional()
     categories?: ServerCategory[];
+
+    @ApiPropertyOptional({
+        description: 'Query data for servers - description, name etc.',
+    })
+    @IsString()
+    @IsOptional()
+    q?: string;
 }

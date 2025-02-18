@@ -33,11 +33,13 @@ const InputsContainer = styled(Box)(({theme}) => ({
 }));
 
 type ServerFiltersProps = {
+    searchData: ListServersDto;
     setSearchData: Dispatch<ListServersDto>;
     setShowingCreateModal: Dispatch<SetStateAction<boolean>>;
 };
 
 const ServerFilters: FC<ServerFiltersProps> = ({
+    searchData,
     setSearchData,
     setShowingCreateModal,
 }) => {
@@ -45,14 +47,16 @@ const ServerFilters: FC<ServerFiltersProps> = ({
     const profile = useAppSelector((state) => state.auth.user);
 
     const isFirstRun = useRef<boolean>(true);
-    const [searchText, setSearchText] = useState<string>('');
-    const [showOwnServers, setShowOwnServers] = useState<boolean>(false);
+    const [searchText, setSearchText] = useState<string>(searchData.q ?? '');
+    const [showOwnServers, setShowOwnServers] = useState<boolean>(
+        searchData.isOwn ?? false,
+    );
     const {
         selectedCategories,
         showCategoriesContainer,
         triggerCategory,
         setShowCategoriesContainer,
-    } = useCategories();
+    } = useCategories(searchData.categories);
 
     useDebounce(
         () => {
@@ -62,12 +66,13 @@ const ServerFilters: FC<ServerFiltersProps> = ({
             }
 
             setSearchData({
+                q: searchText,
                 isOwn: showOwnServers,
                 categories: selectedCategories,
             });
         },
         800,
-        [showOwnServers, selectedCategories],
+        [showOwnServers, selectedCategories, searchText],
     );
 
     const ProfileSpecificFilters = () => {

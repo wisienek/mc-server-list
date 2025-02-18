@@ -65,9 +65,9 @@ export const CategoryItem: FC<CategoryItemProps> = ({
     );
 };
 
-export const useCategories = () => {
+export const useCategories = (initialCategories?: ServerCategory[]) => {
     const [selectedCategories, setSelectedCategories] = useState<ServerCategory[]>(
-        [],
+        initialCategories ?? [],
     );
     const [showCategoriesContainer, setShowCategoriesContainer] =
         useState<boolean>(false);

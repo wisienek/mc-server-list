@@ -2,14 +2,24 @@
 import {ListServersDto, ServerSummaryDto} from '@shared/dto';
 import {useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
-import StyledPageContainer from '../atoms/StyledPageContainer';
-import ServerFilters from '../molecules/ServerFilters';
-import ServerSummaryList from '../molecules/ServerSummary';
-import {serverListQuery} from '../queries/servers/serverListQuery';
+import useSyncSearchDataToUrl from '@front/components/hooks/useSyncSearchDataToURL';
+import {serverListQuery} from '@front/components/queries/servers/serverListQuery';
+import StyledPageContainer from '@front/components/atoms/StyledPageContainer';
+import ServerSummaryList from '@front/components/molecules/ServerSummary';
+import ServerFilters from '@front/components/molecules/ServerFilters';
 import ServerModal, {type ModalMode} from './CreateServerModal';
 
-const ServerListPage = () => {
-    const [searchData, setSearchData] = useState<ListServersDto>({isOwn: false});
+type ServerListPageProps = {
+    initialSearchData?: ListServersDto;
+};
+
+const ServerListPage = ({initialSearchData}: ServerListPageProps) => {
+    const [searchData, setSearchData] = useState<ListServersDto>(
+        initialSearchData ?? {isOwn: false},
+    );
+
+    useSyncSearchDataToUrl(searchData);
+
     const fetchServersQuery = serverListQuery(searchData);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [modalMode, setModalMode] = useState<ModalMode>('create');
@@ -47,6 +57,7 @@ const ServerListPage = () => {
                 )}
 
             <ServerFilters
+                searchData={searchData}
                 setSearchData={setSearchData}
                 setShowingCreateModal={(value: boolean) => {
                     setModalMode('create');
