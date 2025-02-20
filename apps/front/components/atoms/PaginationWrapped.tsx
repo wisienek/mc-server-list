@@ -1,4 +1,4 @@
-import {Pagination} from '@mui/material';
+import Pagination from '@mui/material/Pagination';
 
 type PaginationWrappedProps = {
     items: Array<unknown>;

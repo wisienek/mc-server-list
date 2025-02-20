@@ -22,7 +22,7 @@ import {
     Query,
     UseGuards,
 } from '@nestjs/common';
-import {Server, User} from '@backend/db';
+import {User} from '@backend/db';
 import {seconds, SkipThrottle, Throttle} from '@nestjs/throttler';
 import {
     CreateServerDto,
@@ -96,9 +96,11 @@ export class ServersController {
         description: 'hostname of the server',
     })
     @Get(':host')
-    async getServer(@Param('host') host: string): Promise<ServerDetailsDto> {
-        const server = await this.serversService.getServer(host);
-        return this.mapper.map(server, Server, ServerDetailsDto);
+    async getServer(
+        @SessionUser() user: User,
+        @Param('host') host: string,
+    ): Promise<ServerDetailsDto> {
+        return await this.serversService.getServer(host, user?.id);
     }
 
     @ApiParam({
@@ -130,11 +132,7 @@ export class ServersController {
     async verifyServer(@Body() data: VerifyServerDto): Promise<ServerSummaryDto> {
         await this.commandBus.execute(new VerifyServerCommand(data.hostname));
 
-        return this.mapper.map(
-            await this.serversService.getServer(data.hostname),
-            Server,
-            ServerSummaryDto,
-        );
+        return await this.serversService.getServer(data.hostname);
     }
 
     @ApiParam({

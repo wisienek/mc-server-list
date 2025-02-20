@@ -1,12 +1,12 @@
-import {Skeleton} from '@mui/material';
-import {Pagination, ServerSummaryDto} from '@shared/dto';
 import {type UseQueryResult} from '@tanstack/react-query';
 import React, {type FC} from 'react';
+import Skeleton from '@mui/material/Skeleton';
 import {styled} from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid2';
+import Box from '@mui/material/Box';
 import PaginationWrapped from '@front/components/atoms/PaginationWrapped';
 import ServerSummaryItem from '@front/components/atoms/ServerSummaryItem';
+import {Pagination, ServerSummaryDto} from '@shared/dto';
 
 const ServerSummaryListContainer = styled(Grid)(({theme}) => ({
     gap: theme.spacing(1),

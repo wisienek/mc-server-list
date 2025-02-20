@@ -1,16 +1,13 @@
-import {ServerDetailsDto} from '@shared/dto';
-import axios from 'axios';
 import ServerDetails from '@front/components/organisms/ServerDetailsPage';
+import {getHostnames} from '@front/components/actions/getHostnames';
+import {getServerDetails} from '@front/components/actions/getServerDetails';
 import type {LocaleParams} from '../layout';
 
-export const revalidate = 3600;
+export const revalidate = 3_600;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-    const hosts: string[] = await axios
-        .get(`${process.env.NEXT_PUBLIC_API_URL}/servers/hostnames`)
-        .then((res) => res?.data);
-
+    const hosts = await getHostnames();
     return (hosts ?? []).map((host) => ({
         hostname: host,
     }));
@@ -22,12 +19,7 @@ type HostnamePageProps = {
 
 export default async function Page(props: HostnamePageProps) {
     const hostName = (await props.params).hostname;
-
-    const serverDetails = (
-        await axios.get<ServerDetailsDto>(
-            `${process.env.NEXT_PUBLIC_API_URL}/servers/${hostName}`,
-        )
-    ).data;
+    const serverDetails = await getServerDetails(hostName);
 
     return <ServerDetails server={serverDetails} />;
 }

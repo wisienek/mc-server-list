@@ -1,26 +1,26 @@
-import type {Mapper} from '@automapper/core';
-import {InjectMapper} from '@automapper/nestjs';
-import {GetServerStatsQuery, GetUserQuery} from '@backend/commander';
-import {BedrockServer, JavaServer, Server, ServerRanking, Vote} from '@backend/db';
+import {type FindOptionsWhere, Repository} from 'typeorm';
+import {plainToInstance} from 'class-transformer';
 import {Injectable, Logger} from '@nestjs/common';
-import {QueryBus} from '@nestjs/cqrs';
 import {InjectRepository} from '@nestjs/typeorm';
+import {InjectMapper} from '@automapper/nestjs';
+import type {Mapper} from '@automapper/core';
+import {QueryBus} from '@nestjs/cqrs';
+import {BedrockServer, JavaServer, Server, ServerRanking, Vote} from '@backend/db';
+import {GetServerStatsQuery, GetUserQuery} from '@backend/commander';
 import {
     CreateServerDto,
     CreateServerResponseDto,
     ListServersDto,
     Pagination,
+    ServerDetailsDto,
     ServerSummaryDto,
 } from '@shared/dto';
-import {ServerType} from '@shared/enums';
-import {plainToInstance} from 'class-transformer';
-import {type FindOptionsWhere, Repository} from 'typeorm';
+import type {GetServerStatsQueryHandlerReturnType} from './handlers';
 import {
     ServerExistsError,
     ServerNotFoundError,
     ServerVerificationOfflineError,
 } from './errors';
-import type {GetServerStatsQueryHandlerReturnType} from './handlers';
 
 @Injectable()
 export class ServersService {
@@ -43,7 +43,9 @@ export class ServersService {
         hostName: string,
         userEmail: string,
     ): Promise<number> {
-        const server = await this.getServer(hostName);
+        const server = await this.serverRepository.findOne({
+            where: {host: hostName},
+        });
 
         const givenVote = await this.voteRepository.findOne({
             where: {
@@ -147,18 +149,18 @@ export class ServersService {
         const mapped = await Promise.all(
             items.map(async (item) => {
                 const dto = this.mapper.map(item, Server, ServerSummaryDto);
-                const votesCount = await this.voteRepository.count({
-                    where: {server_id: item.id},
-                });
+                const {votesCount, ranking} = await this.getVotesAndRankingForServer(
+                    item,
+                );
+
                 dto.isLiked =
                     userId &&
                     (await this.voteRepository.exists({
                         where: {server_id: item.id, user_id: userId},
                     }));
                 dto.votes = votesCount;
-                dto.ranking = item.rankingData
-                    ? item.rankingData.ranking
-                    : undefined;
+                dto.ranking = ranking;
+
                 return dto;
             }),
         );
@@ -166,24 +168,27 @@ export class ServersService {
         return new Pagination<ServerSummaryDto>(mapped, total, perPage, page);
     }
 
-    public async getServer(hostName: string): Promise<Server> {
+    public async getServer(
+        hostName: string,
+        userId?: string,
+    ): Promise<ServerDetailsDto> {
         const baseServer = await this.serverRepository.findOne({
             where: {host: hostName},
         });
+        const {votesCount, ranking} = await this.getVotesAndRankingForServer(
+            baseServer,
+        );
 
-        switch (baseServer.type) {
-            case ServerType.JAVA: {
-                return await this.javaServerRepository.findOne({
-                    where: {host: baseServer.host},
-                });
-            }
+        const dto = this.mapper.map(baseServer, Server, ServerDetailsDto);
+        dto.votes = votesCount;
+        dto.ranking = ranking;
+        dto.isLiked =
+            userId &&
+            (await this.voteRepository.exists({
+                where: {server_id: baseServer.id, user_id: userId},
+            }));
 
-            case ServerType.BEDROCK: {
-                return await this.bedrockServerRepository.findOne({
-                    where: {host: baseServer.host},
-                });
-            }
-        }
+        return dto;
     }
 
     public async createServer(
@@ -242,6 +247,28 @@ export class ServersService {
         }
     }
 
+    private async getVotesAndRankingForServer(
+        server: Server,
+    ): Promise<{votesCount: number; ranking: number}> {
+        const votesCount = await this.voteRepository.count({
+            where: {server_id: server.id},
+        });
+
+        const ranking =
+            server?.rankingData?.ranking ??
+            (
+                await this.serverRepository.findOne({
+                    where: {id: server.id},
+                    relations: {rankingData: true},
+                })
+            ).rankingData.ranking;
+
+        return {
+            votesCount,
+            ranking,
+        };
+    }
+
     /**
      * Retrieves a server (either JavaServer or BedrockServer) by hostname, port, or IP.
      * @param data Object containing optional hostname, port, and ip properties.
@@ -252,7 +279,7 @@ export class ServersService {
         port?: number;
         ip?: string;
     }): Promise<Server> {
-        const searchData: FindOptionsWhere<JavaServer | BedrockServer> = {};
+        const searchData: FindOptionsWhere<Server> = {};
 
         if (data.ip) {
             searchData.ip_address = data.ip;
@@ -264,15 +291,9 @@ export class ServersService {
             searchData.host = data.hostname;
         }
 
-        return (
-            (await this.javaServerRepository.findOne({
-                where: searchData,
-                relations: {verification: true, owner: true},
-            })) ??
-            (await this.bedrockServerRepository.findOne({
-                where: searchData,
-                relations: {verification: true, owner: true},
-            }))
-        );
+        return await this.serverRepository.findOne({
+            where: searchData,
+            relations: {verification: true, owner: true},
+        });
     }
 }
