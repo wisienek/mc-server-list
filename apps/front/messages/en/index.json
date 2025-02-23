@@ -39,7 +39,12 @@
             "version": "Version:",
             "verify": "Verify server with MOTD code: <code></code>",
             "claimServer": "Server doesn't have an owner yet. If it's you click this button!"
-        }
+        },
+      "hostPage": {
+        "javaIP": "Java IP",
+        "bedrockIP": "Bedrock IP",
+        "serverCategories": "Server Categories"
+      }
     },
     "server": {
         "add": {
