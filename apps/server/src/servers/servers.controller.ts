@@ -31,6 +31,7 @@ import {
     Pagination,
     ServerDetailsDto,
     ServerSummaryDto,
+    UpdateServerDetailsDto,
     VerifyServerDto,
 } from '@shared/dto';
 import {
@@ -142,8 +143,12 @@ export class ServersController {
     })
     @UseGuards(AuthenticatedGuard)
     @Patch(':host/details')
-    async createDetails(@SessionUser() user: User, @Param('host') host: string) {
-        throw new NotImplementedException();
+    async createDetails(
+        @SessionUser() user: User,
+        @Param('host') host: string,
+        @Body() data: UpdateServerDetailsDto,
+    ): Promise<ServerDetailsDto> {
+        return this.serversService.updateServerDetails(host, user.id, data);
     }
 
     @ApiParam({

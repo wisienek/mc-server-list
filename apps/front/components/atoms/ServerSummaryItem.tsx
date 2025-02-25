@@ -20,6 +20,7 @@ import CategoryIcon from './CategoryIcon';
 import CopyableTypography from './CopyableTypography';
 import {Link} from '@front/i18n/routing';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ServerLikeButton from './ServerLikeButton';
 
 const StyledServerSummary = styled(Paper)(({theme}) => ({
     padding: theme.spacing(1),
@@ -234,22 +235,13 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
                         ))}
                     </CategoriesContainer>
                 </Box>
-                <Box
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <IconButton
-                        onClick={handleFavoriteClick}
-                        size="small"
-                        sx={{cursor: profile ? 'pointer' : 'not-allowed'}}
-                        disabled={!profile}
-                    >
-                        <FavoriteIcon sx={{color: isLikedByUser ? 'red' : 'grey'}} />
-                    </IconButton>
-                    <Typography variant="caption">{votes}</Typography>
-                </Box>
+
+                <ServerLikeButton
+                    handleFavoriteClick={handleFavoriteClick}
+                    profile={profile}
+                    isLikedByUser={isLikedByUser}
+                    votes={votes}
+                />
             </StatsContainer>
             {unverifiedIcon}
         </StyledServerSummary>

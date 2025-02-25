@@ -13,6 +13,10 @@ type ProviderProps = {
 
 const SELECTED_THEME_MODE = 'SELECTED_THEME_MODE' as const;
 
+type CreateThemeProps = Parameters<typeof createTheme>[0];
+
+const ThemeDefaultOptions = {} as const satisfies CreateThemeProps;
+
 function ThemingProvider({
     children,
     defaultTheme = 'main',
@@ -46,12 +50,17 @@ function ThemingProvider({
             return createTheme();
         }
 
-        return createTheme(Themes[defaultTheme][themeMode]);
+        return createTheme({
+            ...Themes[defaultTheme][themeMode],
+            ...ThemeDefaultOptions,
+        });
     }, [defaultTheme, themeMode]);
 
     return (
         <StyledEngineProvider injectFirst>
-            <ThemeProvider theme={currentTheme}>{children}</ThemeProvider>
+            <ThemeProvider theme={currentTheme} noSsr>
+                {children}
+            </ThemeProvider>
         </StyledEngineProvider>
     );
 }

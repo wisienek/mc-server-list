@@ -14,11 +14,13 @@ import {
     Pagination,
     ServerDetailsDto,
     ServerSummaryDto,
+    UpdateServerDetailsDto,
 } from '@shared/dto';
 import type {GetServerStatsQueryHandlerReturnType} from './handlers';
 import {
     ServerExistsError,
     ServerNotFoundError,
+    ServerNotOwnedByUserError,
     ServerVerificationOfflineError,
 } from './errors';
 
@@ -72,6 +74,28 @@ export class ServersService {
         }
 
         return await this.voteRepository.count({where: {server: {host: hostName}}});
+    }
+
+    public async updateServerDetails(
+        host: string,
+        userId: string,
+        updateData: UpdateServerDetailsDto,
+    ): Promise<ServerDetailsDto> {
+        const server = await this.serverRepository.findOne({where: {host}});
+
+        if (!server) {
+            throw new ServerNotFoundError(host);
+        }
+
+        if (server.owner_id !== userId) {
+            throw new ServerNotOwnedByUserError(host, userId);
+        }
+
+        Object.assign(server, updateData);
+
+        const updatedServer = await this.serverRepository.save(server);
+
+        return this.mapper.map(updatedServer, Server, ServerDetailsDto);
     }
 
     public async listHostnames(): Promise<string[]> {
@@ -174,6 +198,9 @@ export class ServersService {
     ): Promise<ServerDetailsDto> {
         const baseServer = await this.serverRepository.findOne({
             where: {host: hostName},
+            relations: {
+                owner: true,
+            },
         });
         const {votesCount, ranking} = await this.getVotesAndRankingForServer(
             baseServer,
@@ -187,6 +214,7 @@ export class ServersService {
             (await this.voteRepository.exists({
                 where: {server_id: baseServer.id, user_id: userId},
             }));
+        dto.isOwner = baseServer.owner_id === userId;
 
         return dto;
     }

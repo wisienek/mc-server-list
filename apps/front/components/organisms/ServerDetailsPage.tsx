@@ -3,6 +3,7 @@
 import ServerDescriptionSection from '@front/components/molecules/ServerDescriptionSection';
 import StyledPageContainer from '@front/components/atoms/StyledPageContainer';
 import ServerMainInfo from '@front/components/molecules/ServerMainInfo';
+import ServerBanner from '@front/components/atoms/ServerBanner';
 import {ServerDetailsDto} from '@shared/dto';
 
 type ServerDetailsProps = {
@@ -13,6 +14,8 @@ const ServerDetails = ({server}: ServerDetailsProps) => {
     return (
         <StyledPageContainer>
             <ServerMainInfo server={server} />
+            <ServerBanner bannerURL={server.banner} />
+
             <ServerDescriptionSection server={server} />
         </StyledPageContainer>
     );

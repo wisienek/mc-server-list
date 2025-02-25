@@ -10,7 +10,7 @@
             "credentialsSaveError": "Si è verificato un errore durante il salvataggio delle credenziali.",
             "password": "Password",
             "passwordPlaceholder": "Inserisci una password",
-            "saving": "Salvataggio in corso",
+            "saving": "Salvataggio",
             "save": "Salva credenziali"
         }
     },
@@ -19,7 +19,7 @@
         "label": "Copia negli appunti"
     },
     "filters": {
-        "searchLabel": "Cerca per nome o descrizione",
+        "searchLabel": "Cerca nome o descrizione",
         "showMyServers": "Mostra i miei server",
         "categories": {
             "show": "Mostra categorie",
@@ -39,26 +39,42 @@
             "version": "Versione:",
             "verify": "Verifica il server con il codice MOTD: <code></code>",
             "claimServer": "Il server non ha ancora un proprietario. Se sei tu, clicca questo pulsante!"
+        },
+        "hostPage": {
+            "javaIP": "IP Java",
+            "bedrockIP": "IP Bedrock",
+            "serverCategories": "Categorie server",
+            "versions": "Versioni",
+            "playersOnline": "Giocatori online",
+            "addCategory": "Aggiungi categoria",
+            "categoriesModal": {
+                "title": "Scegli le categorie del server",
+                "selectedCategoriesTitle": "Categorie selezionate",
+                "showCategories": "Mostra categorie",
+                "hideCategories": "Nascondi categorie",
+                "save": "Salva modifiche"
+            }
         }
     },
     "server": {
         "add": {
-            "newServer": "Rivendica il server",
-            "title": "Aggiungi server all'elenco",
-            "hostName": "IP del server / Nome host",
+            "newServer": "Crea un nuovo server",
+            "title": "Aggiungi server alla lista",
+            "hostName": "IP / Nome host del server",
             "port": "Porta del server",
             "type": "Tipo di server",
             "isSubmitting": "Creazione in corso...",
-            "save": "Ottieni il codice di validazione",
+            "save": "Ottieni codice di convalida",
             "cancel": "Annulla",
-            "addressRequired": "L'indirizzo del server è richiesto.",
-            "invalidAddress": "Deve essere un indirizzo IPv4 o un nome host valido.",
-            "portRequired": "La porta è richiesta.",
+            "addressRequired": "L'indirizzo del server è obbligatorio.",
+            "invalidAddress": "Deve essere un indirizzo IPv4 valido o un nome host.",
+            "portRequired": "La porta è obbligatoria.",
             "portMin": "La porta deve essere almeno 1.",
             "portMax": "La porta deve essere al massimo 65535.",
-            "verificationInstructions": "Copia il codice di verifica <code></code> nel file MOTD del tuo server, quindi clicca sul pulsante sottostante per iniziare il processo di verifica.",
+            "verificationInstructions": "Copia il codice di verifica <code></code> nel file MOTD del tuo server, quindi fai clic sul pulsante qui sotto per avviare il processo di verifica.",
             "expiresAt": "Scade il <expirationDate></expirationDate>",
-            "startVerification": "Avvia la verifica"
+            "startVerification": "Avvia verifica",
+            "serverVerificationTitle": "Verifica il server con il codice"
         }
     }
 }

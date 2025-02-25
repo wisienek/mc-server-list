@@ -5,13 +5,13 @@
         "loginDiscord": "Mit Discord anmelden!",
         "logout": "Abmelden",
         "password": {
-            "setCredentials": "Legen Sie Ihre Zugangsdaten fest:",
-            "successfullySet": "Zugangsdaten erfolgreich gespeichert!",
-            "credentialsSaveError": "Beim Speichern der Zugangsdaten ist ein Fehler aufgetreten.",
+            "setCredentials": "Legen Sie Ihre Anmeldedaten fest:",
+            "successfullySet": "Anmeldedaten erfolgreich gespeichert!",
+            "credentialsSaveError": "Fehler beim Speichern der Anmeldedaten.",
             "password": "Passwort",
-            "passwordPlaceholder": "Bitte geben Sie ein Passwort ein",
+            "passwordPlaceholder": "Bitte ein Passwort eingeben",
             "saving": "Speichern",
-            "save": "Zugangsdaten speichern"
+            "save": "Anmeldedaten speichern"
         }
     },
     "copy": {
@@ -31,34 +31,50 @@
     },
     "page": {
         "seo": {
-            "description": "Website, die einen einfachen Weg bietet, Minecraft-Server hinzuzufügen und zu teilen!",
-            "title": "Minecraft Serverliste"
+            "description": "Website, die eine einfache Möglichkeit bietet, Minecraft-Server hinzuzufügen und zu teilen!",
+            "title": "Minecraft-Serverliste"
         },
         "list": {
             "playersOnline": "Spieler online:",
             "version": "Version:",
             "verify": "Server mit MOTD-Code verifizieren: <code></code>",
-            "claimServer": "Der Server hat noch keinen Besitzer. Wenn Sie es sind, klicken Sie auf diesen Button!"
+            "claimServer": "Dieser Server hat noch keinen Besitzer. Falls er Ihnen gehört, klicken Sie auf diesen Button!"
+        },
+        "hostPage": {
+            "javaIP": "Java-IP",
+            "bedrockIP": "Bedrock-IP",
+            "serverCategories": "Server-Kategorien",
+            "versions": "Versionen",
+            "playersOnline": "Spieler online",
+            "addCategory": "Kategorie hinzufügen",
+            "categoriesModal": {
+                "title": "Wählen Sie die Server-Kategorien",
+                "selectedCategoriesTitle": "Ausgewählte Kategorien",
+                "showCategories": "Kategorien anzeigen",
+                "hideCategories": "Kategorien ausblenden",
+                "save": "Änderungen speichern"
+            }
         }
     },
     "server": {
         "add": {
-            "newServer": "Server beanspruchen",
+            "newServer": "Neuen Server erstellen",
             "title": "Server zur Liste hinzufügen",
             "hostName": "Server-IP / Hostname",
             "port": "Server-Port",
             "type": "Server-Typ",
-            "isSubmitting": "Erstelle...",
-            "save": "Validierungscode anfordern",
+            "isSubmitting": "Erstellung läuft...",
+            "save": "Validierungscode erhalten",
             "cancel": "Abbrechen",
             "addressRequired": "Serveradresse ist erforderlich.",
             "invalidAddress": "Muss eine gültige IPv4-Adresse oder ein Hostname sein.",
             "portRequired": "Port ist erforderlich.",
-            "portMin": "Port muss mindestens 1 sein.",
-            "portMax": "Port darf höchstens 65535 sein.",
-            "verificationInstructions": "Kopieren Sie den Verifizierungscode <code></code> in Ihre Server-MOTD-Datei und klicken Sie dann auf die Schaltfläche unten, um den Verifizierungsprozess zu starten.",
+            "portMin": "Der Port muss mindestens 1 sein.",
+            "portMax": "Der Port darf höchstens 65535 sein.",
+            "verificationInstructions": "Kopieren Sie den Verifizierungscode <code></code> in die MOTD-Datei Ihres Servers und klicken Sie anschließend auf den Button unten, um den Verifizierungsprozess zu starten.",
             "expiresAt": "Läuft ab am <expirationDate></expirationDate>",
-            "startVerification": "Verifizierung starten"
+            "startVerification": "Verifizierung starten",
+            "serverVerificationTitle": "Server mit Code verifizieren"
         }
     }
 }

@@ -1,12 +1,12 @@
 {
     "cancel": "Annuler",
-    "genericError": "Une erreur s'est produite.",
+    "genericError": "Une erreur est survenue.",
     "profile": {
-        "loginDiscord": "Connectez-vous avec Discord !",
+        "loginDiscord": "Connectez-vous avec Discord!",
         "logout": "Déconnexion",
         "password": {
-            "setCredentials": "Définissez vos identifiants :",
-            "successfullySet": "Identifiants enregistrés avec succès !",
+            "setCredentials": "Définissez vos identifiants:",
+            "successfullySet": "Identifiants enregistrés avec succès!",
             "credentialsSaveError": "Une erreur s'est produite lors de l'enregistrement des identifiants.",
             "password": "Mot de passe",
             "passwordPlaceholder": "Veuillez entrer un mot de passe",
@@ -15,11 +15,11 @@
         }
     },
     "copy": {
-        "copied": "Copié !",
+        "copied": "Copié!",
         "label": "Copier dans le presse-papiers"
     },
     "filters": {
-        "searchLabel": "Rechercher par nom ou description",
+        "searchLabel": "Rechercher un nom ou une description",
         "showMyServers": "Afficher mes serveurs",
         "categories": {
             "show": "Afficher les catégories",
@@ -31,34 +31,50 @@
     },
     "page": {
         "seo": {
-            "description": "Site web offrant un moyen facile d'ajouter et de partager des serveurs Minecraft !",
+            "description": "Site web offrant un moyen simple d'ajouter et de partager des serveurs Minecraft!",
             "title": "Liste des serveurs Minecraft"
         },
         "list": {
-            "playersOnline": "Joueurs en ligne :",
-            "version": "Version :",
-            "verify": "Vérifiez le serveur avec le code MOTD : <code></code>",
-            "claimServer": "Le serveur n'a pas encore de propriétaire. Si c'est vous, cliquez sur ce bouton !"
+            "playersOnline": "Joueurs en ligne:",
+            "version": "Version:",
+            "verify": "Vérifiez le serveur avec le code MOTD: <code></code>",
+            "claimServer": "Le serveur n'a pas encore de propriétaire. Si c'est vous, cliquez sur ce bouton!"
+        },
+        "hostPage": {
+            "javaIP": "IP Java",
+            "bedrockIP": "IP Bedrock",
+            "serverCategories": "Catégories de serveur",
+            "versions": "Versions",
+            "playersOnline": "Joueurs en ligne",
+            "addCategory": "Ajouter une catégorie",
+            "categoriesModal": {
+                "title": "Choisissez les catégories du serveur",
+                "selectedCategoriesTitle": "Catégories sélectionnées",
+                "showCategories": "Afficher les catégories",
+                "hideCategories": "Masquer les catégories",
+                "save": "Enregistrer les modifications"
+            }
         }
     },
     "server": {
         "add": {
-            "newServer": "Réclamer le serveur",
+            "newServer": "Créer un nouveau serveur",
             "title": "Ajouter un serveur à la liste",
-            "hostName": "IP/Nom d'hôte du serveur",
+            "hostName": "IP / Nom d'hôte du serveur",
             "port": "Port du serveur",
             "type": "Type de serveur",
-            "isSubmitting": "Création...",
+            "isSubmitting": "Création en cours...",
             "save": "Obtenir le code de validation",
             "cancel": "Annuler",
             "addressRequired": "L'adresse du serveur est requise.",
-            "invalidAddress": "Doit être une adresse IPv4 ou un nom d'hôte valide.",
+            "invalidAddress": "Doit être une adresse IPv4 valide ou un nom d'hôte.",
             "portRequired": "Le port est requis.",
-            "portMin": "Le port doit être au moins 1.",
-            "portMax": "Le port doit être au maximum 65535.",
+            "portMin": "Le port doit être d'au moins 1.",
+            "portMax": "Le port doit être d'au plus 65535.",
             "verificationInstructions": "Copiez le code de vérification <code></code> dans le fichier MOTD de votre serveur, puis cliquez sur le bouton ci-dessous pour démarrer le processus de vérification.",
             "expiresAt": "Expire le <expirationDate></expirationDate>",
-            "startVerification": "Démarrer la vérification"
+            "startVerification": "Démarrer la vérification",
+            "serverVerificationTitle": "Vérifiez le serveur avec le code"
         }
     }
 }

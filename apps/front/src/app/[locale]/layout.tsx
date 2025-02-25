@@ -1,15 +1,17 @@
-import NotificationsContainer from '@lib/front/components/organisms/NotificationCenter';
-import ThemingProvider from '@lib/front/components/organisms/theme/ThemingProvider';
+import InitColorSchemeScript from '@mui/material/InitColorSchemeScript';
+import {CssBaseline} from '@mui/material';
 import {getMessages, setRequestLocale} from 'next-intl/server';
 import {Fira_Mono, Inter, Jersey_15} from 'next/font/google';
 import {NextIntlClientProvider} from 'next-intl';
 import {notFound} from 'next/navigation';
 import type {ReactElement} from 'react';
+import StyledTemplateBody from '@front/components/atoms/StyledTemplateBody';
 import NoScriptMessage from '@front/components/molecules/NoScriptMessage';
 import Navbar from '@front/components/molecules/Navbar';
-import {routing} from '@front/i18n/routing';
-import StyledTemplateBody from '@front/components/atoms/StyledTemplateBody';
 import Footer from '@front/components/molecules/Footer';
+import {routing} from '@front/i18n/routing';
+import NotificationsContainer from '@lib/front/components/organisms/NotificationCenter';
+import ThemingProvider from '@lib/front/components/organisms/theme/ThemingProvider';
 
 import 'dayjs/locale/pl';
 import 'dayjs/locale/en';
@@ -128,10 +130,13 @@ async function LocaleLayout({children, modal, params}: LocaleLayoutProps) {
     return (
         <html
             className={`dark ${jerseyFont.className} ${interFont.className} ${firaMonoFont.className}`}
+            suppressHydrationWarning
         >
             <body>
+                <CssBaseline />
                 <NextIntlClientProvider messages={messages}>
                     <ThemingProvider>
+                        <InitColorSchemeScript />
                         <StyledTemplateBody>
                             <Navbar />
                             <NoScriptMessage />
