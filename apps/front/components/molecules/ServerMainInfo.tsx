@@ -1,19 +1,21 @@
 import SelectedCategoriesSummary from '@front/components/atoms/SelectedCategoriesSummary';
+import {updateServerDetails} from '@front/components/queries/servers/updateServerDetails';
 import {defaultServerIcon} from '@front/components/mocks/serverSummaryMocks';
 import CopyableTypography from '@front/components/atoms/CopyableTypography';
+import AddCategoriesModal from '@front/components/atoms/AddCategoriesModal';
+import EditableTypography from '@front/components/atoms/EditableTypography';
 import {useAppSelector} from '@lib/front/components/store/store';
 import Typography from '@mui/material/Typography';
 import {styled} from '@mui/material/styles';
 import {useTheme} from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import Box from '@mui/material/Box';
+import {omit} from 'lodash';
 import {useTranslations} from 'next-intl';
 import Image from 'next/image';
-import {ServerDetailsDto} from '@shared/dto';
-import {ServerCategory, ServerType} from '@shared/enums';
 import {useState} from 'react';
-import AddCategoriesModal from '../atoms/AddCategoriesModal';
-import {updateServerDetails} from '../queries/servers/updateServerDetails';
+import {ServerCategory, ServerType} from '@shared/enums';
+import {ServerDetailsDto} from '@shared/dto';
 
 type ServerMainInfoProps = {
     server: ServerDetailsDto;
@@ -190,6 +192,39 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
         );
     };
 
+    const EditingName = () => {
+        const props = {
+            variant: 'h5',
+            fontWeight: server?.name ? 'bold' : 'normal',
+            color: 'textPrimary',
+            title: server?.name,
+            placeholder: t('serverNamePlaceholder'),
+            handleInputChange: (name: string) => {
+                if (name.length < 3) {
+                    return;
+                }
+
+                updateDetails({
+                    name,
+                }).then((details) => {
+                    server.name = details.name;
+                });
+            },
+        } as const;
+
+        if (profile.id !== server.owner_id) {
+            return (
+                <Typography
+                    {...omit(props, ['title', 'placeholder', 'handleInputChange'])}
+                >
+                    {props?.title ?? server.host}
+                </Typography>
+            );
+        }
+
+        return <EditableTypography {...props} />;
+    };
+
     return (
         <Container direction="column">
             <AddCategoriesModal
@@ -211,20 +246,13 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
                 <LeftSection>
                     <StyledServerIcon
                         src={serverIcon}
-                        alt={server.name}
+                        alt={server.name ?? 'server-icon'}
                         width={theme.spacing(10).replace('px', '')}
                         height={theme.spacing(10).replace('px', '')}
                     />
 
                     <IpSection>
-                        <Typography
-                            variant="h4"
-                            fontWeight="bold"
-                            color="textPrimary"
-                        >
-                            {server.name}
-                        </Typography>
-
+                        <EditingName />
                         <IpAddresses />
                     </IpSection>
                 </LeftSection>

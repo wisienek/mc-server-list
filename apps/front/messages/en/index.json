@@ -47,6 +47,7 @@
             "versions": "Versions",
             "playersOnline": "Online players",
             "addCategory": "Add category",
+          "serverNamePlaceholder": "Write your server name here!",
             "categoriesModal": {
                 "title": "Pick server categories",
                 "selectedCategoriesTitle": "Selected categories",

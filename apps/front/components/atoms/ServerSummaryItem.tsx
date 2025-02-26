@@ -1,10 +1,8 @@
 'use client';
 import {addNotification} from '@lib/front/components/store/notificationsSlice';
 import {useAppDispatch, useAppSelector} from '@lib/front/components/store/store';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import Tooltip from '@mui/material/Tooltip';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import {styled} from '@mui/material/styles';
 import Typography from '@mui/material/Typography';

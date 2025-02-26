@@ -306,7 +306,7 @@ export class ServerMapperProfile extends AutomapperProfile {
                 ServerDetailsDto,
                 forMember(
                     (dest) => dest.name,
-                    mapFrom((src) => src.name ?? src.host),
+                    mapFrom((src) => src.name),
                 ),
                 forMember(
                     (dest) => dest.categories,
@@ -314,7 +314,7 @@ export class ServerMapperProfile extends AutomapperProfile {
                 ),
                 forMember(
                     (dest) => dest.description,
-                    mapFrom((src) => src.description ?? src.motd.clean),
+                    mapFrom((src) => src.description),
                 ),
                 forMember(
                     (dest) => dest.onlinePlayers,
