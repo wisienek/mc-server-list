@@ -267,7 +267,15 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
                 </Container>
             </Container>
 
-            <Container direction="row">
+            <Container
+                direction="row"
+                sx={{
+                    [theme.breakpoints.down('md')]: {
+                        padding: theme.spacing(0, 3),
+                        flexDirection: 'column-reverse',
+                    },
+                }}
+            >
                 <CategoriesSection />
                 <RankingSection />
             </Container>
