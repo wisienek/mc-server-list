@@ -44,8 +44,11 @@ const StyledServerIcon = styled(Image)(({theme}) => ({
     borderRadius: theme.shape.borderRadius,
 }));
 
-const StyledServerBanner = styled(Image)(() => ({
-    width: '80%',
+const StyledServerBanner = styled(Image)(({theme}) => ({
+    width: '100%',
+    [theme.breakpoints.down('md')]: {
+        display: 'none',
+    },
 }));
 
 const StyledNameAndRankingContainer = styled('div')(() => ({
@@ -170,19 +173,24 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
                         height={50}
                     />
                 </LinkWrapper>
+
                 <StyledNameAndRankingContainer>
                     <Typography variant="h6" color="textPrimary" noWrap>
                         {server.name}
                     </Typography>
+
                     <Typography variant="subtitle1" color="textPrimary" noWrap>
                         #{server.ranking ?? 'n/a'}
                     </Typography>
                 </StyledNameAndRankingContainer>
             </IconContainer>
+
             <ServerDescription>
                 {server.banner && (
                     <LinkWrapper>
                         <StyledServerBanner
+                            unoptimized
+                            loader={() => server.banner}
                             src={server.banner}
                             alt="server banner"
                             width="500"
@@ -190,6 +198,7 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
                         />
                     </LinkWrapper>
                 )}
+
                 {description && (
                     <Typography
                         variant="body2"
@@ -205,6 +214,7 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
                     </Typography>
                 )}
             </ServerDescription>
+
             <StatsContainer>
                 <Box
                     display="flex"

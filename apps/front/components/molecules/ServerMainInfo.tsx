@@ -212,7 +212,7 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
             },
         } as const;
 
-        if (profile.id !== server.owner_id) {
+        if (profile?.id !== server.owner_id) {
             return (
                 <Typography
                     {...omit(props, ['title', 'placeholder', 'handleInputChange'])}

@@ -56,7 +56,7 @@ const EditableTypography: FC<EditableTypographyProps> = ({
         <Typography {...typographyProps}>
             <StyledInput
                 multiline
-                value={value}
+                value={value ?? ''}
                 placeholder={placeholder}
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     setValue(e.target.value)

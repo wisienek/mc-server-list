@@ -47,12 +47,20 @@
             "versions": "Versions",
             "playersOnline": "Online players",
             "addCategory": "Add category",
-          "serverNamePlaceholder": "Write your server name here!",
+            "serverNamePlaceholder": "Write your server name here!",
+            "addBanner": "Add your banner here!",
             "categoriesModal": {
                 "title": "Pick server categories",
                 "selectedCategoriesTitle": "Selected categories",
                 "showCategories": "Show categories",
                 "hideCategories": "Hide categories",
+                "save": "Save changes"
+            },
+            "bannerModal": {
+                "title": "Please add an image URL",
+                "description": "In the input below paste in an URL to the banner image (preferably on IMGUR platform). The aspect ratio for image displayed is 5:1.",
+                "urlLabel": "Image URL",
+                "invalidUrl": "Invalid URL. Only images from imgur.com with jpg, jpeg, png, or gif extensions are allowed.",
                 "save": "Save changes"
             }
         }
