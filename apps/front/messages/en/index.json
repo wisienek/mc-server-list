@@ -62,7 +62,14 @@
                 "urlLabel": "Image URL",
                 "invalidUrl": "Invalid URL. Only images from imgur.com with jpg, jpeg, png, or gif extensions are allowed.",
                 "save": "Save changes"
-            }
+            },
+            "srv": {
+                "header": "Key",
+                "value": "Value"
+            },
+            "srvRecord": "SRV Record data",
+            "description": "Description",
+            "noDescription": "No description provided."
         }
     },
     "server": {

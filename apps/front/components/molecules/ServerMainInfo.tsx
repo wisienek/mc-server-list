@@ -1,5 +1,6 @@
 import SelectedCategoriesSummary from '@front/components/atoms/SelectedCategoriesSummary';
 import {updateServerDetails} from '@front/components/queries/servers/updateServerDetails';
+import ServerInfoContainer from '@front/components/atoms/ServerInfoContainer';
 import {defaultServerIcon} from '@front/components/mocks/serverSummaryMocks';
 import CopyableTypography from '@front/components/atoms/CopyableTypography';
 import AddCategoriesModal from '@front/components/atoms/AddCategoriesModal';
@@ -8,10 +9,9 @@ import {useAppSelector} from '@lib/front/components/store/store';
 import Typography from '@mui/material/Typography';
 import {styled} from '@mui/material/styles';
 import {useTheme} from '@mui/material';
-import Grid from '@mui/material/Grid2';
 import Box from '@mui/material/Box';
-import {omit} from 'lodash';
 import {useTranslations} from 'next-intl';
+import {omit} from 'lodash';
 import Image from 'next/image';
 import {useState} from 'react';
 import {ServerCategory, ServerType} from '@shared/enums';
@@ -20,25 +20,6 @@ import {ServerDetailsDto} from '@shared/dto';
 type ServerMainInfoProps = {
     server: ServerDetailsDto;
 };
-
-const Container = styled(Grid, {
-    shouldForwardProp: (propName: string) =>
-        !['direction', 'usePadding'].includes(propName),
-})<{
-    direction: 'column' | 'column-reverse' | 'row' | 'row-reverse';
-    usePadding?: boolean;
-}>(({theme, direction, usePadding = true}) => ({
-    padding: usePadding ? theme.spacing(3) : 0,
-    display: 'flex',
-    flexDirection: direction,
-    justifyContent: 'space-between',
-    alignItems: 'normal',
-    [theme.breakpoints.down('md')]: {
-        flexDirection: direction.includes('row')
-            ? `column${direction.includes('reverse') ? '-reverse' : ''}`
-            : direction,
-    },
-}));
 
 const LeftSection = styled(Box)({
     display: 'flex',
@@ -134,7 +115,7 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
     const CategoriesSection = () => {
         return (
             <IpSection>
-                <Typography variant="h6" color="textSecondary">
+                <Typography variant="h6" color="textPrimary">
                     {t('serverCategories')}:
                 </Typography>
                 <SelectedCategoriesSummary
@@ -171,23 +152,29 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
     const RankingSection = () => {
         return (
             <IpSection>
-                <Container direction="row" sx={{alignItems: 'center', padding: 0}}>
+                <ServerInfoContainer
+                    direction="row"
+                    sx={{alignItems: 'center', padding: 0}}
+                >
                     <Typography variant="subtitle1" color="textPrimary">
                         Ranking:
                     </Typography>
                     <Typography variant="body1" color="textSecondary" ml={1}>
                         #{server.ranking}
                     </Typography>
-                </Container>
+                </ServerInfoContainer>
 
-                <Container direction="row" sx={{alignItems: 'center', padding: 0}}>
+                <ServerInfoContainer
+                    direction="row"
+                    sx={{alignItems: 'center', padding: 0}}
+                >
                     <Typography variant="subtitle1" color="textPrimary">
                         Votes:
                     </Typography>
                     <Typography variant="body1" color="textSecondary" ml={1}>
                         {server.votes}
                     </Typography>
-                </Container>
+                </ServerInfoContainer>
             </IpSection>
         );
     };
@@ -226,7 +213,7 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
     };
 
     return (
-        <Container direction="column">
+        <ServerInfoContainer direction="column">
             <AddCategoriesModal
                 server={server}
                 open={showingAddCategoryModal}
@@ -242,7 +229,7 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
                 handleClose={() => setShowingAddCategoryModal(false)}
             />
 
-            <Container direction="row">
+            <ServerInfoContainer direction="row">
                 <LeftSection>
                     <StyledServerIcon
                         src={serverIcon}
@@ -257,17 +244,17 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
                     </IpSection>
                 </LeftSection>
 
-                <Container
+                <ServerInfoContainer
                     direction="column"
                     usePadding={false}
                     sx={{justifyContent: 'center'}}
                 >
                     <VersionList />
                     <PlayersOnline />
-                </Container>
-            </Container>
+                </ServerInfoContainer>
+            </ServerInfoContainer>
 
-            <Container
+            <ServerInfoContainer
                 direction="row"
                 sx={{
                     [theme.breakpoints.down('md')]: {
@@ -278,7 +265,7 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
             >
                 <CategoriesSection />
                 <RankingSection />
-            </Container>
-        </Container>
+            </ServerInfoContainer>
+        </ServerInfoContainer>
     );
 }

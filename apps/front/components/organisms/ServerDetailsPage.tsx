@@ -15,7 +15,6 @@ const ServerDetails = ({server}: ServerDetailsProps) => {
         <StyledPageContainer>
             <ServerMainInfo server={server} />
             <ServerBanner server={server} />
-
             <ServerDescriptionSection server={server} />
         </StyledPageContainer>
     );
