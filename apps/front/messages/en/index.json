@@ -69,7 +69,14 @@
             },
             "srvRecord": "SRV Record data",
             "description": "Description",
-            "noDescription": "No description provided."
+            "noDescription": "No description provided.",
+            "editDescription": "Enter editing mode",
+            "saveDescription": "Save changes",
+            "exitEditingDescription": "Finish editing",
+            "descriptionSavedTitle": "Description saved!",
+            "descriptionSavedMessage": "Changed number of characters from {initial} to {changed}",
+            "descriptionSaveErrorTitle": "Something went wrong!",
+            "descriptionSaveErrorMessage": "Due to some unknown error description was not saved."
         }
     },
     "server": {
