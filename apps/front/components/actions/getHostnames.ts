@@ -1,12 +1,10 @@
 'use server';
 
-import axios from 'axios';
-
 export async function getHostnames(): Promise<string[]> {
-    const response = await axios.get<string[]>(
+    const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/servers/hostnames`,
-        {withCredentials: true},
+        {credentials: 'include', next: {tags: ['/servers']}},
     );
 
-    return response.data;
+    return response.json();
 }

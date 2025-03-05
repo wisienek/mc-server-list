@@ -1,30 +1,28 @@
 'use client';
-import {addNotification} from '@lib/front/components/store/notificationsSlice';
 import {useAppDispatch, useAppSelector} from '@lib/front/components/store/store';
+import {addNotification} from '@lib/front/components/store/notificationsSlice';
 import type {MDXEditorMethods} from '@mdxeditor/editor';
 import CloseIcon from '@mui/icons-material/Close';
-import {SvgIcon} from '@mui/material';
 import Typography from '@mui/material/Typography';
 import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
 import Tooltip from '@mui/material/Tooltip';
 import {styled} from '@mui/material/styles';
+import {SvgIcon} from '@mui/material';
 import Box from '@mui/material/Box';
+import type {ServerPaginatedListWithMDXSource} from '@front/components/queries/servers/serverListQuery';
+import {updateServerDetailsCommand} from '@front/components/queries/servers/updateServerDetails';
 import InitializedMDXEditor from '@front/components/atoms/InitializedMDXEditor';
 import ServerInfoContainer from '@front/components/atoms/ServerInfoContainer';
-import {ServerDetailsDto} from '@shared/dto';
 import {useTranslations} from 'next-intl';
-import {MDXRemote} from 'next-mdx-remote-client/rsc';
 import React, {
     type Dispatch,
     type FC,
     type RefObject,
     type SetStateAction,
-    Suspense,
     useRef,
     useState,
 } from 'react';
-import {updateServerDetails} from '../queries/servers/updateServerDetails';
 
 const StyledEditBox = styled(Box)(({theme}) => ({
     display: 'flex',
@@ -75,16 +73,12 @@ const DescriptionSection: FC<DescriptionSectionProps> = ({
     return (
         <>
             {server?.description && server.description.length > 0 ? (
-                <Suspense fallback={<></>}>
-                    <MDXRemote source={server.description} />
-                </Suspense>
+                server.mdxSource.content
             ) : (
                 <Typography variant="body2" color="textSecondary">
                     {t('noDescription')}
                 </Typography>
             )}
-
-            {}
         </>
     );
 };
@@ -103,7 +97,7 @@ const EditorButtons: FC<EditorButtonsProps> = ({
 }) => {
     const t = useTranslations('page.hostPage');
     const dispatch = useAppDispatch();
-    const {mutateAsync: updateDetails} = updateServerDetails(server.host);
+    const {mutateAsync: updateDetails} = updateServerDetailsCommand(server.host);
 
     const handleSave = async () => {
         try {
@@ -164,7 +158,7 @@ const EditorButtons: FC<EditorButtonsProps> = ({
 };
 
 type ServerDescriptionSectionProps = {
-    server: ServerDetailsDto;
+    server: ServerPaginatedListWithMDXSource;
 };
 
 const ServerDescriptionSection = ({server}: ServerDescriptionSectionProps) => {

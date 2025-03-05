@@ -30,6 +30,11 @@
         "credits": "Created and designed by <author>@Wisienek</author> 2025"
     },
     "page": {
+        "not-found": {
+            "title": "Not Found",
+            "description": "The page that you requested could not be found, please check the address and try again.",
+            "return": "Return Home"
+        },
         "seo": {
             "description": "Website providing easy way to add and share minecraft servers!",
             "title": "Minecraft server list"

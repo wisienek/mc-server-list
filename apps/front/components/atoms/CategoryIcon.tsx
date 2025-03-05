@@ -33,7 +33,7 @@ const StyledBadgeIcon = styled(Badge)(() => ({
 
 type CategoryIconProps = {
     category: ServerCategory;
-    onRemove: (category: ServerCategory) => void;
+    onRemove?: (category: ServerCategory) => void;
 } & Partial<ComponentProps<typeof StyledCategoryIcon>>;
 
 const CategoryIcon = ({category, onRemove, ...rest}: CategoryIconProps) => {

@@ -1,6 +1,6 @@
 'use client';
 
-import {updateServerDetails} from '@front/components/queries/servers/updateServerDetails';
+import {updateServerDetailsCommand} from '@front/components/queries/servers/updateServerDetails';
 import {useAppSelector} from '@lib/front/components/store/store';
 import Typography from '@mui/material/Typography';
 import {darken, styled} from '@mui/material/styles';
@@ -35,7 +35,7 @@ const StyledImage = styled(Image)({
 
 const ServerBanner = ({server}: ServerBannerProps) => {
     const profile = useAppSelector((store) => store.auth.user);
-    const {mutateAsync: updateDetails} = updateServerDetails(server.host);
+    const {mutateAsync: updateDetails} = updateServerDetailsCommand(server.host);
     const t = useTranslations('page.hostPage');
     const [isBannerOpen, setIsBannerOpen] = useState<boolean>(false);
 
@@ -45,7 +45,6 @@ const ServerBanner = ({server}: ServerBannerProps) => {
     }
 
     const openBanner = () => {
-        console.log(isOwner, isBannerOpen);
         if (isOwner) {
             setIsBannerOpen(true);
         }

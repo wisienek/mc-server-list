@@ -1,13 +1,10 @@
 'use server';
 
 import {ServerDetailsDto} from '@shared/dto';
-import axios from 'axios';
+import {customFetch} from './baseFetch';
 
 export async function getServerDetails(host: string): Promise<ServerDetailsDto> {
-    const response = await axios.get<ServerDetailsDto>(
-        `${process.env.NEXT_PUBLIC_API_URL}/servers/${host}`,
-        {withCredentials: true},
-    );
-
-    return response.data;
+    return customFetch<ServerDetailsDto>(`/servers/${host}`, {
+        next: {tags: ['/servers', `/servers/${host}`]},
+    });
 }

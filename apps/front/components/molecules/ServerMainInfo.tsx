@@ -1,5 +1,6 @@
+'use client';
 import SelectedCategoriesSummary from '@front/components/atoms/SelectedCategoriesSummary';
-import {updateServerDetails} from '@front/components/queries/servers/updateServerDetails';
+import {updateServerDetailsCommand} from '@front/components/queries/servers/updateServerDetails';
 import ServerInfoContainer from '@front/components/atoms/ServerInfoContainer';
 import {defaultServerIcon} from '@front/components/mocks/serverSummaryMocks';
 import CopyableTypography from '@front/components/atoms/CopyableTypography';
@@ -51,7 +52,7 @@ const StyledServerIcon = styled(Image)(({theme}) => ({
 export default function ServerMainInfo({server}: ServerMainInfoProps) {
     const t = useTranslations('page.hostPage');
 
-    const {mutateAsync: updateDetails} = updateServerDetails(server.host);
+    const {mutateAsync: updateDetails} = updateServerDetailsCommand(server.host);
     const profile = useAppSelector((store) => store.auth.user);
     const [showingAddCategoryModal, setShowingAddCategoryModal] =
         useState<boolean>(false);

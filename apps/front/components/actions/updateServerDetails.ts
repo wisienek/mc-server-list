@@ -1,28 +1,23 @@
 'use server';
 
-import axios, {type AxiosResponse} from 'axios';
 import {ServerDetailsDto, UpdateServerDetailsDto} from '@shared/dto';
+import {revalidateTag} from 'next/cache';
+import {customFetch} from './baseFetch';
 
 export async function updateServerDetails(
-    server: ServerDetailsDto,
+    host: string,
     details: UpdateServerDetailsDto,
-): Promise<ServerDetailsDto | null> {
-    try {
-        const response = await axios.patch<
-            ServerDetailsDto,
-            AxiosResponse<ServerDetailsDto>,
-            UpdateServerDetailsDto
-        >(
-            `${process.env.NEXT_PUBLIC_API_URL}/servers/${server.host}/details`,
-            details,
-            {
-                withCredentials: true,
-            },
-        );
+): Promise<ServerDetailsDto> {
+    const response = await customFetch<ServerDetailsDto>(
+        `/servers/${host}/details`,
+        {
+            method: 'PATCH',
+            body: JSON.stringify(details),
+        },
+    );
 
-        return response.data;
-    } catch (error) {
-        console.error('Failed to update server:', error);
-        return null;
-    }
+    revalidateTag(`/servers/${host}`);
+    revalidateTag('/servers');
+
+    return response;
 }

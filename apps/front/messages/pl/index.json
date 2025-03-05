@@ -30,6 +30,11 @@
         "credits": "Stworzone i zaprojektowane przez <author>@Wisienek</author> 2025"
     },
     "page": {
+        "not-found": {
+            "title": "Nie znaleziono",
+            "description": "Nie można znaleźć żądanej strony. Sprawdź adres i spróbuj ponownie.",
+            "return": "Powrót"
+        },
         "seo": {
             "description": "Strona ułatwiająca dodawanie i udostępnianie serwerów Minecraft!",
             "title": "Lista serwerów Minecraft"
@@ -47,13 +52,36 @@
             "versions": "Wersje",
             "playersOnline": "Gracze online",
             "addCategory": "Dodaj kategorię",
+            "serverNamePlaceholder": "Wpisz tutaj nazwę swojego serwera!",
+            "addBanner": "Dodaj swój baner tutaj!",
             "categoriesModal": {
                 "title": "Wybierz kategorie serwera",
                 "selectedCategoriesTitle": "Wybrane kategorie",
                 "showCategories": "Pokaż kategorie",
                 "hideCategories": "Ukryj kategorie",
                 "save": "Zapisz zmiany"
-            }
+            },
+            "bannerModal": {
+                "title": "Dodaj adres URL obrazu",
+                "description": "Wklej poniżej adres URL obrazu banera (najlepiej z platformy IMGUR). Współczynnik proporcji obrazu wynosi 5:1.",
+                "urlLabel": "Adres URL obrazu",
+                "invalidUrl": "Nieprawidłowy adres URL. Dozwolone są tylko obrazy z imgur.com z rozszerzeniami jpg, jpeg, png lub gif.",
+                "save": "Zapisz zmiany"
+            },
+            "srv": {
+                "header": "Klucz",
+                "value": "Wartość"
+            },
+            "srvRecord": "Dane rekordu SRV",
+            "description": "Opis",
+            "noDescription": "Brak opisu.",
+            "editDescription": "Przejdź do edycji",
+            "saveDescription": "Zapisz zmiany",
+            "exitEditingDescription": "Zakończ edycję",
+            "descriptionSavedTitle": "Opis zapisany!",
+            "descriptionSavedMessage": "Liczba znaków zmieniona z {initial} na {changed}",
+            "descriptionSaveErrorTitle": "Coś poszło nie tak!",
+            "descriptionSaveErrorMessage": "Z powodu nieznanego błędu opis nie został zapisany."
         }
     },
     "server": {

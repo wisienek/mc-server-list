@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import PaginationWrapped from '@front/components/atoms/PaginationWrapped';
 import ServerSummaryItem from '@front/components/atoms/ServerSummaryItem';
 import {Pagination, ServerSummaryDto} from '@shared/dto';
+import type {ServerPaginatedListWithMDXSource} from '../queries/servers/serverListQuery';
 
 const ServerSummaryListContainer = styled(Grid)(({theme}) => ({
     gap: theme.spacing(1),
@@ -16,11 +17,11 @@ const ServerSummaryListContainer = styled(Grid)(({theme}) => ({
 
 type ServerSummaryListProps = {
     setShowVerificationModal: (server: ServerSummaryDto) => void;
-    fetchServersQuery: UseQueryResult<Pagination<ServerSummaryDto>>;
+    fetchServersQuery: UseQueryResult<Pagination<ServerPaginatedListWithMDXSource>>;
 };
 
 type ServerSummaryAwaitedProps = {
-    fetchedServers: UseQueryResult<Pagination<ServerSummaryDto>>;
+    fetchedServers: UseQueryResult<Pagination<ServerPaginatedListWithMDXSource>>;
 } & Pick<ServerSummaryListProps, 'setShowVerificationModal'>;
 
 const ServerSummaryAwaited: FC<ServerSummaryAwaitedProps> = ({

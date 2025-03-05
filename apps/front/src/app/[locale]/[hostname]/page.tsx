@@ -1,25 +1,29 @@
-import ServerDetails from '@front/components/organisms/ServerDetailsPage';
-import {getHostnames} from '@front/components/actions/getHostnames';
 import {getServerDetails} from '@front/components/actions/getServerDetails';
-import type {LocaleParams} from '../layout';
+import {Metadata, ResolvingMetadata} from 'next';
+import type {HostnamePageProps} from './layout';
 
 export const revalidate = 3_600;
 export const dynamicParams = true;
 
-export async function generateStaticParams() {
-    const hosts = await getHostnames();
-    return (hosts ?? []).map((host) => ({
-        hostname: host,
-    }));
-}
-
-type HostnamePageProps = {
-    params: Promise<LocaleParams & {hostname: string}>;
-};
-
-export default async function Page(props: HostnamePageProps) {
+export async function generateMetadata(
+    props: HostnamePageProps,
+    parent: ResolvingMetadata,
+): Promise<Metadata> {
     const hostName = (await props.params).hostname;
     const serverDetails = await getServerDetails(hostName);
 
-    return <ServerDetails server={serverDetails} />;
+    const previousImages = (await parent).openGraph?.images || [];
+
+    const images = [serverDetails.banner, serverDetails.icon].filter(Boolean);
+
+    return {
+        title: serverDetails.name ?? serverDetails.host,
+        openGraph: {
+            images: [...images, ...previousImages],
+        },
+    };
+}
+
+export default async function Page() {
+    return <></>;
 }

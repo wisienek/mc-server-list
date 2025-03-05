@@ -2,6 +2,7 @@ import {ClassSerializerInterceptor, Logger, ValidationPipe} from '@nestjs/common
 import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
 import {NestFactory, Reflector} from '@nestjs/core';
 import {getRepositoryToken} from '@nestjs/typeorm';
+import {CookieNames} from '@shared/enums';
 import {TypeormStore} from 'connect-typeorm';
 import session from 'express-session';
 import {SimpleLogger} from '@backend/logger';
@@ -32,7 +33,7 @@ async function bootstrap() {
     );
     app.use(
         session({
-            name: 'mc-list-dc',
+            name: CookieNames.SESSION_ID,
             secret: configService.COOKIE_SECRET,
             resave: false,
             saveUninitialized: false,
