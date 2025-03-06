@@ -17,7 +17,7 @@ import {CreateServerDto, CreateServerResponseDto} from '@shared/dto';
 import {hostnameRegex, ipv4Regex} from '@core';
 import {ServerType} from '@shared/enums';
 import ServerTypeOption from '@front/components/atoms/ServerTypeOption';
-import {useCreateServer} from '../queries/servers/createServer';
+import {useCreateServer} from '../queries/servers/useCreateServer';
 
 const FormContainer = styled('form')(({theme}) => ({
     display: 'flex',

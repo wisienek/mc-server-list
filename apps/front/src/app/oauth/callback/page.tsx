@@ -1,6 +1,6 @@
 import {CookieNames} from '@shared/enums';
 import {notFound} from 'next/navigation';
-import AuthCallbackPage from '../../../../components/organisms/AuthCallbackPage';
+import AuthCallbackPage from '@front/components/organisms/AuthCallbackPage';
 
 type PageProps = {
     searchParams: Promise<{

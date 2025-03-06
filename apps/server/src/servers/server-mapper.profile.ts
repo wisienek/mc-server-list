@@ -300,7 +300,39 @@ export class ServerMapperProfile extends AutomapperProfile {
             );
 
             createMap(mapper, ServerDto, ServerSummaryDto);
-            createMap(mapper, Server, ServerDetailsDto);
+            createMap(
+                mapper,
+                Server,
+                ServerDetailsDto,
+                forMember(
+                    (dest) => dest.name,
+                    mapFrom((src) => src.name),
+                ),
+                forMember(
+                    (dest) => dest.categories,
+                    mapFrom((src) => src.categories),
+                ),
+                forMember(
+                    (dest) => dest.description,
+                    mapFrom((src) => src.description),
+                ),
+                forMember(
+                    (dest) => dest.onlinePlayers,
+                    mapFrom((src) => src['players']['online'] ?? 0),
+                ),
+                forMember(
+                    (dest) => dest.maxPlayers,
+                    mapFrom((src) => src['players']['max'] ?? 0),
+                ),
+                forMember(
+                    (dest) => dest.versions,
+                    mapFrom((src) => src.versions),
+                ),
+                forMember(
+                    (dest) => dest.verificationCode,
+                    mapFrom((src) => src?.verification?.code),
+                ),
+            );
         };
     }
 }

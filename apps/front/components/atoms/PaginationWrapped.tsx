@@ -1,4 +1,4 @@
-import {Pagination} from '@mui/material';
+import Pagination from '@mui/material/Pagination';
 
 type PaginationWrappedProps = {
     items: Array<unknown>;
@@ -15,12 +15,12 @@ const PaginationWrapped = ({
 }: PaginationWrappedProps) => {
     return (
         <Pagination
-            showFirstButton={true}
-            showLastButton={true}
+            showFirstButton
+            showLastButton
             shape="rounded"
-            count={pages}
-            variant="outlined"
             color="primary"
+            variant="outlined"
+            count={pages}
             defaultPage={1}
             page={currentPage}
             onChange={(_, value) => setCurrentPage(value)}

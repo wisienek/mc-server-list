@@ -2,21 +2,21 @@
     "cancel": "Anuluj",
     "genericError": "Wystąpił błąd.",
     "profile": {
-        "loginDiscord": "Zaloguj się przez Discord!",
-        "logout": "Wyloguj się",
+        "loginDiscord": "Zaloguj się przez Discorda!",
+        "logout": "Wyloguj",
         "password": {
             "setCredentials": "Ustaw swoje dane:",
             "successfullySet": "Dane zapisane pomyślnie!",
             "credentialsSaveError": "Wystąpił błąd podczas zapisywania danych.",
             "password": "Hasło",
-            "passwordPlaceholder": "Proszę wprowadź hasło",
+            "passwordPlaceholder": "Wprowadź hasło",
             "saving": "Zapisywanie",
             "save": "Zapisz dane"
         }
     },
     "copy": {
         "copied": "Skopiowano!",
-        "label": "Kopiuj do schowka"
+        "label": "Skopiuj do schowka"
     },
     "filters": {
         "searchLabel": "Szukaj nazwy lub opisu",
@@ -30,22 +30,65 @@
         "credits": "Stworzone i zaprojektowane przez <author>@Wisienek</author> 2025"
     },
     "page": {
+        "not-found": {
+            "title": "Nie znaleziono",
+            "description": "Strona, której szukasz, nie została znaleziona. Sprawdź adres i spróbuj ponownie.",
+            "return": "Powrót do strony głównej"
+        },
         "seo": {
-            "description": "Strona umożliwiająca łatwe dodawanie i udostępnianie serwerów Minecraft!",
+            "description": "Strona ułatwiająca dodawanie i udostępnianie serwerów Minecraft!",
             "title": "Lista serwerów Minecraft"
         },
         "list": {
             "playersOnline": "Gracze online:",
             "version": "Wersja:",
-            "verify": "Zweryfikuj serwer za pomocą kodu MOTD: <code></code>",
+            "verify": "Zweryfikuj serwer kodem MOTD: <code></code>",
             "claimServer": "Serwer nie ma jeszcze właściciela. Jeśli to Ty, kliknij ten przycisk!"
+        },
+        "hostPage": {
+            "javaIP": "IP Java",
+            "bedrockIP": "IP Bedrock",
+            "serverCategories": "Kategorie serwera",
+            "versions": "Wersje",
+            "playersOnline": "Gracze online",
+            "addCategory": "Dodaj kategorię",
+            "serverNamePlaceholder": "Wpisz tutaj nazwę swojego serwera!",
+            "addBanner": "Dodaj swój baner tutaj!",
+            "categoriesModal": {
+                "title": "Wybierz kategorie serwera",
+                "selectedCategoriesTitle": "Wybrane kategorie",
+                "showCategories": "Pokaż kategorie",
+                "hideCategories": "Ukryj kategorie",
+                "save": "Zapisz zmiany"
+            },
+            "bannerModal": {
+                "title": "Dodaj adres URL obrazu",
+                "description": "Wklej poniżej adres URL obrazu banera (najlepiej z platformy IMGUR). Współczynnik proporcji obrazu wynosi 5:1.",
+                "urlLabel": "Adres URL obrazu",
+                "invalidUrl": "Nieprawidłowy adres URL. Dozwolone są tylko obrazy z imgur.com z rozszerzeniami jpg, jpeg, png lub gif.",
+                "save": "Zapisz zmiany"
+            },
+            "srv": {
+                "header": "Klucz",
+                "value": "Wartość"
+            },
+            "srvRecord": "Dane rekordu SRV",
+            "description": "Opis",
+            "noDescription": "Brak opisu.",
+            "editDescription": "Przejdź do edycji",
+            "saveDescription": "Zapisz zmiany",
+            "exitEditingDescription": "Zakończ edycję",
+            "descriptionSavedTitle": "Opis zapisany!",
+            "descriptionSavedMessage": "Liczba znaków zmieniona z {initial} na {changed}",
+            "descriptionSaveErrorTitle": "Coś poszło nie tak!",
+            "descriptionSaveErrorMessage": "Z powodu nieznanego błędu opis nie został zapisany."
         }
     },
     "server": {
         "add": {
-            "newServer": "Stwórz nowy serwer",
+            "newServer": "Utwórz nowy serwer",
             "title": "Dodaj serwer do listy",
-            "hostName": "IP serwera / Nazwa hosta",
+            "hostName": "IP / Nazwa hosta serwera",
             "port": "Port serwera",
             "type": "Typ serwera",
             "isSubmitting": "Tworzenie...",
@@ -54,12 +97,12 @@
             "addressRequired": "Adres serwera jest wymagany.",
             "invalidAddress": "Musi być poprawnym adresem IPv4 lub nazwą hosta.",
             "portRequired": "Port jest wymagany.",
-            "portMin": "Port musi być co najmniej 1.",
-            "portMax": "Port musi być co najwyżej 65535.",
-            "verificationInstructions": "Skopiuj kod weryfikacyjny <code></code> do pliku MOTD serwera, następnie kliknij poniższy przycisk, aby rozpocząć proces weryfikacji.",
-            "expiresAt": "Wygasa: <expirationDate></expirationDate>",
+            "portMin": "Port musi wynosić co najmniej 1.",
+            "portMax": "Port może wynosić maksymalnie 65535.",
+            "verificationInstructions": "Skopiuj kod weryfikacyjny <code></code> do pliku MOTD serwera, a następnie kliknij przycisk poniżej, aby rozpocząć proces weryfikacji.",
+            "expiresAt": "Wygasa o <expirationDate></expirationDate>",
             "startVerification": "Rozpocznij weryfikację",
-            "serverVerificationTitle": "Weryfikuj serwer kodem"
+            "serverVerificationTitle": "Zweryfikuj serwer kodem"
         }
     }
 }

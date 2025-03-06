@@ -4,6 +4,14 @@ const sharedMixin: ThemeOptions = {
     shape: {
         borderRadius: 15,
     },
+    typography: {
+        fontFamily: '"Jersey 15", serif',
+        fontWeightLight: 300,
+        fontWeightRegular: 400,
+        fontWeightMedium: 550,
+        fontWeightBold: 700,
+        fontSize: 18,
+    },
 };
 
 const light: ThemeOptions = {

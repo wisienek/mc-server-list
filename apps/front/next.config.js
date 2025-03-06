@@ -8,17 +8,32 @@ const ENV = process.env.NEXT_PUBLIC_ENV;
 module.exports = async (phase, context) => {
     const defaultConfig = {
         images: {
+            domains: ['i.imgur.com', 'imgur.com', 'cdn.minecraft-server-list.com'],
             remotePatterns: [
-                {
-                    protocol: 'https',
-                    hostname: '**',
-                },
                 {
                     protocol: 'https',
                     hostname: 'cdn.minecraft-server-list.com',
                     port: '',
                     pathname: '/**',
                     search: '',
+                },
+                {
+                    protocol: 'https',
+                    hostname: 'i.imgur.com',
+                    port: '',
+                    pathname: '/**',
+                    search: '',
+                },
+                {
+                    protocol: 'https',
+                    hostname: 'imgur.com',
+                    port: '',
+                    pathname: '/**',
+                    search: '',
+                },
+                {
+                    protocol: 'https',
+                    hostname: '**',
                 },
             ],
         },

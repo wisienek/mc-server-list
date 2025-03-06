@@ -46,7 +46,7 @@ export class User {
 
     @OneToOne(() => UserCredentials, (credentials) => credentials.user, {
         cascade: true,
-        eager: true,
+        eager: false,
     })
     credentials: Relation<UserCredentials>;
 }

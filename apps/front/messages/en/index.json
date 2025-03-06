@@ -30,6 +30,11 @@
         "credits": "Created and designed by <author>@Wisienek</author> 2025"
     },
     "page": {
+        "not-found": {
+            "title": "Not Found",
+            "description": "The page that you requested could not be found, please check the address and try again.",
+            "return": "Return Home"
+        },
         "seo": {
             "description": "Website providing easy way to add and share minecraft servers!",
             "title": "Minecraft server list"
@@ -39,6 +44,44 @@
             "version": "Version:",
             "verify": "Verify server with MOTD code: <code></code>",
             "claimServer": "Server doesn't have an owner yet. If it's you click this button!"
+        },
+        "hostPage": {
+            "javaIP": "Java IP",
+            "bedrockIP": "Bedrock IP",
+            "serverCategories": "Server Categories",
+            "versions": "Versions",
+            "playersOnline": "Online players",
+            "addCategory": "Add category",
+            "serverNamePlaceholder": "Write your server name here!",
+            "addBanner": "Add your banner here!",
+            "categoriesModal": {
+                "title": "Pick server categories",
+                "selectedCategoriesTitle": "Selected categories",
+                "showCategories": "Show categories",
+                "hideCategories": "Hide categories",
+                "save": "Save changes"
+            },
+            "bannerModal": {
+                "title": "Please add an image URL",
+                "description": "In the input below paste in an URL to the banner image (preferably on IMGUR platform). The aspect ratio for image displayed is 5:1.",
+                "urlLabel": "Image URL",
+                "invalidUrl": "Invalid URL. Only images from imgur.com with jpg, jpeg, png, or gif extensions are allowed.",
+                "save": "Save changes"
+            },
+            "srv": {
+                "header": "Key",
+                "value": "Value"
+            },
+            "srvRecord": "SRV Record data",
+            "description": "Description",
+            "noDescription": "No description provided.",
+            "editDescription": "Enter editing mode",
+            "saveDescription": "Save changes",
+            "exitEditingDescription": "Finish editing",
+            "descriptionSavedTitle": "Description saved!",
+            "descriptionSavedMessage": "Changed number of characters from {initial} to {changed}",
+            "descriptionSaveErrorTitle": "Something went wrong!",
+            "descriptionSaveErrorMessage": "Due to some unknown error description was not saved."
         }
     },
     "server": {

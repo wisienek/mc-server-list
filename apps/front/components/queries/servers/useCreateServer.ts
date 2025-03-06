@@ -1,26 +1,14 @@
 import {getQueryClient} from '@lib/front/components/atoms/getQueryClient';
 import {useMutation} from '@tanstack/react-query';
-import axios from 'axios';
 import {CreateServerDto, CreateServerResponseDto} from '@shared/dto';
+import {createServer} from '@front/components/actions/createServer';
 
 export const useCreateServer = () => {
     const queryClient = getQueryClient();
 
     return useMutation<CreateServerResponseDto, Error, CreateServerDto>(
         {
-            mutationFn: async (data) => {
-                const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/servers`;
-
-                const response = await axios.post<CreateServerResponseDto>(
-                    endpoint,
-                    data,
-                    {
-                        withCredentials: true,
-                    },
-                );
-
-                return response.data;
-            },
+            mutationFn: createServer,
             onSuccess: () => {
                 queryClient.invalidateQueries({
                     queryKey: ['/servers'],

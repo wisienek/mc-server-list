@@ -1,4 +1,4 @@
-import NotFoundPage from '../../../components/organisms/NotFound';
+import NotFoundPage from '@front/components/organisms/NotFound';
 
 export const metadata = {
     title: 'Page Not Found - Minecraft Server List',

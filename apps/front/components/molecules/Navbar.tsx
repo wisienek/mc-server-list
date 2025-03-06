@@ -18,16 +18,14 @@ function Navbar() {
     const profile = useAppSelector((state) => state.auth.user);
 
     return (
-        <>
-            <StyledAppBar position="static">
-                <Container maxWidth="xl">
-                    <Toolbar disableGutters sx={{justifyContent: 'space-between'}}>
-                        <MenuLogo />
-                        <DiscordProfile user={profile} />
-                    </Toolbar>
-                </Container>
-            </StyledAppBar>
-        </>
+        <StyledAppBar position="static">
+            <Container maxWidth="xl">
+                <Toolbar disableGutters sx={{justifyContent: 'space-between'}}>
+                    <MenuLogo />
+                    <DiscordProfile user={profile} />
+                </Toolbar>
+            </Container>
+        </StyledAppBar>
     );
 }
 

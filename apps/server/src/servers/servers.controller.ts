@@ -15,14 +15,13 @@ import {
     Controller,
     Delete,
     Get,
-    NotImplementedException,
     Param,
     Patch,
     Post,
     Query,
     UseGuards,
 } from '@nestjs/common';
-import {Server, User} from '@backend/db';
+import {User} from '@backend/db';
 import {seconds, SkipThrottle, Throttle} from '@nestjs/throttler';
 import {
     CreateServerDto,
@@ -31,6 +30,7 @@ import {
     Pagination,
     ServerDetailsDto,
     ServerSummaryDto,
+    UpdateServerDetailsDto,
     VerifyServerDto,
 } from '@shared/dto';
 import {
@@ -96,9 +96,11 @@ export class ServersController {
         description: 'hostname of the server',
     })
     @Get(':host')
-    async getServer(@Param('host') host: string): Promise<ServerDetailsDto> {
-        const server = await this.serversService.getServer(host);
-        return this.mapper.map(server, Server, ServerDetailsDto);
+    async getServer(
+        @SessionUser() user: User,
+        @Param('host') host: string,
+    ): Promise<ServerDetailsDto> {
+        return await this.serversService.getServer(host, user?.id);
     }
 
     @ApiParam({
@@ -130,11 +132,7 @@ export class ServersController {
     async verifyServer(@Body() data: VerifyServerDto): Promise<ServerSummaryDto> {
         await this.commandBus.execute(new VerifyServerCommand(data.hostname));
 
-        return this.mapper.map(
-            await this.serversService.getServer(data.hostname),
-            Server,
-            ServerSummaryDto,
-        );
+        return await this.serversService.getServer(data.hostname);
     }
 
     @ApiParam({
@@ -144,8 +142,12 @@ export class ServersController {
     })
     @UseGuards(AuthenticatedGuard)
     @Patch(':host/details')
-    async createDetails(@SessionUser() user: User, @Param('host') host: string) {
-        throw new NotImplementedException();
+    async createDetails(
+        @SessionUser() user: User,
+        @Param('host') host: string,
+        @Body() data: UpdateServerDetailsDto,
+    ): Promise<ServerDetailsDto> {
+        return this.serversService.updateServerDetails(host, user.id, data);
     }
 
     @ApiParam({

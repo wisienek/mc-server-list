@@ -4,3 +4,4 @@ export * from './server-verification-offline.error';
 export * from './server-verification-unsuccessful.error';
 export * from './server-not-found.error';
 export * from './already-given-a-vote.error';
+export * from './server-not-owned-by-user.error';

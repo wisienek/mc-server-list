@@ -1,6 +1,7 @@
 'use client';
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import {styled} from '@mui/material/styles';
+import {useTranslations} from 'next-intl';
 import {Link} from '../../i18n/routing';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -22,6 +23,7 @@ const Title = styled(Typography)(({theme}) => ({
     fontSize: '2rem',
     fontWeight: 700,
     marginBottom: theme.spacing(2),
+    color: theme.palette.text.primary,
 }));
 
 const Text = styled(Typography)(({theme}) => ({
@@ -44,18 +46,17 @@ const StyledButton = styled(Button)(({theme}) => ({
 }));
 
 const NotFoundPage = () => {
+    const t = useTranslations('page.not-found');
+
     return (
         <Container>
             <Section>
-                <Title>Not Found</Title>
-                <Text>
-                    The page that you requested could not be found, please check the
-                    address and try again.
-                </Text>
+                <Title>{t('title')}</Title>
+                <Text>{t('description')}</Text>
                 <StyledLink href="/">
                     <StyledButton variant="contained" color="primary">
                         <ChevronLeft width="24" height="24" />
-                        <span>Return Home</span>
+                        <span>{t('return')}</span>
                     </StyledButton>
                 </StyledLink>
             </Section>

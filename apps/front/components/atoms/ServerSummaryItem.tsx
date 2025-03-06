@@ -1,25 +1,24 @@
 'use client';
-import {addNotification} from '@lib/front/components/store/notificationsSlice';
 import {useAppDispatch, useAppSelector} from '@lib/front/components/store/store';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import Tooltip from '@mui/material/Tooltip';
-import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
-import Paper from '@mui/material/Paper';
-import {styled} from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import {ServerSummaryDto} from '@shared/dto';
-import {useTranslations} from 'next-intl';
-import Image from 'next/image';
-import {useRouter} from 'next/navigation';
-import {type FC, type ReactNode, useState} from 'react';
-import {shortenText} from '@core';
-import {defaultServerIcon} from '../mocks/serverSummaryMocks';
-import {useVoteForServer} from '../queries/servers/voteForServer';
-import CategoryIcon from './CategoryIcon';
-import CopyableTypography from './CopyableTypography';
-import {Link} from '@front/i18n/routing';
+import {addNotification} from '@lib/front/components/store/notificationsSlice';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import Typography from '@mui/material/Typography';
+import {styled} from '@mui/material/styles';
+import Tooltip from '@mui/material/Tooltip';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import {type FC, type ReactNode, useState} from 'react';
+import {useTranslations} from 'next-intl';
+import {useRouter} from 'next/navigation';
+import Image from 'next/image';
+import {shortenText} from '@core';
+import type {ServerPaginatedListWithMDXSource} from '@front/components/queries/servers/serverListQuery';
+import {useVoteForServer} from '@front/components/queries/servers/useVoteForServer';
+import {defaultServerIcon} from '@front/components/mocks/serverSummaryMocks';
+import {Link} from '@front/i18n/routing';
+import CopyableTypography from './CopyableTypography';
+import ServerLikeButton from './ServerLikeButton';
+import CategoryIcon from './CategoryIcon';
 
 const StyledServerSummary = styled(Paper)(({theme}) => ({
     padding: theme.spacing(1),
@@ -45,8 +44,11 @@ const StyledServerIcon = styled(Image)(({theme}) => ({
     borderRadius: theme.shape.borderRadius,
 }));
 
-const StyledServerBanner = styled(Image)(() => ({
-    width: '80%',
+const StyledServerBanner = styled(Image)(({theme}) => ({
+    width: '100%',
+    [theme.breakpoints.down('md')]: {
+        display: 'none',
+    },
 }));
 
 const StyledNameAndRankingContainer = styled('div')(() => ({
@@ -56,11 +58,32 @@ const StyledNameAndRankingContainer = styled('div')(() => ({
     alignItems: 'center',
 }));
 
+const ServerBannerContainer = styled('div')(({theme}) => ({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '95%',
+    margin: `0 auto`,
+    [theme.breakpoints.down('md')]: {
+        display: 'none',
+    },
+}));
+
+const ServerDescriptionContainer = styled('div')(() => ({
+    position: 'relative',
+    maxWidth: '100%',
+    overflow: 'hidden',
+    display: '-webkit-box',
+    WebkitLineClamp: 3,
+    WebkitBoxOrient: 'vertical',
+    textOverflow: 'ellipsis',
+    transition: 'max-height 0.3s ease-in-out',
+}));
+
 const ServerDescription = styled('div')(({theme}) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItems: 'center',
     padding: theme.spacing(1.5),
 }));
 
@@ -77,8 +100,8 @@ const CategoriesContainer = styled(Box)(({theme}) => ({
 }));
 
 type ServerSummaryProps = {
-    server: ServerSummaryDto;
-    setShowVerificationModal: (server: ServerSummaryDto) => void;
+    server: ServerPaginatedListWithMDXSource;
+    setShowVerificationModal: (server: ServerPaginatedListWithMDXSource) => void;
 };
 
 const ServerSummaryItem: FC<ServerSummaryProps> = ({
@@ -146,7 +169,7 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
     const onlinePlayers = server.onlinePlayers ?? 0;
     const maxPlayers = server.maxPlayers ?? 0;
     const categories = server.categories ?? [];
-    const description = shortenText(server?.description ?? '', 640);
+    const description = shortenText(server?.description ?? '', 512);
     const linkTo = `/${server.host}`;
 
     const LinkWrapper = ({children}: {children: ReactNode}) => (
@@ -171,41 +194,41 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
                         height={50}
                     />
                 </LinkWrapper>
+
                 <StyledNameAndRankingContainer>
                     <Typography variant="h6" color="textPrimary" noWrap>
                         {server.name}
                     </Typography>
+
                     <Typography variant="subtitle1" color="textPrimary" noWrap>
                         #{server.ranking ?? 'n/a'}
                     </Typography>
                 </StyledNameAndRankingContainer>
             </IconContainer>
+
             <ServerDescription>
                 {server.banner && (
                     <LinkWrapper>
-                        <StyledServerBanner
-                            src={server.banner}
-                            alt="server banner"
-                            width="500"
-                            height="60"
-                        />
+                        <ServerBannerContainer>
+                            <StyledServerBanner
+                                unoptimized
+                                loader={() => server.banner}
+                                src={server.banner}
+                                alt="server banner"
+                                width="500"
+                                height="60"
+                            />
+                        </ServerBannerContainer>
                     </LinkWrapper>
                 )}
+
                 {description && (
-                    <Typography
-                        variant="body2"
-                        sx={{
-                            display: '-webkit-box',
-                            whiteSpace: 'pre-line',
-                            WebkitLineClamp: server.banner ? 2 : 6,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
-                        }}
-                    >
-                        {description}
-                    </Typography>
+                    <ServerDescriptionContainer>
+                        {server.mdxSource.content ?? description}
+                    </ServerDescriptionContainer>
                 )}
             </ServerDescription>
+
             <StatsContainer>
                 <Box
                     display="flex"
@@ -234,22 +257,13 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
                         ))}
                     </CategoriesContainer>
                 </Box>
-                <Box
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <IconButton
-                        onClick={handleFavoriteClick}
-                        size="small"
-                        sx={{cursor: profile ? 'pointer' : 'not-allowed'}}
-                        disabled={!profile}
-                    >
-                        <FavoriteIcon sx={{color: isLikedByUser ? 'red' : 'grey'}} />
-                    </IconButton>
-                    <Typography variant="caption">{votes}</Typography>
-                </Box>
+
+                <ServerLikeButton
+                    handleFavoriteClick={handleFavoriteClick}
+                    profile={profile}
+                    isLikedByUser={isLikedByUser}
+                    votes={votes}
+                />
             </StatsContainer>
             {unverifiedIcon}
         </StyledServerSummary>

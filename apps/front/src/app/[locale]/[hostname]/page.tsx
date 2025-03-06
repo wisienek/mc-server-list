@@ -1,33 +1,29 @@
-import {ServerDetailsDto} from '@shared/dto';
-import axios from 'axios';
-import ServerDetails from '@front/components/organisms/ServerDetailsPage';
-import type {LocaleParams} from '../layout';
+import {getServerDetails} from '@front/components/actions/getServerDetails';
+import {Metadata, ResolvingMetadata} from 'next';
+import type {HostnamePageProps} from './layout';
 
-export const revalidate = 3600;
+export const revalidate = 3_600;
 export const dynamicParams = true;
 
-export async function generateStaticParams() {
-    const hosts: string[] = await axios
-        .get(`${process.env.NEXT_PUBLIC_API_URL}/servers/hostnames`)
-        .then((res) => res?.data);
+export async function generateMetadata(
+    props: HostnamePageProps,
+    parent: ResolvingMetadata,
+): Promise<Metadata> {
+    const hostName = (await props.params).hostname;
+    const serverDetails = await getServerDetails(hostName);
 
-    return (hosts ?? []).map((host) => ({
-        hostname: host,
-    }));
+    const previousImages = (await parent).openGraph?.images || [];
+
+    const images = [serverDetails.banner, serverDetails.icon].filter(Boolean);
+
+    return {
+        title: serverDetails.name ?? serverDetails.host,
+        openGraph: {
+            images: [...images, ...previousImages],
+        },
+    };
 }
 
-type HostnamePageProps = {
-    params: Promise<LocaleParams & {hostname: string}>;
-};
-
-export default async function Page(props: HostnamePageProps) {
-    const hostName = (await props.params).hostname;
-
-    const serverDetails = (
-        await axios.get<ServerDetailsDto>(
-            `${process.env.NEXT_PUBLIC_API_URL}/servers/${hostName}`,
-        )
-    ).data;
-
-    return <ServerDetails server={serverDetails} />;
+export default async function Page() {
+    return <></>;
 }
