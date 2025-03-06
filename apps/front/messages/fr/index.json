@@ -30,6 +30,11 @@
         "credits": "Créé et conçu par <author>@Wisienek</author> 2025"
     },
     "page": {
+        "not-found": {
+            "title": "Non trouvé",
+            "description": "La page demandée est introuvable, veuillez vérifier l'adresse et réessayer.",
+            "return": "Retourner à l'accueil"
+        },
         "seo": {
             "description": "Site web offrant un moyen simple d'ajouter et de partager des serveurs Minecraft!",
             "title": "Liste des serveurs Minecraft"
@@ -38,7 +43,7 @@
             "playersOnline": "Joueurs en ligne:",
             "version": "Version:",
             "verify": "Vérifiez le serveur avec le code MOTD: <code></code>",
-            "claimServer": "Le serveur n'a pas encore de propriétaire. Si c'est vous, cliquez sur ce bouton!"
+            "claimServer": "Ce serveur n'a pas encore de propriétaire. Si c'est vous, cliquez sur ce bouton!"
         },
         "hostPage": {
             "javaIP": "IP Java",
@@ -47,13 +52,36 @@
             "versions": "Versions",
             "playersOnline": "Joueurs en ligne",
             "addCategory": "Ajouter une catégorie",
+            "serverNamePlaceholder": "Écrivez le nom de votre serveur ici!",
+            "addBanner": "Ajoutez votre bannière ici!",
             "categoriesModal": {
                 "title": "Choisissez les catégories du serveur",
                 "selectedCategoriesTitle": "Catégories sélectionnées",
                 "showCategories": "Afficher les catégories",
                 "hideCategories": "Masquer les catégories",
                 "save": "Enregistrer les modifications"
-            }
+            },
+            "bannerModal": {
+                "title": "Veuillez ajouter une URL d'image",
+                "description": "Collez ci-dessous une URL d'image de la bannière (de préférence sur la plateforme IMGUR). Le rapport d'aspect affiché est de 5:1.",
+                "urlLabel": "URL de l'image",
+                "invalidUrl": "URL invalide. Seules les images de imgur.com avec les extensions jpg, jpeg, png ou gif sont autorisées.",
+                "save": "Enregistrer les modifications"
+            },
+            "srv": {
+                "header": "Clé",
+                "value": "Valeur"
+            },
+            "srvRecord": "Données d'enregistrement SRV",
+            "description": "Description",
+            "noDescription": "Aucune description fournie.",
+            "editDescription": "Passer en mode édition",
+            "saveDescription": "Enregistrer les modifications",
+            "exitEditingDescription": "Terminer l'édition",
+            "descriptionSavedTitle": "Description enregistrée!",
+            "descriptionSavedMessage": "Nombre de caractères modifié de {initial} à {changed}",
+            "descriptionSaveErrorTitle": "Une erreur est survenue!",
+            "descriptionSaveErrorMessage": "En raison d'une erreur inconnue, la description n'a pas été enregistrée."
         }
     },
     "server": {

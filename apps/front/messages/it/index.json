@@ -30,6 +30,11 @@
         "credits": "Creato e progettato da <author>@Wisienek</author> 2025"
     },
     "page": {
+        "not-found": {
+            "title": "Non trovato",
+            "description": "La pagina richiesta non è stata trovata, controlla l'indirizzo e riprova.",
+            "return": "Torna alla home"
+        },
         "seo": {
             "description": "Sito web che offre un modo semplice per aggiungere e condividere server Minecraft!",
             "title": "Elenco server Minecraft"
@@ -47,13 +52,36 @@
             "versions": "Versioni",
             "playersOnline": "Giocatori online",
             "addCategory": "Aggiungi categoria",
+            "serverNamePlaceholder": "Scrivi qui il nome del tuo server!",
+            "addBanner": "Aggiungi il tuo banner qui!",
             "categoriesModal": {
                 "title": "Scegli le categorie del server",
                 "selectedCategoriesTitle": "Categorie selezionate",
                 "showCategories": "Mostra categorie",
                 "hideCategories": "Nascondi categorie",
                 "save": "Salva modifiche"
-            }
+            },
+            "bannerModal": {
+                "title": "Aggiungi un URL immagine",
+                "description": "Nel campo sottostante incolla un URL dell'immagine del banner (preferibilmente su IMGUR). Il rapporto di aspetto dell'immagine visualizzata è 5:1.",
+                "urlLabel": "URL immagine",
+                "invalidUrl": "URL non valido. Sono consentite solo immagini da imgur.com con estensioni jpg, jpeg, png o gif.",
+                "save": "Salva modifiche"
+            },
+            "srv": {
+                "header": "Chiave",
+                "value": "Valore"
+            },
+            "srvRecord": "Dati record SRV",
+            "description": "Descrizione",
+            "noDescription": "Nessuna descrizione fornita.",
+            "editDescription": "Entra in modalità modifica",
+            "saveDescription": "Salva modifiche",
+            "exitEditingDescription": "Termina modifica",
+            "descriptionSavedTitle": "Descrizione salvata!",
+            "descriptionSavedMessage": "Numero di caratteri modificato da {initial} a {changed}",
+            "descriptionSaveErrorTitle": "Qualcosa è andato storto!",
+            "descriptionSaveErrorMessage": "A causa di un errore sconosciuto la descrizione non è stata salvata."
         }
     },
     "server": {

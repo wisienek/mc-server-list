@@ -32,8 +32,8 @@
     "page": {
         "not-found": {
             "title": "Nie znaleziono",
-            "description": "Nie można znaleźć żądanej strony. Sprawdź adres i spróbuj ponownie.",
-            "return": "Powrót"
+            "description": "Strona, której szukasz, nie została znaleziona. Sprawdź adres i spróbuj ponownie.",
+            "return": "Powrót do strony głównej"
         },
         "seo": {
             "description": "Strona ułatwiająca dodawanie i udostępnianie serwerów Minecraft!",
