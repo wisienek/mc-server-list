@@ -3,6 +3,7 @@
     "genericError": "Une erreur est survenue.",
     "profile": {
         "loginDiscord": "Connectez-vous avec Discord!",
+        "login": "Connectez-vous avec vos identifiants",
         "logout": "Déconnexion",
         "password": {
             "setCredentials": "Définissez vos identifiants:",

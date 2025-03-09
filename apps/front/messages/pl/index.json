@@ -3,6 +3,7 @@
     "genericError": "Wystąpił błąd.",
     "profile": {
         "loginDiscord": "Zaloguj się przez Discorda!",
+        "login": "Zaloguj się za pomocą danych uwierzytelniających",
         "logout": "Wyloguj",
         "password": {
             "setCredentials": "Ustaw swoje dane:",

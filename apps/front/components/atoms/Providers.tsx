@@ -1,14 +1,17 @@
 'use client';
+import InitializeAuth, {
+    InitializeAuthProps,
+} from '@front/components/store/InitializeAuth';
 import {type AppStore, makeStore} from '@lib/front/components/store/store';
-import React, {useRef} from 'react';
+import React, {type ReactNode, useRef} from 'react';
 import {Provider} from 'react-redux';
-import InitializeAuth from '../store/InitializeAuth';
 
 interface ProvidersProps {
-    children: React.ReactNode;
+    children: ReactNode;
+    auth: InitializeAuthProps;
 }
 
-function Providers({children}: ProvidersProps) {
+function Providers({children, auth}: ProvidersProps) {
     const storeRef = useRef<AppStore | null>(null);
     if (!storeRef.current) {
         storeRef.current = makeStore();
@@ -16,7 +19,7 @@ function Providers({children}: ProvidersProps) {
 
     return (
         <Provider store={storeRef.current}>
-            <InitializeAuth />
+            <InitializeAuth {...auth} />
             {children}
         </Provider>
     );

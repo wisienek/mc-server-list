@@ -1,6 +1,6 @@
-import {CookieNames} from '@shared/enums';
 import {notFound} from 'next/navigation';
 import AuthCallbackPage from '@front/components/organisms/AuthCallbackPage';
+import {discordLogin} from '@front/components/actions/discordLogin';
 
 type PageProps = {
     searchParams: Promise<{
@@ -16,15 +16,9 @@ const Page = async ({searchParams}: PageProps) => {
         notFound();
     }
 
-    const fetchResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/login?code=${code}`,
-        {credentials: 'include'},
-    );
-    const extractedCookie = fetchResponse.headers
-        .getSetCookie()
-        .find((i) => i.includes(CookieNames.SESSION_ID));
+    const sessionCookie = await discordLogin(Array.isArray(code) ? code[0] : code);
 
-    return <AuthCallbackPage cookieString={extractedCookie} />;
+    return <AuthCallbackPage cookieString={sessionCookie} />;
 };
 
 export default Page;

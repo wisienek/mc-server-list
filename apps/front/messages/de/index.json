@@ -3,6 +3,7 @@
     "genericError": "Ein Fehler ist aufgetreten.",
     "profile": {
         "loginDiscord": "Mit Discord anmelden!",
+        "login": "Mit Anmeldeinformationen einloggen",
         "logout": "Abmelden",
         "password": {
             "setCredentials": "Legen Sie Ihre Anmeldedaten fest:",

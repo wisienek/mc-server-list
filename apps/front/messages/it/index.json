@@ -3,6 +3,7 @@
     "genericError": "Si è verificato un errore.",
     "profile": {
         "loginDiscord": "Accedi con Discord!",
+        "login": "Accedi con le credenziali",
         "logout": "Disconnetti",
         "password": {
             "setCredentials": "Imposta le tue credenziali:",

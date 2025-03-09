@@ -5,7 +5,11 @@ import {cookies} from 'next/headers';
 
 export async function customFetch<T>(
     url: string,
-    options: RequestInit = {},
+    options: RequestInit = {
+        next: {
+            revalidate: 60,
+        },
+    },
 ): Promise<T> {
     const cookieStore = await cookies();
     const sessionCookieValue = cookieStore.get(CookieNames.SESSION_ID)?.value;
@@ -16,15 +20,20 @@ export async function customFetch<T>(
         headers.append('Cookie', `${CookieNames.SESSION_ID}=${sessionCookieValue}`);
     }
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
-        ...options,
-        credentials: 'include',
-        headers,
-    });
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
+            ...options,
+            credentials: 'include',
+            headers,
+        });
 
-    if (!response.ok) {
-        throw new Error(await response.text());
+        if (!response.ok) {
+            throw response.statusText;
+        }
+
+        return response.json();
+    } catch (error) {
+        console.error(`Error on fetch: ${JSON.stringify({url, options})}`, error);
+        return null;
     }
-
-    return response.json();
 }

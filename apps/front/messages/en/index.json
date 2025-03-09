@@ -3,6 +3,7 @@
     "genericError": "An error occurred.",
     "profile": {
         "loginDiscord": "Login with discord!",
+        "login": "Login with credentials",
         "logout": "Logout",
         "password": {
             "setCredentials": "Set Your credentials:",

@@ -1,21 +1,17 @@
+import {addNotification} from '@lib/front/components/store/notificationsSlice';
 import {getQueryClient} from '@lib/front/components/atoms/getQueryClient';
+import {useAppDispatch} from '@lib/front/components/store/store';
+import {logout} from '@lib/front/components/store/authSlice';
 import {useMutation} from '@tanstack/react-query';
-import axios from 'axios';
+import {logoutUser} from '@front/components/actions/logoutUser';
 
 export const useUserLogout = () => {
     const queryClient = getQueryClient();
+    const dispatch = useAppDispatch();
 
     return useMutation(
         {
-            mutationFn: async () => {
-                const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/users/logout`;
-
-                const response = await axios.post<number>(endpoint, null, {
-                    withCredentials: true,
-                });
-
-                return response.data;
-            },
+            mutationFn: logoutUser,
             onSuccess: () => {
                 queryClient.invalidateQueries({
                     queryKey: ['/servers'],
@@ -25,6 +21,18 @@ export const useUserLogout = () => {
                     queryKey: ['/users/status', '/users/has-credentials'],
                     exact: false,
                 });
+
+                dispatch(logout());
+            },
+            onError: (error) => {
+                dispatch(
+                    addNotification({
+                        id: error.stack,
+                        level: 'Error',
+                        title: error.name,
+                        description: error.message,
+                    }),
+                );
             },
         },
         queryClient,

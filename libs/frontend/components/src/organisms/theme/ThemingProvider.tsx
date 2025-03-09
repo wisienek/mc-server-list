@@ -1,7 +1,7 @@
 'use client';
-import {type ReactNode, useCallback, useEffect, useMemo, useState} from 'react';
+import {type ReactNode, useMemo} from 'react';
 import {createTheme, StyledEngineProvider, ThemeProvider} from '@mui/material';
-import Cookies from 'js-cookie';
+import {useAppSelector} from '../../store/store';
 
 import Themes, {type ThemeNames, type ThemeTypes} from './themes';
 
@@ -11,38 +11,12 @@ type ProviderProps = {
     children: ReactNode;
 };
 
-const SELECTED_THEME_MODE = 'SELECTED_THEME_MODE' as const;
-
 type CreateThemeProps = Parameters<typeof createTheme>[0];
 
 const ThemeDefaultOptions = {} as const satisfies CreateThemeProps;
 
-function ThemingProvider({
-    children,
-    defaultTheme = 'main',
-    defaultType = 'dark',
-}: ProviderProps) {
-    const [isClient, setIsClient] = useState<boolean>(false);
-    const [themeMode, setThemeMode] = useState<ThemeTypes>(defaultType);
-
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
-
-    const initializeThemeSettings = useCallback(() => {
-        const savedMode =
-            (Cookies.get(SELECTED_THEME_MODE) as ThemeTypes) || defaultType;
-
-        Cookies.set(SELECTED_THEME_MODE, savedMode);
-
-        setThemeMode(savedMode);
-    }, [defaultType]);
-
-    useEffect(() => {
-        if (isClient) {
-            initializeThemeSettings();
-        }
-    }, [isClient, initializeThemeSettings]);
+function ThemingProvider({children, defaultTheme = 'main'}: ProviderProps) {
+    const themeMode = useAppSelector((store) => store.theme.mode);
 
     const currentTheme = useMemo(() => {
         if (!Themes[defaultTheme][themeMode]) {
