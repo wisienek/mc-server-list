@@ -1,4 +1,5 @@
 import {getUserData} from '@front/components/actions/getUserData';
+import LocaleSwitcher from './LocaleSwitcher';
 import StyledProfileContainer from './StyledProfileContainer';
 import ThemeSwitch from './dark-mode-switcher/ThemeSwitch';
 import LoginWithDiscord from './LoginWithDiscord';
@@ -29,6 +30,7 @@ export default async function Profile() {
 
     return (
         <StyledProfileContainer>
+            <LocaleSwitcher />
             <ThemeSwitch />
             {user ? <UserContent /> : <NoUserContent />}
         </StyledProfileContainer>

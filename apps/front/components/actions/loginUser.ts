@@ -28,12 +28,6 @@ export async function loginUser(data: {
                 const parsedCookieJSON = parseCookieString(cookie);
                 const decodedValue = decodeURIComponent(parsedCookieJSON.value);
 
-                console.log({
-                    cookie,
-                    parsedCookieJSON,
-                    decodedValue,
-                });
-
                 cookieStore.set(parsedCookieJSON.name, decodedValue, {
                     expires: parsedCookieJSON.expires,
                 });
