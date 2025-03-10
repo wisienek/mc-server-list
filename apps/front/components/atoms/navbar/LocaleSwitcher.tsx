@@ -10,8 +10,8 @@ import MenuItem from '@mui/material/MenuItem';
 import {styled} from '@mui/material/styles';
 import Menu from '@mui/material/Menu';
 import Box from '@mui/material/Box';
+import {NextLocaleCookieKey} from '@front/consts';
 import {routing} from '@front/i18n/routing';
-import {NextLocaleCookieKey} from '../../../consts';
 
 const localeFlags: Record<string, string> = {
     en: '🇬🇧',
