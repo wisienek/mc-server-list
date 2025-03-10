@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import MuiModal, {ModalProps as MuiModalProps} from '@mui/material/Modal';
+import MuiModal, {type ModalProps as MuiModalProps} from '@mui/material/Modal';
 import {styled} from '@mui/material/styles';
 import type {ReactNode} from 'react';
 

@@ -8,16 +8,17 @@ export async function updateServerDetails(
     host: string,
     details: UpdateServerDetailsDto,
 ): Promise<ServerDetailsDto> {
-    const response = await customFetch<ServerDetailsDto>(
+    return await customFetch<ServerDetailsDto>(
         `/servers/${host}/details`,
         {
             method: 'PATCH',
             body: JSON.stringify(details),
         },
+        {
+            onSuccess: () => {
+                revalidateTag(`/servers/${host}`);
+                revalidateTag('/servers');
+            },
+        },
     );
-
-    revalidateTag(`/servers/${host}`);
-    revalidateTag('/servers');
-
-    return response;
 }

@@ -1,13 +1,17 @@
 import {useDispatch, useSelector, useStore} from 'react-redux';
 import {configureStore} from '@reduxjs/toolkit';
-import authReducer from './authSlice';
 import notificationReducer from './notificationsSlice';
+import themeReducer from './themeSlice';
+import modalReducer from './modalSlice';
+import authReducer from './authSlice';
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
             auth: authReducer,
             notifications: notificationReducer,
+            theme: themeReducer,
+            modal: modalReducer,
         },
         devTools: true,
     });

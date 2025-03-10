@@ -13,16 +13,17 @@ export async function verifyServer(
         type: server.type,
     };
 
-    const response = await customFetch<ServerSummaryDto>(
+    return await customFetch<ServerSummaryDto>(
         `/servers/${server.host}/verify`,
         {
             method: 'PATCH',
             body: JSON.stringify(payload),
         },
+        {
+            onSuccess: () => {
+                revalidateTag(`/servers/${server.host}`);
+                revalidateTag('/servers');
+            },
+        },
     );
-
-    revalidateTag(`/servers/${server.host}`);
-    revalidateTag('/servers');
-
-    return response;
 }

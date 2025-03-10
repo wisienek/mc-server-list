@@ -6,7 +6,7 @@ import {CookieNames} from '@shared/enums';
 import {TypeormStore} from 'connect-typeorm';
 import session from 'express-session';
 import {SimpleLogger} from '@backend/logger';
-import {ApiConfig} from '@backend/config';
+import {ApiConfig, ProjectConfig} from '@backend/config';
 import {Session} from '@backend/db';
 import passport from 'passport';
 import {Repository} from 'typeorm';
@@ -27,6 +27,7 @@ async function bootstrap() {
     app.enableShutdownHooks();
 
     const configService = app.get(ApiConfig);
+    const projectConfig = app.get(ProjectConfig);
 
     const sessionRepository: Repository<Session> = app.get(
         getRepositoryToken(Session),
@@ -38,8 +39,10 @@ async function bootstrap() {
             resave: false,
             saveUninitialized: false,
             cookie: {
-                secure: false,
-                maxAge: configService.TOKEN_EXPIRATION_HOURS * 60 * 60 * 1_000,
+                httpOnly: true,
+                secure: projectConfig.isProd,
+                maxAge: 1000 * 60 * 60 * 24 * 7,
+                sameSite: 'lax',
             },
             store: new TypeormStore().connect(sessionRepository),
         }),

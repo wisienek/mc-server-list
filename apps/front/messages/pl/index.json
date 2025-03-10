@@ -1,8 +1,13 @@
 {
     "cancel": "Anuluj",
     "genericError": "Wystąpił błąd.",
+    "themes": {
+        "switchToLight": "Przełącz na jasny motyw",
+        "switchToDark": "Przełącz na ciemny motyw"
+    },
     "profile": {
         "loginDiscord": "Zaloguj się przez Discorda!",
+        "login": "Zaloguj się za pomocą danych uwierzytelniających",
         "logout": "Wyloguj",
         "password": {
             "setCredentials": "Ustaw swoje dane:",
@@ -12,6 +17,19 @@
             "passwordPlaceholder": "Wprowadź hasło",
             "saving": "Zapisywanie",
             "save": "Zapisz dane"
+        },
+        "loginModal": {
+            "title": "Podaj dane logowania",
+            "email": "Adres E-Mail",
+            "password": "Hasło",
+            "submit": "Zaloguj",
+            "cancel": "Zamknij",
+            "invalidEmail": "Wprowadź poprawny adres e-mail.",
+            "invalidPassword": "Hasło musi mieć co najmniej 6 znaków.",
+            "loginNotification": {
+                "title": "Zalogowano!",
+                "description": "Pomyślnie zalogowano na konto {email}"
+            }
         }
     },
     "copy": {

@@ -72,18 +72,4 @@ export class UsersService {
     private async hashPassword(password: string): Promise<string> {
         return await bcrypt.hash(password, 10);
     }
-
-    /**
-     * Check if password is correct
-     * @param {string} originalPassword - password that is stored in database
-     * @param {string} checkingPassword - User provided password
-     * @returns {Promise<boolean>}
-     * @private
-     */
-    private async checkPassword(
-        originalPassword: string,
-        checkingPassword: string,
-    ): Promise<boolean> {
-        return await bcrypt.compare(checkingPassword, originalPassword);
-    }
 }

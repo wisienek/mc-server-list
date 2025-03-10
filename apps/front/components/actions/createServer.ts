@@ -7,12 +7,18 @@ import {customFetch} from './baseFetch';
 export async function createServer(
     data: CreateServerDto,
 ): Promise<CreateServerResponseDto> {
-    const response = await customFetch<CreateServerResponseDto>(`/servers`, {
-        method: 'POST',
-        body: JSON.stringify(data),
-    });
-
-    revalidateTag('/servers');
+    const response = await customFetch<CreateServerResponseDto>(
+        `/servers`,
+        {
+            method: 'POST',
+            body: JSON.stringify(data),
+        },
+        {
+            onSuccess: () => {
+                revalidateTag('/servers');
+            },
+        },
+    );
 
     return response;
 }
