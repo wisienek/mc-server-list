@@ -5,10 +5,12 @@ import {Fira_Mono, Inter, Jersey_15} from 'next/font/google';
 import {NextIntlClientProvider} from 'next-intl';
 import {notFound} from 'next/navigation';
 import type {ReactElement} from 'react';
+import {cookies} from 'next/headers';
 import NotificationsContainer from '@lib/front/components/organisms/NotificationCenter';
 import ThemingProvider from '@lib/front/components/organisms/theme/ThemingProvider';
 import StyledTemplateBody from '@front/components/atoms/StyledTemplateBody';
 import NoScriptMessage from '@front/components/molecules/NoScriptMessage';
+import ModalRoot from '@front/components/organisms/ModalRoot';
 import Navbar from '@front/components/molecules/Navbar';
 import Footer from '@front/components/molecules/Footer';
 import {routing} from '@front/i18n/routing';
@@ -27,7 +29,6 @@ export type LocaleParams = {
 
 export type LocaleLayoutProps = {
     children: ReactElement;
-    modal: ReactElement;
     params: Promise<LocaleParams>;
 };
 
@@ -118,8 +119,9 @@ export function generateStaticParams() {
     return routing.locales.map((locale) => ({locale}));
 }
 
-async function LocaleLayout({children, modal, params}: LocaleLayoutProps) {
+async function LocaleLayout({children, params}: LocaleLayoutProps) {
     const {locale} = await params;
+    const userCookies = await cookies();
     if (!routing.locales.includes(locale as never)) {
         notFound();
     }
@@ -127,9 +129,11 @@ async function LocaleLayout({children, modal, params}: LocaleLayoutProps) {
     setRequestLocale(locale);
     const messages = await getMessages({locale});
 
+    const selectedTheme = userCookies.get('SELECTED_THEME_MODE')?.value ?? 'dark';
+
     return (
         <html
-            className={`dark ${jerseyFont.className} ${interFont.className} ${firaMonoFont.className}`}
+            className={`${selectedTheme} ${jerseyFont.className} ${interFont.className} ${firaMonoFont.className}`}
             suppressHydrationWarning
         >
             <body>
@@ -141,8 +145,8 @@ async function LocaleLayout({children, modal, params}: LocaleLayoutProps) {
                             <Navbar />
                             <NoScriptMessage />
                             <div id="modal-root" />
+                            <ModalRoot />
                             {children}
-                            {modal}
                             <NotificationsContainer />
                             <Footer />
                         </StyledTemplateBody>

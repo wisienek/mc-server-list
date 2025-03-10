@@ -1,6 +1,10 @@
 {
     "cancel": "Annulla",
     "genericError": "Si è verificato un errore.",
+    "themes": {
+        "switchToLight": "Passa al tema chiaro",
+        "switchToDark": "Passa al tema scuro"
+    },
     "profile": {
         "loginDiscord": "Accedi con Discord!",
         "login": "Accedi con le credenziali",
@@ -13,6 +17,19 @@
             "passwordPlaceholder": "Inserisci una password",
             "saving": "Salvataggio",
             "save": "Salva credenziali"
+        },
+        "loginModal": {
+            "title": "Inserisci le tue credenziali di accesso",
+            "email": "Indirizzo Email",
+            "password": "Password",
+            "submit": "Accedi",
+            "cancel": "Chiudi",
+            "invalidEmail": "Inserisci un indirizzo email valido.",
+            "invalidPassword": "La password deve contenere almeno 6 caratteri.",
+            "loginNotification": {
+                "title": "Accesso effettuato!",
+                "description": "Accesso riuscito all'account {email}"
+            }
         }
     },
     "copy": {

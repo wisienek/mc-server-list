@@ -1,9 +1,15 @@
 import {Body, Controller, Get, Post, Req, UseGuards} from '@nestjs/common';
 import {InjectMapper} from '@automapper/nestjs';
 import type {Mapper} from '@automapper/core';
+import {AuthGuard} from '@nestjs/passport';
 import {ApiTags} from '@nestjs/swagger';
 import {type Request} from 'express';
-import {AuthenticatedGuard, DiscordAuthGuard, SessionUser} from '@backend/auth';
+import {
+    AuthenticatedGuard,
+    DiscordAuthGuard,
+    LoginGuard,
+    SessionUser,
+} from '@backend/auth';
 import {User} from '@backend/db';
 import {SaveUserCredentialsDto, UserDto} from '@shared/dto';
 import {UsersService} from './users.service';
@@ -26,6 +32,12 @@ export class UsersController {
     @UseGuards(DiscordAuthGuard)
     login() {
         return {msg: 'Login'};
+    }
+
+    @UseGuards(LoginGuard)
+    @Post('login/credentials')
+    loginWithCredentials(@SessionUser() user: User) {
+        return this.mapper.map(user, User, UserDto);
     }
 
     @Get('status')

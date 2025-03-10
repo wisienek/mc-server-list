@@ -1,6 +1,10 @@
 {
     "cancel": "Annuler",
     "genericError": "Une erreur est survenue.",
+    "themes": {
+        "switchToLight": "Passer au thème clair",
+        "switchToDark": "Passer au thème sombre"
+    },
     "profile": {
         "loginDiscord": "Connectez-vous avec Discord!",
         "login": "Connectez-vous avec vos identifiants",
@@ -13,6 +17,19 @@
             "passwordPlaceholder": "Veuillez entrer un mot de passe",
             "saving": "Enregistrement",
             "save": "Enregistrer les identifiants"
+        },
+        "loginModal": {
+            "title": "Entrez vos identifiants de connexion",
+            "email": "Adresse Email",
+            "password": "Mot de passe",
+            "submit": "Se connecter",
+            "cancel": "Fermer",
+            "invalidEmail": "Veuillez entrer une adresse email valide.",
+            "invalidPassword": "Le mot de passe doit comporter au moins 6 caractères.",
+            "loginNotification": {
+                "title": "Connecté!",
+                "description": "Connexion réussie au compte {email}"
+            }
         }
     },
     "copy": {

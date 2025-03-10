@@ -1,6 +1,10 @@
 {
     "cancel": "Cancel",
     "genericError": "An error occurred.",
+    "themes": {
+        "switchToLight": "Switch to light theme",
+        "switchToDark": "Switch to dark theme"
+    },
     "profile": {
         "loginDiscord": "Login with discord!",
         "login": "Login with credentials",
@@ -13,6 +17,19 @@
             "passwordPlaceholder": "Please enter a password",
             "saving": "Saving",
             "save": "Save credentials"
+        },
+        "loginModal": {
+            "title": "Enter your login credentials",
+            "email": "Email Address",
+            "password": "Password",
+            "submit": "Login",
+            "cancel": "Close",
+            "invalidEmail": "Enter a valid email address.",
+            "invalidPassword": "Password must be at least 6 characters long.",
+            "loginNotification": {
+                "title": "Logged in!",
+                "description": "Successfully logged into {email} account"
+            }
         }
     },
     "copy": {

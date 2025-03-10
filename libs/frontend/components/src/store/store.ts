@@ -2,6 +2,7 @@ import {useDispatch, useSelector, useStore} from 'react-redux';
 import {configureStore} from '@reduxjs/toolkit';
 import notificationReducer from './notificationsSlice';
 import themeReducer from './themeSlice';
+import modalReducer from './modalSlice';
 import authReducer from './authSlice';
 
 export const makeStore = () => {
@@ -10,6 +11,7 @@ export const makeStore = () => {
             auth: authReducer,
             notifications: notificationReducer,
             theme: themeReducer,
+            modal: modalReducer,
         },
         devTools: true,
     });

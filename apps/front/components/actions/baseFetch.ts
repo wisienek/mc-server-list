@@ -3,6 +3,14 @@
 import {CookieNames} from '@shared/enums';
 import {cookies} from 'next/headers';
 
+type CallbacksType<T> = {
+    onSuccess?: (outputData?: {
+        data?: T;
+        response?: Response;
+    }) => void | Promise<void>;
+    onError?: (error?: Error) => void | Promise<void>;
+};
+
 export async function customFetch<T>(
     url: string,
     options: RequestInit = {
@@ -10,16 +18,15 @@ export async function customFetch<T>(
             revalidate: 60,
         },
     },
-    callbacks?: {
-        onSuccess?: (data?: T) => void;
-        onError?: (error: Error) => void;
-    },
+    callbacks: CallbacksType<T> = {},
 ): Promise<T> {
     const cookieStore = await cookies();
     const sessionCookieValue = cookieStore.get(CookieNames.SESSION_ID)?.value;
 
     const headers = new Headers(options?.headers);
     headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+
     if (sessionCookieValue) {
         headers.append('Cookie', `${CookieNames.SESSION_ID}=${sessionCookieValue}`);
     }
@@ -32,21 +39,24 @@ export async function customFetch<T>(
         });
 
         if (!response.ok) {
-            throw response.statusText;
+            const errorData = await response.json().catch(() => ({}));
+            const error = new Error(
+                errorData.message || response.statusText || 'Unknown fetch error',
+            );
+
+            (error as any).status = response.status;
+
+            throw error;
         }
 
         const returnData: T = await response.json();
-        if (callbacks.onSuccess) {
-            callbacks.onSuccess(returnData);
-        }
-
+        await callbacks.onSuccess?.({data: returnData, response});
         return returnData;
     } catch (error) {
         if (callbacks.onError) {
-            callbacks.onError(error);
+            await callbacks.onError(error as Error);
         }
 
-        console.error(`Error on fetch: ${JSON.stringify({url, options})}`, error);
-        return null;
+        return Promise.reject(error);
     }
 }

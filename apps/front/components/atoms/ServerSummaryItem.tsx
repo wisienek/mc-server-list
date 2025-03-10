@@ -241,7 +241,7 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
                             noWrap
                             text={`${displayName}${displayPort}`}
                         />
-                        <Typography variant="subtitle1">
+                        <Typography variant="subtitle1" color="textSecondary">
                             {t('playersOnline')} {onlinePlayers} / {maxPlayers}
                         </Typography>
                         <Typography variant="subtitle1" color="textSecondary" noWrap>

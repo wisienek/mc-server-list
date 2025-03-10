@@ -24,11 +24,11 @@ const themeSlice = createSlice({
     reducers: {
         toggleTheme(state) {
             state.mode = state.mode === 'dark' ? 'light' : 'dark';
-            Cookies.set(SELECTED_THEME_MODE, state.mode, {expires: 365});
+            Cookies.set(SELECTED_THEME_MODE, state.mode);
         },
         setTheme(state, action: PayloadAction<ThemeTypes>) {
             state.mode = action.payload;
-            Cookies.set(SELECTED_THEME_MODE, action.payload, {expires: 365});
+            Cookies.set(SELECTED_THEME_MODE, action.payload);
         },
     },
 });

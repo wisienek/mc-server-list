@@ -9,4 +9,12 @@ export default styled('div')(({theme}) => ({
     [theme.breakpoints.down('sm')]: {
         marginLeft: 'auto',
     },
+    '& > *': {
+        width: `${theme.spacing(5)} !important`,
+        height: `${theme.spacing(5)} !important`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: theme.spacing(1 / 2),
+    },
 }));

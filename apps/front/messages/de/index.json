@@ -1,6 +1,10 @@
 {
     "cancel": "Abbrechen",
     "genericError": "Ein Fehler ist aufgetreten.",
+    "themes": {
+        "switchToLight": "Zum hellen Thema wechseln",
+        "switchToDark": "Zum dunklen Thema wechseln"
+    },
     "profile": {
         "loginDiscord": "Mit Discord anmelden!",
         "login": "Mit Anmeldeinformationen einloggen",
@@ -13,6 +17,19 @@
             "passwordPlaceholder": "Bitte ein Passwort eingeben",
             "saving": "Speichern",
             "save": "Anmeldedaten speichern"
+        },
+        "loginModal": {
+            "title": "Geben Sie Ihre Anmeldedaten ein",
+            "email": "E-Mail-Adresse",
+            "password": "Passwort",
+            "submit": "Einloggen",
+            "cancel": "Schließen",
+            "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+            "invalidPassword": "Das Passwort muss mindestens 6 Zeichen lang sein.",
+            "loginNotification": {
+                "title": "Eingeloggt!",
+                "description": "Erfolgreich in das Konto {email} eingeloggt"
+            }
         }
     },
     "copy": {
