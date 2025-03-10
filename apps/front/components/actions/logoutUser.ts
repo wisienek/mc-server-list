@@ -12,11 +12,17 @@ export async function logoutUser(): Promise<void> {
         return null;
     }
 
-    await customFetch<unknown>(`/users/logout`, {
-        method: 'POST',
-        next: {tags: ['/users/logout']},
-    });
-
-    revalidateTag('/users/status');
-    revalidateTag('/users/has-credentials');
+    await customFetch<unknown>(
+        `/users/logout`,
+        {
+            method: 'POST',
+            next: {tags: ['/users/logout']},
+        },
+        {
+            onSuccess: () => {
+                revalidateTag('/users/status');
+                revalidateTag('/users/has-credentials');
+            },
+        },
+    );
 }

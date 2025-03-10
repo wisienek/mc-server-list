@@ -10,6 +10,10 @@ export async function customFetch<T>(
             revalidate: 60,
         },
     },
+    callbacks?: {
+        onSuccess?: (data?: T) => void;
+        onError?: (error: Error) => void;
+    },
 ): Promise<T> {
     const cookieStore = await cookies();
     const sessionCookieValue = cookieStore.get(CookieNames.SESSION_ID)?.value;
@@ -31,8 +35,17 @@ export async function customFetch<T>(
             throw response.statusText;
         }
 
-        return response.json();
+        const returnData: T = await response.json();
+        if (callbacks.onSuccess) {
+            callbacks.onSuccess(returnData);
+        }
+
+        return returnData;
     } catch (error) {
+        if (callbacks.onError) {
+            callbacks.onError(error);
+        }
+
         console.error(`Error on fetch: ${JSON.stringify({url, options})}`, error);
         return null;
     }
