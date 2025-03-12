@@ -1,13 +1,11 @@
 'use client';
-import {type ReactNode, useMemo} from 'react';
+import {type ReactNode, useMemo, useEffect, useState} from 'react';
 import {createTheme, StyledEngineProvider, ThemeProvider} from '@mui/material';
 import {useAppSelector} from '../../store/store';
-
 import Themes, {type ThemeNames, type ThemeTypes} from './themes';
 
 type ProviderProps = {
     defaultTheme?: ThemeNames;
-    defaultType?: ThemeTypes;
     children: ReactNode;
 };
 
@@ -16,11 +14,15 @@ type CreateThemeProps = Parameters<typeof createTheme>[0];
 const ThemeDefaultOptions = {} as const satisfies CreateThemeProps;
 
 function ThemingProvider({children, defaultTheme = 'main'}: ProviderProps) {
-    const themeMode = useAppSelector((store) => store.theme.mode);
+    const reduxThemeMode = useAppSelector((store) => store.theme.mode);
+    const [themeMode, setThemeMode] = useState<ThemeTypes | null>(null);
+
+    useEffect(() => {
+        setThemeMode(reduxThemeMode);
+    }, [reduxThemeMode]);
 
     const currentTheme = useMemo(() => {
-        if (!Themes[defaultTheme][themeMode]) {
-            console.warn(`Invalid theme: ${themeMode}`);
+        if (!themeMode || !Themes[defaultTheme][themeMode]) {
             return createTheme();
         }
 
@@ -30,11 +32,13 @@ function ThemingProvider({children, defaultTheme = 'main'}: ProviderProps) {
         });
     }, [defaultTheme, themeMode]);
 
+    if (!themeMode) {
+        return null;
+    }
+
     return (
         <StyledEngineProvider injectFirst>
-            <ThemeProvider theme={currentTheme} noSsr>
-                {children}
-            </ThemeProvider>
+            <ThemeProvider theme={currentTheme}>{children}</ThemeProvider>
         </StyledEngineProvider>
     );
 }

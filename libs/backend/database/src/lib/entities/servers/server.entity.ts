@@ -76,8 +76,8 @@ export class Server {
     isActive: boolean;
 
     @AutoMap()
-    @OneToOne(() => ServerVerification, (verification) => verification.server)
-    verification: Relation<ServerVerification>;
+    @OneToMany(() => ServerVerification, (verification) => verification.server)
+    verifications: Relation<ServerVerification[]>;
 
     @AutoMap()
     @Column('text', {array: true, default: '{}'})

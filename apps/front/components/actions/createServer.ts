@@ -7,7 +7,7 @@ import {customFetch} from './baseFetch';
 export async function createServer(
     data: CreateServerDto,
 ): Promise<CreateServerResponseDto> {
-    const response = await customFetch<CreateServerResponseDto>(
+    return await customFetch<CreateServerResponseDto>(
         `/servers`,
         {
             method: 'POST',
@@ -19,6 +19,4 @@ export async function createServer(
             },
         },
     );
-
-    return response;
 }

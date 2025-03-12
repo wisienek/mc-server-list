@@ -132,14 +132,14 @@ const CreateServerModalContents = ({
             .then((data) => {
                 setServerResponse(data);
             })
-            .catch((error: AxiosError) => {
+            .catch((error: Error) => {
                 console.error(error);
                 dispatch(
                     addNotification({
-                        description: error.response.data['message'] ?? error.message,
-                        id: `${error.status}`,
+                        description: error.message,
+                        id: `${error.stack}`,
                         level: 'Error',
-                        title: error.response.statusText,
+                        title: error.name,
                     }),
                 );
             });

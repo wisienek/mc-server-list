@@ -1,11 +1,12 @@
 import {GetServerStatsQuery, VerifyServerCommand} from '@backend/commander';
 import {Server, ServerVerification} from '@backend/db';
-import {CommandHandler, type ICommandHandler, QueryBus} from '@nestjs/cqrs';
+import {CommandHandler, ICommandHandler, QueryBus} from '@nestjs/cqrs';
 import {InjectRepository} from '@nestjs/typeorm';
 import {MinecraftServerOfflineStatus} from '@shared/dto';
 import {plainToInstance} from 'class-transformer';
-import {Repository} from 'typeorm';
+import {In, Repository} from 'typeorm';
 import {Logger} from '@nestjs/common';
+import {FindOptionsWhere} from 'typeorm/find-options/FindOptionsWhere';
 import type {GetServerStatsQueryHandlerReturnType} from './mc-server-stats.handler';
 
 @CommandHandler(VerifyServerCommand)
@@ -23,43 +24,65 @@ export class VerifyServerCommandHandler
     ) {}
 
     async execute(command: VerifyServerCommand): Promise<Server[]> {
-        const {hostName} = command;
+        const {hostName, userId} = command;
 
-        const whereCondition = {
+        const whereCondition: FindOptionsWhere<ServerVerification> = {
             verified: false,
-            ...(hostName ? {server: {host: hostName}} : {}),
         };
 
-        const awaitingServers = await this.verificationRepository.find({
-            where: whereCondition,
-            relations: {server: true},
-        });
-
-        if (awaitingServers.length === 0) {
-            return;
+        if (hostName) {
+            whereCondition.server = {host: hostName};
+        }
+        if (userId) {
+            whereCondition.user_id = userId;
         }
 
-        const checkedServers = await Promise.all(
-            awaitingServers.map((v) => this.checkServerVerification(v)),
+        const awaitingVerifications = await this.verificationRepository.find({
+            where: whereCondition,
+            relations: {server: true, user: true},
+        });
+
+        if (awaitingVerifications.length === 0) {
+            return [];
+        }
+
+        const checkedVerifications = await Promise.all(
+            awaitingVerifications.map((verification) =>
+                this.checkServerVerification(verification),
+            ),
         );
 
-        const passingVerification = checkedServers.filter(({status}) => status);
+        const passingVerifications = checkedVerifications.filter(
+            ({status}) => status,
+        );
 
         await Promise.all(
-            passingVerification.map(async ({verification}) => {
+            passingVerifications.map(async ({verification}) => {
                 verification.verified = true;
-                verification.server.isActive = true;
-
                 await this.verificationRepository.save(verification);
-                await this.serverRepository.save(verification.server);
             }),
         );
 
-        this.logger.log(
-            `Verification passed: ${passingVerification.length} out of ${
-                checkedServers.length
-            } servers.${hostName ? ` For: ${hostName}` : ''}`,
+        const uniqueServers = new Set(
+            passingVerifications.map(({verification}) => verification.server.id),
         );
+
+        const serversToActivate = await this.serverRepository.find({
+            where: {
+                id: In(Array.from(uniqueServers)),
+            },
+        });
+
+        serversToActivate.forEach((server) => (server.isActive = true));
+        await this.serverRepository.save(serversToActivate);
+
+        this.logger.log(
+            `Verification passed: ${passingVerifications.length} out of ${
+                checkedVerifications.length
+            } verifications.${hostName ? ` For: ${hostName}` : ''}`,
+        );
+
+        return serversToActivate;
     }
 
     private async checkServerVerification(
