@@ -8,7 +8,7 @@ import {
     OneToOne,
 } from 'typeorm';
 import {UserCredentials} from './user-credentials.entity';
-import {Server, Vote} from '../servers';
+import {Server, ServerVerification, Vote} from '../servers';
 
 @Entity()
 export class User {
@@ -49,4 +49,10 @@ export class User {
         eager: false,
     })
     credentials: Relation<UserCredentials>;
+
+    @AutoMap(() => ServerVerification)
+    @OneToMany(() => ServerVerification, (verification) => verification.user, {
+        eager: false,
+    })
+    verifications: Relation<ServerVerification>;
 }

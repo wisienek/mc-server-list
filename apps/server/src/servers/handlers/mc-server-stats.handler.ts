@@ -1,6 +1,6 @@
 import type {Mapper} from '@automapper/core';
 import {InjectMapper} from '@automapper/nestjs';
-import {type IQueryHandler, QueryHandler} from '@nestjs/cqrs';
+import {type IQueryHandler, QueryHandler, CommandBus} from '@nestjs/cqrs';
 import {InjectRepository} from '@nestjs/typeorm';
 import {
     MinecraftServerOfflineStatus,
@@ -8,9 +8,11 @@ import {
 } from '@shared/dto';
 import {ServerType} from '@shared/enums';
 import {Repository} from 'typeorm';
-import {randomInt} from 'crypto';
-import {BedrockServer, JavaServer, Server, ServerVerification} from '@backend/db';
-import {GetServerStatsQuery} from '@backend/commander';
+import {BedrockServer, JavaServer, Server} from '@backend/db';
+import {
+    GetServerStatsQuery,
+    CreateServerVerificationCommand,
+} from '@backend/commander';
 import {MCStatsService} from '@backend/mc-stats';
 
 export type GetServerStatsQueryHandlerReturnType = {
@@ -26,8 +28,7 @@ export class GetServerStatsQueryHandler
         private readonly mcStatsService: MCStatsService,
         @InjectRepository(Server)
         private readonly serverRepository: Repository<Server>,
-        @InjectRepository(ServerVerification)
-        private readonly verificationRepository: Repository<ServerVerification>,
+        private readonly commandBus: CommandBus,
         @InjectMapper()
         private readonly mapper: Mapper,
     ) {}
@@ -74,19 +75,16 @@ export class GetServerStatsQueryHandler
         }
 
         if (!found) {
-            const verification = this.verificationRepository.create({
-                code: this.generateRandomString(16),
-            });
             const server = await this.serverRepository.save(
                 {
                     ...mappedData,
-                    verification: verification,
                 },
                 {reload: true},
             );
 
-            verification.server_id = server.id;
-            await this.verificationRepository.save(verification);
+            await this.commandBus.execute(
+                new CreateServerVerificationCommand(server.id, server.owner_id),
+            );
 
             return server;
         }
@@ -95,25 +93,5 @@ export class GetServerStatsQueryHandler
             ...found,
             ...mappedData,
         });
-    }
-
-    /**
-     * Generates a random string.
-     *
-     * @param length - The desired length of the string (default is 32).
-     * @returns A random string of the specified length using printable ASCII characters.
-     */
-    private generateRandomString(length: number = 32): string {
-        const allowedChars = Array.from({length: 95}, (_, i) =>
-            String.fromCharCode(i + 32),
-        ).join('');
-        let result = '';
-
-        for (let i = 0; i < length; i++) {
-            const randomIndex = randomInt(0, allowedChars.length);
-            result += allowedChars[randomIndex];
-        }
-
-        return result.replace(/\s|&|§/, '');
     }
 }

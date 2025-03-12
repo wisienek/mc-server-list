@@ -4,9 +4,20 @@ import {Injectable, Logger} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {InjectMapper} from '@automapper/nestjs';
 import type {Mapper} from '@automapper/core';
-import {QueryBus} from '@nestjs/cqrs';
-import {BedrockServer, JavaServer, Server, ServerRanking, Vote} from '@backend/db';
-import {GetServerStatsQuery, GetUserQuery} from '@backend/commander';
+import {CommandBus, QueryBus} from '@nestjs/cqrs';
+import {
+    BedrockServer,
+    JavaServer,
+    Server,
+    ServerRanking,
+    ServerVerification,
+    Vote,
+} from '@backend/db';
+import {
+    CreateServerVerificationCommand,
+    GetServerStatsQuery,
+    GetUserQuery,
+} from '@backend/commander';
 import {
     CreateServerDto,
     CreateServerResponseDto,
@@ -37,6 +48,7 @@ export class ServersService {
         private readonly voteRepository: Repository<Vote>,
         private readonly logger: Logger,
         private readonly queryBus: QueryBus,
+        private readonly commandBus: CommandBus,
         @InjectMapper()
         private readonly mapper: Mapper,
     ) {}
@@ -110,21 +122,26 @@ export class ServersService {
     ): Promise<Pagination<ServerSummaryDto>> {
         const query = this.serverRepository
             .createQueryBuilder('server')
-            .leftJoinAndSelect('server.verification', 'verification');
+            .leftJoinAndMapOne(
+                'server.rankingData',
+                ServerRanking,
+                'sr',
+                'sr.serverId = server.id',
+            );
 
         if (filters.isActive !== undefined) {
             query.where('server.isActive = :active', {active: filters.isActive});
         }
 
-        if (filters.q && filters.q.length > 0) {
+        if (filters.q) {
             const searchTerm = `%${filters.q}%`;
             query.andWhere(
                 `(server.description ILIKE :searchTerm
-          OR server.name ILIKE :searchTerm
-          OR server.ip_address ILIKE :searchTerm
-          OR server.host ILIKE :searchTerm
-          OR CAST(server.port AS TEXT) ILIKE :searchTerm
-          OR CAST(server.motd AS TEXT) ILIKE :searchTerm)`,
+            OR server.name ILIKE :searchTerm
+            OR server.ip_address ILIKE :searchTerm
+            OR server.host ILIKE :searchTerm
+            OR CAST(server.port AS TEXT) ILIKE :searchTerm
+            OR CAST(server.motd AS TEXT) ILIKE :searchTerm)`,
                 {searchTerm},
             );
         }
@@ -139,29 +156,23 @@ export class ServersService {
             });
         }
 
-        if (filters.versions && filters.versions.length > 0) {
+        if (filters.versions?.length) {
             query.andWhere('server.versions && ARRAY[:...versions]', {
                 versions: filters.versions,
             });
         }
 
-        if (filters?.isOwn === true && userId) {
+        if (filters.isOwn === true && userId) {
             query.andWhere('server.owner_id = :owner', {owner: userId});
         }
 
-        if (filters.categories && filters.categories.length > 0) {
+        if (filters.categories?.length) {
             query.andWhere(
                 'server.categories && ARRAY[:...categories]::server_categories_enum[]',
                 {categories: filters.categories},
             );
         }
 
-        query.leftJoinAndMapOne(
-            'server.rankingData',
-            ServerRanking,
-            'sr',
-            'sr.serverId = server.id',
-        );
         query.orderBy('sr.ranking', 'ASC');
 
         const page = filters.page || 1;
@@ -177,13 +188,22 @@ export class ServersService {
                     item,
                 );
 
-                dto.isLiked =
-                    userId &&
-                    (await this.voteRepository.exists({
-                        where: {server_id: item.id, user_id: userId},
-                    }));
+                dto.isLiked = userId
+                    ? await this.voteRepository.exists({
+                          where: {server_id: item.id, user_id: userId},
+                      })
+                    : false;
                 dto.votes = votesCount;
                 dto.ranking = ranking;
+
+                if (userId) {
+                    const verification: ServerVerification =
+                        await this.commandBus.execute(
+                            new CreateServerVerificationCommand(item.id, userId),
+                        );
+
+                    dto.verificationCode = verification.code;
+                }
 
                 return dto;
             }),
@@ -215,6 +235,13 @@ export class ServersService {
                 where: {server_id: baseServer.id, user_id: userId},
             }));
         dto.isOwner = baseServer.owner_id === userId;
+        if (userId) {
+            const verification: ServerVerification = await this.commandBus.execute(
+                new CreateServerVerificationCommand(baseServer.id, userId),
+            );
+
+            dto.verificationCode = verification.code;
+        }
 
         return dto;
     }
@@ -226,9 +253,7 @@ export class ServersService {
 
         if (existsServer) {
             throw new ServerExistsError(
-                existsServer.verification.verified
-                    ? existsServer.verification.code
-                    : undefined,
+                existsServer.verifications?.find((v) => v.verified)?.code,
             );
         }
 
@@ -244,13 +269,19 @@ export class ServersService {
             throw new ServerVerificationOfflineError();
         }
 
+        const server = await this.serverRepository.save(fetchedServer.server);
+
+        const verification = await this.commandBus.execute(
+            new CreateServerVerificationCommand(server.id, server.owner_id),
+        );
+
         this.logger.log(
-            `Created server: ${fetchedServer.server.host} for ${fetchedServer.server.type} and verification: ${fetchedServer.server.verification.code}`,
+            `Created server: ${server.host} for ${server.type} with verification: ${verification.code}`,
         );
 
         return {
-            ...fetchedServer.server.verification,
-            host: fetchedServer.server.host,
+            ...verification,
+            host: server.host,
         };
     }
 
@@ -321,7 +352,7 @@ export class ServersService {
 
         return await this.serverRepository.findOne({
             where: searchData,
-            relations: {verification: true, owner: true},
+            relations: {verifications: true, owner: true},
         });
     }
 }

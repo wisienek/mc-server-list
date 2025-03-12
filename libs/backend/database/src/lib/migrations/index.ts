@@ -7,3 +7,4 @@ export * from './1738793624563-SessionDeletedAt';
 export * from './1738883140309-UserCredentials';
 export * from './1739314805437-ServerRanking';
 export * from './1739827957429-optionalOwner';
+export * from './1741818219033-PerUserVerification';

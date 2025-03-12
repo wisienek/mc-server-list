@@ -24,6 +24,7 @@ import {
     UserCredentials1738883140309,
     ServerRanking1739314805437,
     OptionalOwner1739827957429,
+    PerUserVerification1741818219033,
 } from './migrations';
 
 const getDefaultConfig = (): PostgresConnectionOptions => {
@@ -68,6 +69,7 @@ export const getConfig = (): DataSourceOptions => {
             UserCredentials1738883140309,
             ServerRanking1739314805437,
             OptionalOwner1739827957429,
+            PerUserVerification1741818219033,
         ],
     };
 };

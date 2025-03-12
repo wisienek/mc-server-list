@@ -129,8 +129,13 @@ export class ServersController {
     })
     @UseGuards(AuthenticatedGuard)
     @Patch(':host/verify')
-    async verifyServer(@Body() data: VerifyServerDto): Promise<ServerSummaryDto> {
-        await this.commandBus.execute(new VerifyServerCommand(data.hostname));
+    async verifyServer(
+        @SessionUser() user: User,
+        @Body() data: VerifyServerDto,
+    ): Promise<ServerSummaryDto> {
+        await this.commandBus.execute(
+            new VerifyServerCommand(data.hostname, user.id),
+        );
 
         return await this.serversService.getServer(data.hostname);
     }

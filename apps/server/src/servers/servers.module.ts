@@ -14,9 +14,10 @@ import {
     GetServerStatsQueryHandler,
     VerifyServerCommandHandler,
     VerifyTimeoutsCommandHandler,
+    CreateServerVerificationCommandHandler,
 } from './handlers';
-import {ServerMapperProfile} from './server-mapper.profile';
 import {ServerVerificationService} from './server-verification.service';
+import {ServerMapperProfile} from './server-mapper.profile';
 import {ServersController} from './servers.controller';
 import {ServersService} from './servers.service';
 
@@ -26,6 +27,7 @@ const handlers = [
     VerifyServerCommandHandler,
     GetServerStatsQueryHandler,
     VerifyTimeoutsCommandHandler,
+    CreateServerVerificationCommandHandler,
 ];
 
 @Module({
