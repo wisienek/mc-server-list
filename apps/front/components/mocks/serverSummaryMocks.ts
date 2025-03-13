@@ -1,5 +1,5 @@
-import {ServerSummaryDto} from '@shared/dto';
-import {ServerCategory} from '@shared/enums';
+import type {ServerSummaryDto} from '@shared/dto';
+import {ServerCategory, ServerType} from '@shared/enums';
 
 export const defaultServerIcon = '/logo_minecraft.png';
 
@@ -37,6 +37,18 @@ Mob Armor
 Dungeons
 Quests
 Daily Challenges`,
+        type: ServerType.JAVA,
+        isActive: false,
+        verification: {
+            id: '',
+            code: 'aaabbbccc',
+            expiresAt: 0,
+            verified: false,
+            server_id: '',
+        },
+        verificationCode: 'aaabbbccc',
+        isTimedOut: false,
+        owner_id: '',
     },
     {
         id: '2',
@@ -68,6 +80,17 @@ Our in-game currency, Cubits, can be used across all servers. Store special item
 
 We host community events and offer daily chances to win Cubits and exclusive prizes. At ManaCube, we're not just a server – we're a community that promises a rich and immersive Minecraft experience. Come join us!
 `,
+        type: ServerType.BEDROCK,
+        isActive: false,
+        verification: {
+            id: '',
+            code: 'aaabbbccc',
+            expiresAt: 0,
+            verified: false,
+            server_id: '',
+        },
+        isTimedOut: false,
+        owner_id: '',
     },
     {
         id: '3',
@@ -95,6 +118,17 @@ The server is running 1.20, and everyone is welcome as both Java and Bedrock pla
 The server offers a variety of plugins that enhance the player experience while also staying true to Minecrafts roots such as keep-inv, player warps, griefprevention, and more!
 Show your support for the server by voting to earn free ranks which grants perks such as extra homes, cool prefixes, chest shops, and more!
 Grab a seat, get comfy and stay for a while!`,
+        type: ServerType.BEDROCK,
+        isActive: false,
+        verification: {
+            id: '',
+            code: 'aaabbbccc',
+            expiresAt: 0,
+            verified: false,
+            server_id: '',
+        },
+        isTimedOut: false,
+        owner_id: '',
     },
 ];
 

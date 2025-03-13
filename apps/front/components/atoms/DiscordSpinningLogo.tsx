@@ -16,15 +16,16 @@ const LogoContainer = styled('div')({
     display: 'inline-block',
 });
 
-interface StyledSVGProps {
-    rotate: boolean;
+interface StyledSVGProps extends React.SVGProps<SVGSVGElement> {
+    shouldRotate: boolean;
+    children?: React.ReactNode;
 }
 
-const StyledSVG = styled('svg', {shouldForwardProp: (name) => name !== 'rotate'})<
-    StyledSVGProps & {rotate: boolean}
->(({rotate}) => ({
+const StyledSVG = styled('svg', {
+    shouldForwardProp: (name) => name !== 'shouldRotate',
+})<StyledSVGProps>(({shouldRotate}) => ({
     transformOrigin: '50% 50%',
-    ...(rotate
+    ...(shouldRotate
         ? {
               animation: `${dynamicRotation} 0.8s infinite`,
           }
@@ -49,7 +50,7 @@ const DynamicRotatingDiscordLogo: React.FC<DynamicRotatingDiscordLogoProps> = ({
     return (
         <LogoContainer>
             <StyledSVG
-                rotate={rotate}
+                shouldRotate={rotate}
                 color={discordColor}
                 fill={discordFill}
                 width={width}

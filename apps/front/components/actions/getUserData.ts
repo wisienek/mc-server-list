@@ -16,7 +16,7 @@ export async function getUserData(): Promise<UserDto | null> {
         return await customFetch<UserDto>('/users/status', {
             next: {tags: ['/users/status'], revalidate: 300},
         });
-    } catch (error) {
+    } catch (_error) {
         return null;
     }
 }

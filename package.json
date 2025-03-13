@@ -19,7 +19,8 @@
         "format:write": "nx format:write",
         "format:check": "nx format:check",
         "dep-graph": "nx dep-graph",
-        "typeorm": "typeorm-ts-node-commonjs"
+        "typeorm": "typeorm-ts-node-commonjs",
+        "build-front": "nx run front:build"
     },
     "private": true,
     "type": "commonjs",
@@ -100,6 +101,7 @@
         "@eslint/js": "^9.19.0",
         "@nestjs/schematics": "^10.0.1",
         "@nestjs/testing": "^10.0.2",
+        "@next/eslint-plugin-next": "^15.2.2",
         "@nx/devkit": "20.3.2",
         "@nx/eslint": "20.3.2",
         "@nx/eslint-plugin": "^20.3.3",

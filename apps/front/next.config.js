@@ -43,6 +43,9 @@ module.exports = async (phase, context) => {
             COMMIT_SHA: process.env.CI_COMMIT_SHORT_SHA,
         },
         swcMinify: true,
+        eslint: {
+            ignoreDuringBuilds: true,
+        },
     };
 
     let config = withNx(defaultConfig);

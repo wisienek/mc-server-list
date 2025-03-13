@@ -3,7 +3,6 @@
 import {addNotification} from '@lib/front/components/store/notificationsSlice';
 import {useAppDispatch} from '@lib/front/components/store/store';
 import {useForm, type SubmitHandler} from 'react-hook-form';
-import {AxiosError} from 'axios';
 import {z} from 'zod';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
@@ -72,7 +71,7 @@ const CreateServerModalContents = ({
     const t = useTranslations('server.add');
     const dispatch = useAppDispatch();
 
-    const {mutateAsync: sendCreateServer, isPending} = useCreateServer();
+    const {mutateAsync: sendCreateServer} = useCreateServer();
 
     const createServerSchema = z.object({
         address: z

@@ -1,0 +1,11 @@
+.nx
+dist
+node_modules
+.next
+.github
+.editorconfig
+.env*
+!.env.production
+!.env.development
+.gitignore
+*.log

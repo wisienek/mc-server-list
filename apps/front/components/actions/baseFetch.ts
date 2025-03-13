@@ -44,7 +44,7 @@ export async function customFetch<T>(
                 errorData.message || response.statusText || 'Unknown fetch error',
             );
 
-            (error as any).status = response.status;
+            error['status'] = response.status;
 
             throw error;
         }

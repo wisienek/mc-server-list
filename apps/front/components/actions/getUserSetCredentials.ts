@@ -15,7 +15,7 @@ export async function getUserSetCredentials(): Promise<boolean | null> {
         return await customFetch<boolean>(`/users/has-credentials`, {
             next: {tags: ['/users/has-credentials'], revalidate: 300},
         });
-    } catch (error) {
+    } catch (_error) {
         return null;
     }
 }
