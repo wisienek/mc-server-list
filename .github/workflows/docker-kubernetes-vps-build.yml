@@ -20,6 +20,9 @@ jobs:
                   username: ${{ secrets.DOCKER_USERNAME }}
                   password: ${{ secrets.DOCKER_PASSWORD }}
 
+            - name: Install Nx CLI
+              run: npm install -g nx
+
             - name: Build & Push Frontend Image
               run: |
                   TAG=$(git rev-parse --short HEAD)
