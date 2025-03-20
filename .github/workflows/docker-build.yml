@@ -1,13 +1,12 @@
-name: Build and Push Docker Images
+name: Build and Deploy to Kubernetes
 
 on:
     workflow_dispatch:
 
 jobs:
-    build-frontend:
-        name: Build & Push Frontend
+    build-and-push:
+        name: Build & Push Docker Images
         runs-on: ubuntu-latest
-
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v4
@@ -18,36 +17,38 @@ jobs:
                   username: ${{ secrets.DOCKER_USERNAME }}
                   password: ${{ secrets.DOCKER_PASSWORD }}
 
-            - name: Build Frontend Image
+            - name: Build & Push Frontend Image
               run: |
                   TAG=$(git rev-parse --short HEAD)
-                  docker build -t ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:$TAG -f apps/front/Dockerfile .
-
-            - name: Push Frontend Image to Docker Hub
-              run: |
+                  docker build -t ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:$TAG -t ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:latest -f apps/front/Dockerfile .
                   docker push ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:$TAG
                   docker push ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:latest
 
-    build-api:
-        name: Build & Push API
-        runs-on: ubuntu-latest
+            - name: Build & Push API Image
+              run: |
+                  TAG=$(git rev-parse --short HEAD)
+                  docker build -t ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-api:$TAG -t ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-api:latest -f apps/server/Dockerfile .
+                  docker push ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-api:$TAG
+                  docker push ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-api:latest
 
+    deploy:
+        name: Deploy to Kubernetes
+        runs-on: ubuntu-latest
+        needs: build-and-push
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v4
 
-            - name: Log in to Docker Hub
-              uses: docker/login-action@v3
+            - name: Set up SSH and Deploy
+              uses: appleboy/ssh-action@v1.0.3
               with:
-                  username: ${{ secrets.DOCKER_USERNAME }}
-                  password: ${{ secrets.DOCKER_PASSWORD }}
-
-            - name: Build API Image
-              run: |
-                  TAG=$(git rev-parse --short HEAD)
-                  docker build -t ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-api:$TAG -t ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-api:latest -f apps/server/Dockerfile .
-
-            - name: Push API Image to Docker Hub
-              run: |
-                  docker push ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-api:$TAG
-                  docker push ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-api:latest
+                  host: ${{ secrets.VPS_HOST }}
+                  username: ${{ secrets.VPS_USER }}
+                  key: ${{ secrets.VPS_SSH_KEY }}
+                  script: |
+                      echo "Pulling latest images..."
+                      kubectl set image deployment/frontend frontend=${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:latest --record
+                      kubectl set image deployment/api api=${{ secrets.DOCKER_USERNAME }}/mc-sv-list-api:latest --record
+                      kubectl rollout restart deployment/frontend
+                      kubectl rollout restart deployment/api
+                      kubectl get pods
