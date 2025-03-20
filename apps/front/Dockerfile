@@ -13,6 +13,7 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
+RUN npm install -g nx@latest
 
 FROM base AS builder
 
@@ -24,7 +25,7 @@ COPY . .
 
 COPY .env.production .env.production
 
-RUN rm -rf .next node_modules/.cache dist
+RUN rm -rf .next dist
 
 RUN npx nx run front:build
 
