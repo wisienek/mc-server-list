@@ -50,6 +50,12 @@ jobs:
                   username: ${{ secrets.VPS_USER }}
                   key: ${{ secrets.VPS_SSH_KEY }}
                   script: |
+                      echo "Checking if curl is installed..."
+                      if ! command -v curl &> /dev/null; then
+                        echo "curl is not installed. Installing curl..."
+                        sudo apt update && sudo apt install -y curl || sudo yum install -y curl
+                      fi
+
                       echo "Checking if Kubernetes is installed..."
                       if ! command -v kubectl &> /dev/null; then
                         echo "Kubernetes is not installed. Installing K3s..."
@@ -60,12 +66,113 @@ jobs:
                         echo "Kubernetes is already installed."
                       fi
 
-                      echo "Setting Kubeconfig..."
+                      echo "Ensuring kubectl is available..."
+                      export PATH=$PATH:/usr/local/bin
                       export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
+                      DEPLOYMENTS_DIR="/opt/kubernetes"
+                      echo "Ensuring Kubernetes deployment files exist at $DEPLOYMENTS_DIR..."
+
+                      mkdir -p $DEPLOYMENTS_DIR
+
+                      # Create frontend-deployment.yaml if missing
+                      if [ ! -f "$DEPLOYMENTS_DIR/frontend-deployment.yaml" ]; then
+                        echo "Creating frontend-deployment.yaml..."
+                        cat <<EOF > $DEPLOYMENTS_DIR/frontend-deployment.yaml
+                      apiVersion: apps/v1
+                      kind: Deployment
+                      metadata:
+                        name: frontend
+                        labels:
+                          app: frontend
+                      spec:
+                        replicas: 2
+                        selector:
+                          matchLabels:
+                            app: frontend
+                        template:
+                          metadata:
+                            labels:
+                              app: frontend
+                          spec:
+                            containers:
+                              - name: frontend
+                                image: ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:latest
+                                ports:
+                                  - containerPort: 3000
+                                env:
+                                  - name: NODE_ENV
+                                    value: "production"
+                      ---
+                      apiVersion: v1
+                      kind: Service
+                      metadata:
+                        name: frontend-service
+                      spec:
+                        selector:
+                          app: frontend
+                        ports:
+                          - protocol: TCP
+                            port: 80
+                            targetPort: 3000
+                        type: LoadBalancer
+                      EOF
+                      fi
+
+                      # Create api-deployment.yaml if missing
+                      if [ ! -f "$DEPLOYMENTS_DIR/api-deployment.yaml" ]; then
+                        echo "Creating api-deployment.yaml..."
+                        cat <<EOF > $DEPLOYMENTS_DIR/api-deployment.yaml
+                      apiVersion: apps/v1
+                      kind: Deployment
+                      metadata:
+                        name: api
+                        labels:
+                          app: api
+                      spec:
+                        replicas: 2
+                        selector:
+                          matchLabels:
+                            app: api
+                        template:
+                          metadata:
+                            labels:
+                              app: api
+                          spec:
+                            containers:
+                              - name: api
+                                image: ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-api:latest
+                                ports:
+                                  - containerPort: 3000
+                                env:
+                                  - name: NODE_ENV
+                                    value: "production"
+                                  - name: APP_PORT
+                                    value: "3000"
+                      ---
+                      apiVersion: v1
+                      kind: Service
+                      metadata:
+                        name: api-service
+                      spec:
+                        selector:
+                          app: api
+                        ports:
+                          - protocol: TCP
+                            port: 3000
+                            targetPort: 3000
+                        type: ClusterIP
+                      EOF
+                      fi
+
+                      # Apply Kubernetes deployments
+                      echo "Applying Kubernetes deployments..."
+                      kubectl apply -f $DEPLOYMENTS_DIR/frontend-deployment.yaml
+                      kubectl apply -f $DEPLOYMENTS_DIR/api-deployment.yaml
+
                       echo "Pulling latest images..."
-                      kubectl set image deployment/frontend frontend=${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:latest --record
-                      kubectl set image deployment/api api=${{ secrets.DOCKER_USERNAME }}/mc-sv-list-api:latest --record
+                      kubectl set image deployment/frontend frontend=${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:latest
+                      kubectl set image deployment/api api=${{ secrets.DOCKER_USERNAME }}/mc-sv-list-api:latest
                       kubectl rollout restart deployment/frontend
                       kubectl rollout restart deployment/api
-                      kubectl get pods
+                      kubectl get pods -o wide
