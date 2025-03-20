@@ -1,6 +1,9 @@
-name: Build and Deploy to Kubernetes
+name: Build and Deploy to VPS Kubernetes
 
 on:
+    pull_request:
+        branches:
+            - main
     workflow_dispatch:
 
 jobs:
