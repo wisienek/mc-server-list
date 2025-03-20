@@ -35,144 +35,239 @@ jobs:
                   docker push ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-api:latest
 
     deploy:
-        name: Deploy to Kubernetes
-        runs-on: ubuntu-latest
-        needs: build-and-push
-        steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v4
+      name: Deploy to Kubernetes
+      runs-on: ubuntu-latest
+      needs: build-and-push
+      steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v4
 
-            - name: Set up SSH and Deploy
-              uses: appleboy/ssh-action@v1.2.2
-              with:
-                  host: ${{ secrets.VPS_HOST }}
-                  port: ${{ secrets.VPS_PORT }}
-                  username: ${{ secrets.VPS_USER }}
-                  key: ${{ secrets.VPS_SSH_KEY }}
-                  script: |
-                      echo "Checking if curl is installed..."
-                      if ! command -v curl &> /dev/null; then
-                        echo "curl is not installed. Installing curl..."
-                        sudo apt update && sudo apt install -y curl || sudo yum install -y curl
-                      fi
+        - name: Set up SSH and Deploy
+          uses: appleboy/ssh-action@v1.2.2
+          with:
+            host: ${{ secrets.VPS_HOST }}
+            port: ${{ secrets.VPS_PORT }}
+            username: ${{ secrets.VPS_USER }}
+            key: ${{ secrets.VPS_SSH_KEY }}
+            script: |
+              if ! command -v kubectl &> /dev/null; then
+                curl -sfL https://get.k3s.io | sh -
+                sleep 20
+              fi
 
-                      echo "Checking if Kubernetes is installed..."
-                      if ! command -v kubectl &> /dev/null; then
-                        echo "Kubernetes is not installed. Installing K3s..."
-                        curl -sfL https://get.k3s.io | sh -
-                        echo "Waiting for K3s to start..."
-                        sleep 20
-                      else
-                        echo "Kubernetes is already installed."
-                      fi
+              export PATH=$PATH:/usr/local/bin
+              export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
-                      echo "Ensuring kubectl is available..."
-                      export PATH=$PATH:/usr/local/bin
-                      export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+              DEPLOYMENTS_DIR="/opt/kubernetes"
+              mkdir -p $DEPLOYMENTS_DIR
 
-                      DEPLOYMENTS_DIR="/opt/kubernetes"
-                      echo "Ensuring Kubernetes deployment files exist at $DEPLOYMENTS_DIR..."
+              POSTGRES_PASSWORD="${{ secrets.POSTGRES_PASSWORD }}"
+              if [ -z "$POSTGRES_PASSWORD" ]; then
+                POSTGRES_PASSWORD=$(openssl rand -base64 20)
+              fi
 
-                      mkdir -p $DEPLOYMENTS_DIR
+              kubectl delete secret mc-secrets --ignore-not-found
+              kubectl create secret generic mc-secrets \
+                --from-literal=COOKIE_SECRET='${{ secrets.COOKIE_SECRET }}' \
+                --from-literal=DISCORD_CLIENT_ID='${{ secrets.DISCORD_CLIENT_ID }}' \
+                --from-literal=DISCORD_CLIENT_SECRET='${{ secrets.DISCORD_CLIENT_SECRET }}' \
+                --from-literal=DISCORD_REDIRECT_URI='https://${{ secrets.SITE_DOMAIN }}/oauth/callback'
 
-                      # Create frontend-deployment.yaml if missing
-                      if [ ! -f "$DEPLOYMENTS_DIR/frontend-deployment.yaml" ]; then
-                        echo "Creating frontend-deployment.yaml..."
-                        cat <<EOF > $DEPLOYMENTS_DIR/frontend-deployment.yaml
-                      apiVersion: apps/v1
-                      kind: Deployment
+              if [ ! -f "$DEPLOYMENTS_DIR/postgres-deployment.yaml" ]; then
+                cat <<EOF > $DEPLOYMENTS_DIR/postgres-deployment.yaml
+                  apiVersion: apps/v1
+                  kind: Deployment
+                  metadata:
+                    name: postgres
+                  spec:
+                    replicas: 1
+                    selector:
+                      matchLabels:
+                        app: postgres
+                    template:
                       metadata:
-                        name: frontend
                         labels:
-                          app: frontend
+                          app: postgres
                       spec:
-                        replicas: 2
-                        selector:
-                          matchLabels:
-                            app: frontend
-                        template:
-                          metadata:
-                            labels:
-                              app: frontend
-                          spec:
-                            containers:
-                              - name: frontend
-                                image: ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:latest
-                                ports:
-                                  - containerPort: 3000
-                                env:
-                                  - name: NODE_ENV
-                                    value: "production"
-                      ---
-                      apiVersion: v1
-                      kind: Service
-                      metadata:
-                        name: frontend-service
-                      spec:
-                        selector:
-                          app: frontend
-                        ports:
-                          - protocol: TCP
-                            port: 80
-                            targetPort: 3000
-                        type: LoadBalancer
-                      EOF
-                      fi
+                        containers:
+                          - name: postgres
+                            image: postgres:latest
+                            env:
+                              - name: POSTGRES_DB
+                                value: "mc-list"
+                              - name: POSTGRES_USER
+                                value: "AdminUser"
+                              - name: POSTGRES_PASSWORD
+                                value: "$POSTGRES_PASSWORD"
+                  ---
+                  apiVersion: v1
+                  kind: Service
+                  metadata:
+                    name: postgres-service
+                  spec:
+                    selector:
+                      app: postgres
+                    ports:
+                      - protocol: TCP
+                        port: 5432
+                        targetPort: 5432
+                    type: ClusterIP
+                  EOF
+                fi
 
-                      # Create api-deployment.yaml if missing
-                      if [ ! -f "$DEPLOYMENTS_DIR/api-deployment.yaml" ]; then
-                        echo "Creating api-deployment.yaml..."
-                        cat <<EOF > $DEPLOYMENTS_DIR/api-deployment.yaml
-                      apiVersion: apps/v1
-                      kind: Deployment
-                      metadata:
-                        name: api
-                        labels:
+                if [ ! -f "$DEPLOYMENTS_DIR/redis-deployment.yaml" ]; then
+                  cat <<EOF > $DEPLOYMENTS_DIR/redis-deployment.yaml
+                    apiVersion: apps/v1
+                    kind: Deployment
+                    metadata:
+                      name: redis
+                    defaults:
+                    permissions:
+                    jobs:
+                    name:
+                    env:
+                    run-name:
+                    on:
+                    concurrency:
+                    spec:
+                      replicas: 1
+                      selector:
+                        matchLabels:
+                          app: redis
+                      template:
+                        metadata:
+                          labels:
+                            app: redis
+                        spec:
+                          containers:
+                            - name: redis
+                              image: redis:latest
+                    ---
+                    apiVersion: v1
+                    kind: Service
+                    metadata:
+                      name: redis-service
+                    spec:
+                      selector:
+                        app: redis
+                      ports:
+                        - protocol: TCP
+                          port: 6382
+                          targetPort: 6382
+                      type: ClusterIP
+                    EOF
+                fi
+
+                if [ ! -f "$DEPLOYMENTS_DIR/api-deployment.yaml" ]; then
+                  cat <<EOF > $DEPLOYMENTS_DIR/api-deployment.yaml
+                    apiVersion: apps/v1
+                    kind: Deployment
+                    metadata:
+                      name: api
+                    spec:
+                      replicas: 1
+                      selector:
+                        matchLabels:
                           app: api
-                      spec:
-                        replicas: 2
-                        selector:
-                          matchLabels:
+                      template:
+                        metadata:
+                          labels:
                             app: api
-                        template:
-                          metadata:
-                            labels:
-                              app: api
-                          spec:
-                            containers:
-                              - name: api
-                                image: ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-api:latest
-                                ports:
-                                  - containerPort: 3000
-                                env:
-                                  - name: NODE_ENV
-                                    value: "production"
-                                  - name: APP_PORT
-                                    value: "3000"
-                      ---
-                      apiVersion: v1
-                      kind: Service
+                        spec:
+                          containers:
+                            - name: api
+                              image: ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-api:latest
+                              ports:
+                                - containerPort: 3000
+                              env:
+                                - name: NODE_ENV
+                                  value: "production"
+                                - name: APP_PORT
+                                  value: "3000"
+                                - name: DB_DATABASE
+                                  value: "mc-list"
+                                - name: DB_USERNAME
+                                  value: "AdminUser"
+                                - name: DB_PASSWORD
+                                  value: "$POSTGRES_PASSWORD"
+                                - name: DB_HOST
+                                  value: "postgres-service"
+                                - name: DB_PORT
+                                  value: "5432"
+                                - name: REDIS_PORT
+                                  value: "6382"
+                                - name: REDIS_HOST
+                                  value: "redis-service"
+                              envFrom:
+                                - secretRef:
+                                    name: mc-secrets
+                    ---
+                    apiVersion: v1
+                    kind: Service
+                    metadata:
+                      name: api-service
+                    spec:
+                      selector:
+                        app: api
+                      ports:
+                        - protocol: TCP
+                          port: 3000
+                          targetPort: 3000
+                      type: ClusterIP
+                    EOF
+              fi
+
+              if [ ! -f "$DEPLOYMENTS_DIR/frontend-deployment.yaml" ]; then
+                cat <<EOF > $DEPLOYMENTS_DIR/frontend-deployment.yaml
+                  apiVersion: apps/v1
+                  kind: Deployment
+                  metadata:
+                    name: frontend
+                  spec:
+                    replicas: 1
+                    selector:
+                      matchLabels:
+                        app: frontend
+                    template:
                       metadata:
-                        name: api-service
+                        labels:
+                          app: frontend
                       spec:
-                        selector:
-                          app: api
-                        ports:
-                          - protocol: TCP
-                            port: 3000
-                            targetPort: 3000
-                        type: ClusterIP
-                      EOF
-                      fi
+                        containers:
+                          - name: frontend
+                            image: ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:latest
+                            ports:
+                              - containerPort: 3000
+                            env:
+                              - name: NODE_ENV
+                                value: "production"
+                              - name: NEXT_PUBLIC_API_URL
+                                value: "http://api-service:3000"
+                  ---
+                  apiVersion: v1
+                  kind: Service
+                  metadata:
+                    name: frontend-service
+                  spec:
+                    selector:
+                      app: frontend
+                    ports:
+                      - protocol: TCP
+                        port: 80
+                        targetPort: 3000
+                    type: LoadBalancer
+                  EOF
+              fi
 
-                      # Apply Kubernetes deployments
-                      echo "Applying Kubernetes deployments..."
-                      kubectl apply -f $DEPLOYMENTS_DIR/frontend-deployment.yaml
-                      kubectl apply -f $DEPLOYMENTS_DIR/api-deployment.yaml
+              kubectl apply -f $DEPLOYMENTS_DIR/postgres-deployment.yaml
+              kubectl apply -f $DEPLOYMENTS_DIR/redis-deployment.yaml
+              kubectl apply -f $DEPLOYMENTS_DIR/api-deployment.yaml
+              kubectl apply -f $DEPLOYMENTS_DIR/frontend-deployment.yaml
 
-                      echo "Pulling latest images..."
-                      kubectl set image deployment/frontend frontend=${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:latest
-                      kubectl set image deployment/api api=${{ secrets.DOCKER_USERNAME }}/mc-sv-list-api:latest
-                      kubectl rollout restart deployment/frontend
-                      kubectl rollout restart deployment/api
-                      kubectl get pods -o wide
+              kubectl set image deployment/api api=${{ secrets.DOCKER_USERNAME }}/mc-sv-list-api:latest
+              kubectl set image deployment/frontend frontend=${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:latest
+
+              sleep 10
+              kubectl get pods -o wide
+              kubectl get services
+              kubectl get deployments
