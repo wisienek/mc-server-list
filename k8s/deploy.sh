@@ -1,0 +1,30 @@
+#!/bin/bash
+
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+DEPLOYMENT_DIR="/opt/kubernetes"
+
+mkdir -p $DEPLOYMENT_DIR
+
+echo "Updating Kubernetes Secrets..."
+kubectl delete secret mc-secrets --ignore-not-found
+kubectl create secret generic mc-secrets \
+  --from-literal=COOKIE_SECRET="${COOKIE_SECRET}" \
+  --from-literal=DISCORD_CLIENT_ID="${DISCORD_CLIENT_ID}" \
+  --from-literal=DISCORD_CLIENT_SECRET="${DISCORD_CLIENT_SECRET}" \
+  --from-literal=DISCORD_REDIRECT_URI="https://${SITE_DOMAIN}/oauth/callback"
+
+echo "Applying Kubernetes Deployments..."
+kubectl apply -f $DEPLOYMENT_DIR/postgres-deployment.yaml
+kubectl apply -f $DEPLOYMENT_DIR/redis-deployment.yaml
+kubectl apply -f $DEPLOYMENT_DIR/api-deployment.yaml
+kubectl apply -f $DEPLOYMENT_DIR/frontend-deployment.yaml
+
+echo "Updating Images..."
+kubectl set image deployment/api api=${DOCKER_USERNAME}/mc-sv-list-api:latest
+kubectl set image deployment/frontend frontend=${DOCKER_USERNAME}/mc-sv-list-frontend:latest
+
+sleep 10
+
+kubectl get pods -o wide
+kubectl get services
+kubectl get deployments
