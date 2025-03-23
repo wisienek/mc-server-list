@@ -42,27 +42,27 @@ jobs:
             - name: Checkout Repository
               uses: actions/checkout@v4
 
-            - name: Replace Docker username in API deployment
+            - name: Prepare templated k8s manifests
               run: |
                   mkdir -p k8s/generated
-                  sed "s|__DOCKER_USERNAME__|${{ secrets.DOCKER_USERNAME }}|g" k8s/api-deployment.yaml > k8s/api-deployment.yaml
+                  sed "s|__DOCKER_USERNAME__|${{ secrets.DOCKER_USERNAME }}|g" k8s/api-deployment.yaml > k8s/generated/api-deployment.yaml
+                  sed "s|__DOCKER_USERNAME__|${{ secrets.DOCKER_USERNAME }}|g" k8s/frontend-deployment.yaml > k8s/generated/frontend-deployment.yaml
+                  cp k8s/postgres-deployment.yaml k8s/generated/postgres-deployment.yaml
+                  cp k8s/redis-deployment.yaml k8s/generated/redis-deployment.yaml
+                  cp k8s/deploy.sh k8s/generated/deploy.sh
 
-            - name: Replace Docker username in frontend deployment
-              run: |
-                  sed "s|__DOCKER_USERNAME__|${{ secrets.DOCKER_USERNAME }}|g" k8s/frontend-deployment.yaml > k8s/frontend-deployment.yaml
-
-            - name: Sync `/k8s/` to VPS
+            - name: Sync Kubernetes files to VPS
               uses: appleboy/scp-action@v0.1.4
               with:
                   host: ${{ secrets.VPS_HOST }}
                   port: ${{ secrets.VPS_PORT }}
                   username: ${{ secrets.VPS_USER }}
                   key: ${{ secrets.VPS_SSH_KEY }}
-                  source: 'k8s/*'
+                  source: 'k8s/generated/*'
                   target: '/opt/k8s/'
                   strip_components: 1
 
-            - name: Set up SSH and Deploy
+            - name: SSH Deploy to Kubernetes
               uses: appleboy/ssh-action@v1.2.2
               with:
                   host: ${{ secrets.VPS_HOST }}

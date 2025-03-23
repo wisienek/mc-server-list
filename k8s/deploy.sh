@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-DEPLOYMENT_DIR="/opt/kubernetes"
+DEPLOYMENT_DIR="/opt/k8s"
 
 mkdir -p $DEPLOYMENT_DIR
 
