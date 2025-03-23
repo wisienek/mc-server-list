@@ -78,5 +78,5 @@ jobs:
 
                       export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
-                      chmod +x /opt/k8s/deploy.sh
-                      /opt/k8s/deploy.sh
+                      chmod +x /opt/k8s/generated/deploy.sh
+                      /opt/k8s/generated/deploy.sh

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-DEPLOYMENT_DIR="/opt/k8s"
+DEPLOYMENT_DIR="/opt/k8s/generated"
 
 mkdir -p $DEPLOYMENT_DIR
 
@@ -18,12 +18,6 @@ kubectl apply -f $DEPLOYMENT_DIR/postgres-deployment.yaml
 kubectl apply -f $DEPLOYMENT_DIR/redis-deployment.yaml
 kubectl apply -f $DEPLOYMENT_DIR/api-deployment.yaml
 kubectl apply -f $DEPLOYMENT_DIR/frontend-deployment.yaml
-
-echo "Updating Images..."
-kubectl set image deployment/api api=${DOCKER_USERNAME}/mc-sv-list-api:latest
-kubectl set image deployment/frontend frontend=${DOCKER_USERNAME}/mc-sv-list-frontend:latest
-
-sleep 10
 
 kubectl get pods -o wide
 kubectl get services
