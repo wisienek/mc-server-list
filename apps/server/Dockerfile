@@ -12,8 +12,6 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-RUN npm install -g nx@latest
-
 FROM base AS build
 
 WORKDIR /app
@@ -37,6 +35,8 @@ ENV APP_PORT=3000
 ENV NO_COLOR=true
 ENV NODE_ENV=production
 
-COPY --from=build /app/ ./
+COPY --from=build /app/dist/apps/server ./
+
+RUN yarn --frozen-lockfile --prod
 
 CMD ["node", "main.js"]
