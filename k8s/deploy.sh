@@ -11,7 +11,8 @@ kubectl create secret generic mc-secrets \
   --from-literal=COOKIE_SECRET="${COOKIE_SECRET}" \
   --from-literal=DISCORD_CLIENT_ID="${DISCORD_CLIENT_ID}" \
   --from-literal=DISCORD_CLIENT_SECRET="${DISCORD_CLIENT_SECRET}" \
-  --from-literal=DISCORD_REDIRECT_URI="${DISCORD_REDIRECT_URI}"
+  --from-literal=DISCORD_REDIRECT_URI="${DISCORD_REDIRECT_URI}" \
+  --from-literal=POSTGRES_PASSWORD="${POSTGRES_PASSWORD}"
 
 echo "Applying Kubernetes Deployments..."
 kubectl apply -f $DEPLOYMENT_DIR/postgres-deployment.yaml
