@@ -1,17 +1,18 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-    name: frontend-ingress
+    name: api-ingress
     annotations:
         traefik.ingress.kubernetes.io/router.entrypoints: web
+        traefik.ingress.kubernetes.io/router.middlewares: strip-api-prefix@kubernetescrd
 spec:
     rules:
         - http:
               paths:
-                  - path: /
+                  - path: /api
                     pathType: Prefix
                     backend:
                         service:
-                            name: frontend-service
+                            name: api-service
                             port:
-                                number: 80
+                                number: 3000

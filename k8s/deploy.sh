@@ -26,6 +26,8 @@ kubectl apply -f $DEPLOYMENT_DIR/redis-deployment.yaml
 kubectl apply -f $DEPLOYMENT_DIR/api-deployment.yaml
 kubectl apply -f $DEPLOYMENT_DIR/frontend-deployment.yaml
 kubectl apply -f $DEPLOYMENT_DIR/frontend-ingress.yaml
+kubectl apply -f $DEPLOYMENT_DIR/api-strip-middleware.yaml
+kubectl apply -f $DEPLOYMENT_DIR/api-ingress.yaml
 
 kubectl get pods -o wide
 kubectl get services
