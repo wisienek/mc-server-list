@@ -64,6 +64,12 @@ jobs:
 
             - name: SSH Deploy to Kubernetes
               uses: appleboy/ssh-action@v1.2.2
+              env:
+                COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
+                DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
+                DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
+                DISCORD_REDIRECT_URI: ${{ secrets.DISCORD_REDIRECT_URI }}
+                POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
               with:
                   host: ${{ secrets.VPS_HOST }}
                   port: ${{ secrets.VPS_PORT }}
