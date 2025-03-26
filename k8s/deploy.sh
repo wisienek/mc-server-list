@@ -25,6 +25,7 @@ kubectl apply -f $DEPLOYMENT_DIR/postgres-deployment.yaml
 kubectl apply -f $DEPLOYMENT_DIR/redis-deployment.yaml
 kubectl apply -f $DEPLOYMENT_DIR/api-deployment.yaml
 kubectl apply -f $DEPLOYMENT_DIR/frontend-deployment.yaml
+kubectl apply -f $DEPLOYMENT_DIR/frontend-ingress.yaml
 kubectl apply -f $DEPLOYMENT_DIR/cluster-issuer.yaml
 
 kubectl get pods -o wide
