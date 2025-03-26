@@ -17,8 +17,6 @@ async function bootstrap() {
         logger: SimpleLogger.create('bootstrap'),
     });
 
-    app.setGlobalPrefix('api');
-
     app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
     app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
     app.enableCors({
@@ -71,7 +69,7 @@ async function bootstrap() {
         deepScanRoutes: true,
         autoTagControllers: true,
     });
-    SwaggerModule.setup('api/docs', app, document, {explorer: true});
+    SwaggerModule.setup('docs', app, document, {explorer: true});
 
     const port = configService.APP_PORT;
     await app.listen(port);
