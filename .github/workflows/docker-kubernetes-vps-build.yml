@@ -76,6 +76,13 @@ jobs:
                         sleep 20
                       fi
 
+                      echo "Secrets preview (debug):"
+                      echo "COOKIE_SECRET: ${COOKIE_SECRET}"
+                      echo "DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}"
+                      echo "DISCORD_CLIENT_SECRET: ${DISCORD_CLIENT_SECRET}"
+                      echo "DISCORD_REDIRECT_URI: ${DISCORD_REDIRECT_URI}"
+                      echo "POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}"
+
                       export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
                       chmod +x /opt/k8s/generated/deploy.sh
