@@ -70,12 +70,17 @@ jobs:
                 DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
                 DISCORD_REDIRECT_URI: ${{ secrets.DISCORD_REDIRECT_URI }}
                 POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+
+                AUTOMATIC_VERIFICATION: ${{ vars.AUTOMATIC_VERIFICATION }}
+                AUTOMATIC_SERVER_TIMEOUT_TIMES: ${{ vars.AUTOMATIC_SERVER_TIMEOUT_TIMES }}
+                AUTOMATIC_SERVER_TIMEOUT_BATCH: ${{ vars.AUTOMATIC_SERVER_TIMEOUT_BATCH }}
+                TOKEN_EXPIRATION_HOURS: ${{ vars.TOKEN_EXPIRATION_HOURS }}
               with:
                   host: ${{ secrets.VPS_HOST }}
                   port: ${{ secrets.VPS_PORT }}
                   username: ${{ secrets.VPS_USER }}
                   key: ${{ secrets.VPS_SSH_KEY }}
-                  envs: COOKIE_SECRET,DISCORD_CLIENT_ID,DISCORD_CLIENT_SECRET,DISCORD_REDIRECT_URI,POSTGRES_PASSWORD
+                  envs: COOKIE_SECRET,DISCORD_CLIENT_ID,DISCORD_CLIENT_SECRET,DISCORD_REDIRECT_URI,POSTGRES_PASSWORD,AUTOMATIC_VERIFICATION,AUTOMATIC_SERVER_TIMEOUT_TIMES,AUTOMATIC_SERVER_TIMEOUT_BATCH,TOKEN_EXPIRATION_HOURS
                   script: |
                       if ! command -v kubectl &> /dev/null; then
                         curl -sfL https://get.k3s.io | sh -
