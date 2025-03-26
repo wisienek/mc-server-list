@@ -3,17 +3,11 @@ kind: Ingress
 metadata:
     name: frontend-ingress
     annotations:
-        cert-manager.io/cluster-issuer: letsencrypt
         nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
     ingressClassName: nginx
-    tls:
-        - hosts:
-              - __SITE_DOMAIN__
-          secretName: frontend-tls
     rules:
-        - host: __SITE_DOMAIN__
-          http:
+        - http:
               paths:
                   - path: /
                     pathType: Prefix
