@@ -17,6 +17,8 @@ async function bootstrap() {
         logger: SimpleLogger.create('bootstrap'),
     });
 
+    app.setGlobalPrefix('api');
+
     app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
     app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
     app.enableCors({

@@ -23,7 +23,11 @@ jobs:
             - name: Build & Push Frontend Image
               run: |
                   TAG=$(git rev-parse --short HEAD)
-                  docker build -t ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:$TAG -t ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:latest -f apps/front/Dockerfile .
+                  docker build \
+                    --build-arg NEXT_PUBLIC_API_URL=https://${{ vars.SITE_DOMAIN }}/api \
+                    -t ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:$TAG \
+                    -t ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:latest \
+                    -f apps/front/Dockerfile .
                   docker push ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:$TAG
                   docker push ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:latest
 
@@ -48,7 +52,6 @@ jobs:
                   sed "s|__DOCKER_USERNAME__|${{ secrets.DOCKER_USERNAME }}|g" k8s/api-deployment.yaml > k8s/generated/api-deployment.yaml
                   sed "s|__DOCKER_USERNAME__|${{ secrets.DOCKER_USERNAME }}|g" k8s/frontend-deployment.yaml > k8s/generated/frontend-deployment.yaml
                   sed "s|__SITE_DOMAIN__|${{ vars.SITE_DOMAIN }}|g" k8s/frontend-ingress.yaml > k8s/generated/frontend-ingress.yaml
-                  sed "s|__LETSENCRYPT_EMAIL__|${{ secrets.LETSENCRYPT_EMAIL }}|g" k8s/cluster-issuer.yaml > k8s/generated/cluster-issuer.yaml
                   cp k8s/postgres-deployment.yaml k8s/generated/postgres-deployment.yaml
                   cp k8s/redis-deployment.yaml k8s/generated/redis-deployment.yaml
                   cp k8s/deploy.sh k8s/generated/deploy.sh
