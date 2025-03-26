@@ -14,14 +14,14 @@ export const ApiSchema = z.object({
     COOKIE_SECRET: z
         .string()
         .min(8, `Cookie secret should not have less then 8 chars.`),
-    TOKEN_EXPIRATION_HOURS: z
+    TOKEN_EXPIRATION_HOURS: z.coerce
         .number()
         .min(1, `Minimum 1 hour`)
         .max(35 * 24, `Maximum of 35 days (fib no.)`)
         .default(14 * 24),
     AUTOMATIC_VERIFICATION: z.boolean().default(true),
-    AUTOMATIC_SERVER_TIMEOUT_TIMES: z.number().gt(0),
-    AUTOMATIC_SERVER_TIMEOUT_BATCH: z.number().gt(20),
+    AUTOMATIC_SERVER_TIMEOUT_TIMES: z.coerce.number().gt(0),
+    AUTOMATIC_SERVER_TIMEOUT_BATCH: z.coerce.number().gt(20),
 });
 
 @Injectable()
