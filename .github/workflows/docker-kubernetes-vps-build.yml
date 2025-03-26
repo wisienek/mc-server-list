@@ -47,6 +47,8 @@ jobs:
                   mkdir -p k8s/generated
                   sed "s|__DOCKER_USERNAME__|${{ secrets.DOCKER_USERNAME }}|g" k8s/api-deployment.yaml > k8s/generated/api-deployment.yaml
                   sed "s|__DOCKER_USERNAME__|${{ secrets.DOCKER_USERNAME }}|g" k8s/frontend-deployment.yaml > k8s/generated/frontend-deployment.yaml
+                  sed "s|__SITE_DOMAIN__|${{ vars.SITE_DOMAIN }}|g" k8s/frontend-ingress.yaml > k8s/generated/frontend-ingress.yaml
+                  sed "s|__LETSENCRYPT_EMAIL__|${{ secrets.LETSENCRYPT_EMAIL }}|g" k8s/cluster-issuer.yaml > k8s/generated/cluster-issuer.yaml
                   cp k8s/postgres-deployment.yaml k8s/generated/postgres-deployment.yaml
                   cp k8s/redis-deployment.yaml k8s/generated/redis-deployment.yaml
                   cp k8s/deploy.sh k8s/generated/deploy.sh
@@ -65,36 +67,30 @@ jobs:
             - name: SSH Deploy to Kubernetes
               uses: appleboy/ssh-action@v1.2.2
               env:
-                COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
-                DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
-                DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
-                DISCORD_REDIRECT_URI: ${{ secrets.DISCORD_REDIRECT_URI }}
-                POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+                  COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
+                  DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
+                  DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
+                  DISCORD_REDIRECT_URI: ${{ secrets.DISCORD_REDIRECT_URI }}
+                  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
-                AUTOMATIC_VERIFICATION: ${{ vars.AUTOMATIC_VERIFICATION }}
-                AUTOMATIC_SERVER_TIMEOUT_TIMES: ${{ vars.AUTOMATIC_SERVER_TIMEOUT_TIMES }}
-                AUTOMATIC_SERVER_TIMEOUT_BATCH: ${{ vars.AUTOMATIC_SERVER_TIMEOUT_BATCH }}
-                TOKEN_EXPIRATION_HOURS: ${{ vars.TOKEN_EXPIRATION_HOURS }}
+                  LETSENCRYPT_EMAIL: ${{ secrets.LETSENCRYPT_EMAIL }}
+                  SITE_DOMAIN: ${{ vars.SITE_DOMAIN }}
+
+                  AUTOMATIC_VERIFICATION: ${{ vars.AUTOMATIC_VERIFICATION }}
+                  AUTOMATIC_SERVER_TIMEOUT_TIMES: ${{ vars.AUTOMATIC_SERVER_TIMEOUT_TIMES }}
+                  AUTOMATIC_SERVER_TIMEOUT_BATCH: ${{ vars.AUTOMATIC_SERVER_TIMEOUT_BATCH }}
+                  TOKEN_EXPIRATION_HOURS: ${{ vars.TOKEN_EXPIRATION_HOURS }}
               with:
                   host: ${{ secrets.VPS_HOST }}
                   port: ${{ secrets.VPS_PORT }}
                   username: ${{ secrets.VPS_USER }}
                   key: ${{ secrets.VPS_SSH_KEY }}
-                  envs: COOKIE_SECRET,DISCORD_CLIENT_ID,DISCORD_CLIENT_SECRET,DISCORD_REDIRECT_URI,POSTGRES_PASSWORD,AUTOMATIC_VERIFICATION,AUTOMATIC_SERVER_TIMEOUT_TIMES,AUTOMATIC_SERVER_TIMEOUT_BATCH,TOKEN_EXPIRATION_HOURS
+                  envs: COOKIE_SECRET,DISCORD_CLIENT_ID,DISCORD_CLIENT_SECRET,DISCORD_REDIRECT_URI,POSTGRES_PASSWORD,AUTOMATIC_VERIFICATION,AUTOMATIC_SERVER_TIMEOUT_TIMES,AUTOMATIC_SERVER_TIMEOUT_BATCH,TOKEN_EXPIRATION_HOURS,LETSENCRYPT_EMAIL,SITE_DOMAIN
                   script: |
                       if ! command -v kubectl &> /dev/null; then
                         curl -sfL https://get.k3s.io | sh -
                         sleep 20
                       fi
-
-                      echo "Secrets preview (debug):"
-                      echo "COOKIE_SECRET: ${COOKIE_SECRET}"
-                      echo "DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}"
-                      echo "DISCORD_CLIENT_SECRET: ${DISCORD_CLIENT_SECRET}"
-                      echo "DISCORD_REDIRECT_URI: ${DISCORD_REDIRECT_URI}"
-                      echo "POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}"
-
-                      export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
                       chmod +x /opt/k8s/generated/deploy.sh
                       /opt/k8s/generated/deploy.sh
