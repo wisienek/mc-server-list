@@ -25,6 +25,7 @@ jobs:
                   TAG=$(git rev-parse --short HEAD)
                   docker build \
                     --build-arg NEXT_PUBLIC_API_URL=https://${{ vars.SITE_DOMAIN }}/api \
+                    --build-arg NEXT_PUBLIC_DOMAIN=https://${{ vars.SITE_DOMAIN }} \
                     -t ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:$TAG \
                     -t ${{ secrets.DOCKER_USERNAME }}/mc-sv-list-frontend:latest \
                     -f apps/front/Dockerfile .

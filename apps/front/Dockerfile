@@ -23,11 +23,16 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_DOMAIN
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_DOMAIN=$NEXT_PUBLIC_DOMAIN
 
 RUN rm -rf .next node_modules/.cache dist
 
-RUN NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL npx nx run front:build
+RUN echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL" > .env.production && \
+    echo "NEXT_PUBLIC_DOMAIN=$NEXT_PUBLIC_DOMAIN" >> .env.production
+
+RUN NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL NEXT_PUBLIC_DOMAIN=$NEXT_PUBLIC_DOMAIN npx nx run front:build
 
 RUN cp -r apps/front/public apps/front/.next/standalone/apps/front && \
     cp -r apps/front/.next/static apps/front/.next/standalone/apps/front/.next/
