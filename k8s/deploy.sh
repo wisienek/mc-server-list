@@ -21,6 +21,7 @@ kubectl create secret generic mc-secrets \
 wait 10
 
 echo "Applying Kubernetes Deployments..."
+kubectl apply -f $DEPLOYMENT_DIR/cert-issuer.yaml
 kubectl apply -f $DEPLOYMENT_DIR/postgres-deployment.yaml
 kubectl apply -f $DEPLOYMENT_DIR/redis-deployment.yaml
 kubectl apply -f $DEPLOYMENT_DIR/api-deployment.yaml

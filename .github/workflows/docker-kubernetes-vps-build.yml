@@ -52,8 +52,9 @@ jobs:
                   mkdir -p k8s/generated
                   sed "s|__DOCKER_USERNAME__|${{ secrets.DOCKER_USERNAME }}|g" k8s/api-deployment.yaml > k8s/generated/api-deployment.yaml
                   sed "s|__DOCKER_USERNAME__|${{ secrets.DOCKER_USERNAME }}|g" k8s/frontend-deployment.yaml > k8s/generated/frontend-deployment.yaml
+                  sed "s|__SITE_DOMAIN__|${{ vars.SITE_DOMAIN }}|g" k8s/api-ingress.yaml > k8s/generated/api-ingress.yaml
                   sed "s|__SITE_DOMAIN__|${{ vars.SITE_DOMAIN }}|g" k8s/frontend-ingress.yaml > k8s/generated/frontend-ingress.yaml
-                  cp k8s/api-ingress.yaml k8s/generated/api-ingress.yaml
+                  sed "s|__CERT_EMAIL__|${{ vars.LETSENCRYPT_EMAIL }}|g" k8s/cert-issuer.yaml > k8s/generated/cert-issuer.yaml
                   cp k8s/api-strip-middleware.yaml k8s/generated/api-strip-middleware.yaml
                   cp k8s/postgres-deployment.yaml k8s/generated/postgres-deployment.yaml
                   cp k8s/redis-deployment.yaml k8s/generated/redis-deployment.yaml

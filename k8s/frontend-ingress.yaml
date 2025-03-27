@@ -4,9 +4,16 @@ metadata:
     name: frontend-ingress
     annotations:
         traefik.ingress.kubernetes.io/router.entrypoints: web
+        traefik.ingress.kubernetes.io/redirect-entry-point: websecure
+        cert-manager.io/cluster-issuer: letsencrypt
 spec:
+    tls:
+        - hosts:
+              - __SITE_DOMAIN__
+          secretName: mcrank-tls
     rules:
-        - http:
+        - host: __SITE_DOMAIN__
+          http:
               paths:
                   - path: /
                     pathType: Prefix
