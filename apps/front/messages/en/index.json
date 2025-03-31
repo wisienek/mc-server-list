@@ -1,6 +1,7 @@
 {
     "cancel": "Cancel",
     "genericError": "An error occurred.",
+    "resetFilters": "Reset filters",
     "themes": {
         "switchToLight": "Switch to light theme",
         "switchToDark": "Switch to dark theme"

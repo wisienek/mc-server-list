@@ -1,6 +1,7 @@
 {
     "cancel": "Anuluj",
     "genericError": "Wystąpił błąd.",
+    "resetFilters": "Resetuj filtry",
     "themes": {
         "switchToLight": "Przełącz na jasny motyw",
         "switchToDark": "Przełącz na ciemny motyw"

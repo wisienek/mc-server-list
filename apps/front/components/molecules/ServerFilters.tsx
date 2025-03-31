@@ -1,5 +1,12 @@
 'use client';
-import {type Dispatch, type FC, type SetStateAction, useRef, useState} from 'react';
+import {
+    type Dispatch,
+    type FC,
+    type SetStateAction,
+    useRef,
+    useState,
+    useMemo,
+} from 'react';
 import {useTranslations} from 'next-intl';
 import {useDebounce} from 'react-use';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -18,6 +25,7 @@ import ServerCategoriesSelect, {
 } from '@front/components/atoms/ServerCategoriesSelect';
 import {useAppSelector} from '@lib/front/components/store/store';
 import {ListServersDto} from '@shared/dto';
+import FiltersReset from '../atoms/FiltersReset';
 
 const Container = styled(Box)(({theme}) => ({
     width: '100%',
@@ -49,15 +57,18 @@ const ServerFilters: FC<ServerFiltersProps> = ({
     const profile = useAppSelector((state) => state.auth.user);
 
     const isFirstRun = useRef<boolean>(true);
+    const [initialSearchData] = useState<ListServersDto>(searchData);
     const [searchText, setSearchText] = useState<string>(searchData.q ?? '');
     const [showOwnServers, setShowOwnServers] = useState<boolean>(
         searchData.isOwn ?? false,
     );
+
     const {
         selectedCategories,
         showCategoriesContainer,
         triggerCategory,
         setShowCategoriesContainer,
+        setSelectedCategories,
     } = useCategories(searchData.categories);
 
     useDebounce(
@@ -76,6 +87,21 @@ const ServerFilters: FC<ServerFiltersProps> = ({
         800,
         [showOwnServers, selectedCategories, searchText],
     );
+
+    const changesDetected = useMemo(() => {
+        return (
+            searchText !== (initialSearchData.q ?? '') ||
+            showOwnServers !== (initialSearchData.isOwn ?? false) ||
+            selectedCategories.sort().join(',') !==
+                (initialSearchData.categories ?? []).sort().join(',')
+        );
+    }, [searchText, showOwnServers, selectedCategories, initialSearchData]);
+
+    const resetChanges = () => {
+        setSearchText(initialSearchData.q ?? '');
+        setShowOwnServers(initialSearchData.isOwn ?? false);
+        setSelectedCategories(initialSearchData.categories ?? []);
+    };
 
     const ProfileSpecificFilters = () => {
         if (!profile) {
@@ -129,6 +155,10 @@ const ServerFilters: FC<ServerFiltersProps> = ({
                         ? t('categories.hide')
                         : t('categories.show')}
                 </Button>
+                <FiltersReset
+                    changesDetected={changesDetected}
+                    resetChanges={resetChanges}
+                />
             </InputsContainer>
 
             <InputsContainer>
