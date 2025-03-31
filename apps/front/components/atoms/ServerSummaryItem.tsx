@@ -178,6 +178,9 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
             href={linkTo}
             onMouseEnter={() => router.prefetch(linkTo)}
             className="cursor-pointer"
+            style={{
+                textDecoration: 'none',
+            }}
         >
             {children}
         </Link>
@@ -185,49 +188,51 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
 
     return (
         <StyledServerSummary elevation={3}>
-            <IconContainer>
-                <LinkWrapper>
+            <LinkWrapper>
+                <IconContainer>
                     <StyledServerIcon
                         src={server.icon ?? defaultServerIcon}
                         alt="server icon"
                         width={50}
                         height={50}
                     />
-                </LinkWrapper>
 
-                <StyledNameAndRankingContainer>
-                    <Typography variant="h6" color="textPrimary" noWrap>
-                        {server.name}
-                    </Typography>
+                    <StyledNameAndRankingContainer>
+                        <Typography variant="h6" color="textPrimary" noWrap>
+                            {server.name}
+                        </Typography>
 
-                    <Typography variant="subtitle1" color="textPrimary" noWrap>
-                        #{server.ranking ?? 'n/a'}
-                    </Typography>
-                </StyledNameAndRankingContainer>
-            </IconContainer>
+                        <Typography variant="subtitle1" color="textPrimary" noWrap>
+                            #{server.ranking ?? 'n/a'}
+                        </Typography>
+                    </StyledNameAndRankingContainer>
+                </IconContainer>
+            </LinkWrapper>
 
-            <ServerDescription>
-                {server.banner && (
-                    <LinkWrapper>
-                        <ServerBannerContainer>
-                            <StyledServerBanner
-                                unoptimized
-                                loader={() => server.banner}
-                                src={server.banner}
-                                alt="server banner"
-                                width="500"
-                                height="60"
-                            />
-                        </ServerBannerContainer>
-                    </LinkWrapper>
-                )}
+            <LinkWrapper>
+                <ServerDescription>
+                    {server.banner && (
+                        <LinkWrapper>
+                            <ServerBannerContainer>
+                                <StyledServerBanner
+                                    unoptimized
+                                    loader={() => server.banner}
+                                    src={server.banner}
+                                    alt="server banner"
+                                    width="500"
+                                    height="60"
+                                />
+                            </ServerBannerContainer>
+                        </LinkWrapper>
+                    )}
 
-                {description && (
-                    <ServerDescriptionContainer>
-                        {server.mdxSource.content ?? description}
-                    </ServerDescriptionContainer>
-                )}
-            </ServerDescription>
+                    {description && (
+                        <ServerDescriptionContainer>
+                            {server.mdxSource.content ?? description}
+                        </ServerDescriptionContainer>
+                    )}
+                </ServerDescription>
+            </LinkWrapper>
 
             <StatsContainer>
                 <Box
