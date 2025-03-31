@@ -4,7 +4,7 @@ import {revalidateTag} from 'next/cache';
 import {customFetch} from './baseFetch';
 
 export async function voteForServer(hostName: string): Promise<number> {
-    return await customFetch<number>(
+    const result = await customFetch<number>(
         `/servers/${hostName}/vote`,
         {
             method: 'POST',
@@ -16,4 +16,10 @@ export async function voteForServer(hostName: string): Promise<number> {
             },
         },
     );
+
+    if (result.isErr()) {
+        return null;
+    }
+
+    return result.unwrap();
 }

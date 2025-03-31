@@ -12,11 +12,13 @@ export async function getUserData(): Promise<UserDto | null> {
         return null;
     }
 
-    try {
-        return await customFetch<UserDto>('/users/status', {
-            next: {tags: ['/users/status'], revalidate: 300},
-        });
-    } catch (_error) {
+    const result = await customFetch<UserDto>('/users/status', {
+        next: {tags: ['/users/status'], revalidate: 300},
+    });
+
+    if (result.isErr()) {
         return null;
     }
+
+    return result.unwrap();
 }

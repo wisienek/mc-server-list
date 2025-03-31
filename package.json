@@ -74,6 +74,7 @@
     "next-intl": "^3.26.3",
     "next-mdx-remote": "^5.0.0",
     "next-mdx-remote-client": "^2.0.1",
+    "oxide.ts": "^1.1.0",
     "passport": "^0.7.0",
     "passport-discord": "^0.1.4",
     "passport-local": "^1.0.0",

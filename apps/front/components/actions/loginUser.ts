@@ -11,7 +11,7 @@ export async function loginUser(data: {
     email: string;
     password: string;
 }): Promise<UserDto> {
-    return await customFetch<UserDto>(
+    const result = await customFetch<UserDto>(
         `/users/login/credentials`,
         {
             method: 'POST',
@@ -37,4 +37,9 @@ export async function loginUser(data: {
             },
         },
     );
+    if (result.isErr()) {
+        return null;
+    }
+
+    return result.unwrap();
 }

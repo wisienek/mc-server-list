@@ -8,7 +8,7 @@ export async function updateServerDetails(
     host: string,
     details: UpdateServerDetailsDto,
 ): Promise<ServerDetailsDto> {
-    return await customFetch<ServerDetailsDto>(
+    const result = await customFetch<ServerDetailsDto>(
         `/servers/${host}/details`,
         {
             method: 'PATCH',
@@ -21,4 +21,10 @@ export async function updateServerDetails(
             },
         },
     );
+
+    if (result.isErr()) {
+        return null;
+    }
+
+    return result.unwrap();
 }

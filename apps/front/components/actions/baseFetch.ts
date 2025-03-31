@@ -2,6 +2,7 @@
 
 import {CookieNames} from '@shared/enums';
 import {cookies} from 'next/headers';
+import {Result, Ok, Err} from 'oxide.ts';
 
 type CallbacksType<T> = {
     onSuccess?: (outputData?: {
@@ -19,7 +20,7 @@ export async function customFetch<T>(
         },
     },
     callbacks: CallbacksType<T> = {},
-): Promise<T> {
+): Promise<Result<T, Error>> {
     const cookieStore = await cookies();
     const sessionCookieValue = cookieStore.get(CookieNames.SESSION_ID)?.value;
 
@@ -46,17 +47,18 @@ export async function customFetch<T>(
 
             error['status'] = response.status;
 
-            throw error;
+            Err(error);
         }
 
         const returnData: T = await response.json();
         await callbacks.onSuccess?.({data: returnData, response});
-        return returnData;
+
+        return Ok(returnData);
     } catch (error) {
         if (callbacks.onError) {
             await callbacks.onError(error as Error);
         }
 
-        return Promise.reject(error);
+        return Err(error);
     }
 }

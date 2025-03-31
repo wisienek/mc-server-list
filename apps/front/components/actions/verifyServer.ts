@@ -13,7 +13,7 @@ export async function verifyServer(
         type: server.type,
     };
 
-    return await customFetch<ServerSummaryDto>(
+    const result = await customFetch<ServerSummaryDto>(
         `/servers/${server.host}/verify`,
         {
             method: 'PATCH',
@@ -26,4 +26,10 @@ export async function verifyServer(
             },
         },
     );
+
+    if (result.isErr()) {
+        return null;
+    }
+
+    return result.unwrap();
 }

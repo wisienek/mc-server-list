@@ -11,11 +11,13 @@ export async function getUserSetCredentials(): Promise<boolean | null> {
         return null;
     }
 
-    try {
-        return await customFetch<boolean>(`/users/has-credentials`, {
-            next: {tags: ['/users/has-credentials'], revalidate: 300},
-        });
-    } catch (_error) {
+    const result = await customFetch<boolean>(`/users/has-credentials`, {
+        next: {tags: ['/users/has-credentials'], revalidate: 300},
+    });
+
+    if (result.isErr()) {
         return null;
     }
+
+    return result.unwrap();
 }
