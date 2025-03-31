@@ -28,6 +28,15 @@ const StyledServerSummary = styled(Paper)(({theme}) => ({
     minWidth: 'min-content',
     gap: theme.spacing(1),
     position: 'relative',
+    transition:
+        'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease',
+
+    '&:hover': {
+        backgroundColor: theme.palette.action.hover,
+        transform: 'scale(1.01)',
+        boxShadow: theme.shadows[3],
+        zIndex: 1,
+    },
 }));
 
 const IconContainer = styled(Box)(({theme}) => ({
