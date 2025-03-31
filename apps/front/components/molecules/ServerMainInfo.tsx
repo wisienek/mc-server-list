@@ -123,14 +123,18 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
                     showAddIcon={server.owner_id === profile?.id}
                     selectedCategories={server.categories}
                     addIconAction={() => setShowingAddCategoryModal(true)}
-                    removeIconAction={(category) =>
-                        updateDetails({
-                            categories: server.categories.filter(
-                                (c) => c !== category,
-                            ),
-                        }).then(
-                            (details) => (server.categories = details.categories),
-                        )
+                    removeIconAction={
+                        server.owner_id === profile?.id
+                            ? (category) =>
+                                  updateDetails({
+                                      categories: server.categories.filter(
+                                          (c) => c !== category,
+                                      ),
+                                  }).then(
+                                      (details) =>
+                                          (server.categories = details.categories),
+                                  )
+                            : undefined
                     }
                     bodyProps={{
                         sx: {
