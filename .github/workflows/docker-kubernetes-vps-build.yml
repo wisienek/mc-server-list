@@ -1,6 +1,10 @@
 name: Build and Deploy to VPS Kubernetes
 
-on: workflow_dispatch
+on:
+    pull_request:
+        types:
+            - opened
+    workflow_dispatch:
 
 jobs:
     build-and-push:
