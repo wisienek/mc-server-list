@@ -212,18 +212,16 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
             <LinkWrapper>
                 <ServerDescription>
                     {server.banner && (
-                        <LinkWrapper>
-                            <ServerBannerContainer>
-                                <StyledServerBanner
-                                    unoptimized
-                                    loader={() => server.banner}
-                                    src={server.banner}
-                                    alt="server banner"
-                                    width="500"
-                                    height="60"
-                                />
-                            </ServerBannerContainer>
-                        </LinkWrapper>
+                        <ServerBannerContainer>
+                            <StyledServerBanner
+                                unoptimized
+                                loader={() => server.banner}
+                                src={server.banner}
+                                alt="server banner"
+                                width="500"
+                                height="60"
+                            />
+                        </ServerBannerContainer>
                     )}
 
                     {description && (
