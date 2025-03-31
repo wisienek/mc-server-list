@@ -13,15 +13,15 @@
         "password": {
             "setCredentials": "Imposta le tue credenziali:",
             "successfullySet": "Credenziali salvate con successo!",
-            "credentialsSaveError": "Si è verificato un errore durante il salvataggio delle credenziali.",
+            "credentialsSaveError": "Errore durante il salvataggio delle credenziali.",
             "password": "Password",
             "passwordPlaceholder": "Inserisci una password",
             "saving": "Salvataggio",
             "save": "Salva credenziali"
         },
         "loginModal": {
-            "title": "Inserisci le tue credenziali di accesso",
-            "email": "Indirizzo Email",
+            "title": "Inserisci le credenziali di accesso",
+            "email": "Indirizzo email",
             "password": "Password",
             "submit": "Accedi",
             "cancel": "Chiudi",
@@ -51,7 +51,7 @@
     "page": {
         "not-found": {
             "title": "Non trovato",
-            "description": "La pagina richiesta non è stata trovata, controlla l'indirizzo e riprova.",
+            "description": "La pagina richiesta non è stata trovata. Controlla l'indirizzo e riprova.",
             "return": "Torna alla home"
         },
         "seo": {
@@ -67,12 +67,12 @@
         "hostPage": {
             "javaIP": "IP Java",
             "bedrockIP": "IP Bedrock",
-            "serverCategories": "Categorie server",
+            "serverCategories": "Categorie del server",
             "versions": "Versioni",
             "playersOnline": "Giocatori online",
             "addCategory": "Aggiungi categoria",
             "serverNamePlaceholder": "Scrivi qui il nome del tuo server!",
-            "addBanner": "Aggiungi il tuo banner qui!",
+            "addBanner": "Aggiungi qui il tuo banner!",
             "categoriesModal": {
                 "title": "Scegli le categorie del server",
                 "selectedCategoriesTitle": "Categorie selezionate",
@@ -82,7 +82,7 @@
             },
             "bannerModal": {
                 "title": "Aggiungi un URL immagine",
-                "description": "Nel campo sottostante incolla un URL dell'immagine del banner (preferibilmente su IMGUR). Il rapporto di aspetto dell'immagine visualizzata è 5:1.",
+                "description": "Incolla qui sotto l'URL dell'immagine del banner (preferibilmente da IMGUR). Il rapporto dell'immagine visualizzata è 5:1.",
                 "urlLabel": "URL immagine",
                 "invalidUrl": "URL non valido. Sono consentite solo immagini da imgur.com con estensioni jpg, jpeg, png o gif.",
                 "save": "Salva modifiche"
@@ -91,16 +91,16 @@
                 "header": "Chiave",
                 "value": "Valore"
             },
-            "srvRecord": "Dati record SRV",
+            "srvRecord": "Dati del record SRV",
             "description": "Descrizione",
             "noDescription": "Nessuna descrizione fornita.",
-            "editDescription": "Entra in modalità modifica",
+            "editDescription": "Modalità modifica",
             "saveDescription": "Salva modifiche",
             "exitEditingDescription": "Termina modifica",
             "descriptionSavedTitle": "Descrizione salvata!",
-            "descriptionSavedMessage": "Numero di caratteri modificato da {initial} a {changed}",
+            "descriptionSavedMessage": "Numero di caratteri cambiato da {initial} a {changed}",
             "descriptionSaveErrorTitle": "Qualcosa è andato storto!",
-            "descriptionSaveErrorMessage": "A causa di un errore sconosciuto la descrizione non è stata salvata."
+            "descriptionSaveErrorMessage": "A causa di un errore sconosciuto, la descrizione non è stata salvata."
         }
     },
     "server": {
@@ -110,18 +110,18 @@
             "hostName": "IP / Nome host del server",
             "port": "Porta del server",
             "type": "Tipo di server",
-            "isSubmitting": "Creazione in corso...",
-            "save": "Ottieni codice di convalida",
+            "isSubmitting": "Creazione...",
+            "save": "Ottieni codice di verifica",
             "cancel": "Annulla",
             "addressRequired": "L'indirizzo del server è obbligatorio.",
             "invalidAddress": "Deve essere un indirizzo IPv4 valido o un nome host.",
             "portRequired": "La porta è obbligatoria.",
             "portMin": "La porta deve essere almeno 1.",
-            "portMax": "La porta deve essere al massimo 65535.",
-            "verificationInstructions": "Copia il codice di verifica <code></code> nel file MOTD del tuo server, quindi fai clic sul pulsante qui sotto per avviare il processo di verifica.",
+            "portMax": "La porta può essere al massimo 65535.",
+            "verificationInstructions": "Copia il codice di verifica <code></code> nel file MOTD del server, quindi clicca il pulsante qui sotto per iniziare la verifica.",
             "expiresAt": "Scade il <expirationDate></expirationDate>",
             "startVerification": "Avvia verifica",
-            "serverVerificationTitle": "Verifica il server con il codice"
+            "serverVerificationTitle": "Verifica server con codice"
         }
     }
 }

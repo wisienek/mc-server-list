@@ -11,30 +11,30 @@
         "login": "Connectez-vous avec vos identifiants",
         "logout": "Déconnexion",
         "password": {
-            "setCredentials": "Définissez vos identifiants:",
-            "successfullySet": "Identifiants enregistrés avec succès!",
-            "credentialsSaveError": "Une erreur s'est produite lors de l'enregistrement des identifiants.",
+            "setCredentials": "Définissez vos identifiants :",
+            "successfullySet": "Identifiants enregistrés avec succès !",
+            "credentialsSaveError": "Une erreur est survenue lors de l'enregistrement.",
             "password": "Mot de passe",
             "passwordPlaceholder": "Veuillez entrer un mot de passe",
             "saving": "Enregistrement",
             "save": "Enregistrer les identifiants"
         },
         "loginModal": {
-            "title": "Entrez vos identifiants de connexion",
-            "email": "Adresse Email",
+            "title": "Entrez vos identifiants",
+            "email": "Adresse e-mail",
             "password": "Mot de passe",
-            "submit": "Se connecter",
+            "submit": "Connexion",
             "cancel": "Fermer",
-            "invalidEmail": "Veuillez entrer une adresse email valide.",
+            "invalidEmail": "Veuillez entrer une adresse e-mail valide.",
             "invalidPassword": "Le mot de passe doit comporter au moins 6 caractères.",
             "loginNotification": {
-                "title": "Connecté!",
+                "title": "Connecté !",
                 "description": "Connexion réussie au compte {email}"
             }
         }
     },
     "copy": {
-        "copied": "Copié!",
+        "copied": "Copié !",
         "label": "Copier dans le presse-papiers"
     },
     "filters": {
@@ -50,19 +50,19 @@
     },
     "page": {
         "not-found": {
-            "title": "Non trouvé",
-            "description": "La page demandée est introuvable, veuillez vérifier l'adresse et réessayer.",
-            "return": "Retourner à l'accueil"
+            "title": "Introuvable",
+            "description": "La page demandée est introuvable. Veuillez vérifier l'adresse et réessayer.",
+            "return": "Retour à l'accueil"
         },
         "seo": {
-            "description": "Site web offrant un moyen simple d'ajouter et de partager des serveurs Minecraft!",
-            "title": "Liste des serveurs Minecraft"
+            "description": "Un site Web pour ajouter et partager facilement des serveurs Minecraft !",
+            "title": "Liste de serveurs Minecraft"
         },
         "list": {
-            "playersOnline": "Joueurs en ligne:",
-            "version": "Version:",
-            "verify": "Vérifiez le serveur avec le code MOTD: <code></code>",
-            "claimServer": "Ce serveur n'a pas encore de propriétaire. Si c'est vous, cliquez sur ce bouton!"
+            "playersOnline": "Joueurs en ligne :",
+            "version": "Version :",
+            "verify": "Vérifiez le serveur avec le code MOTD : <code></code>",
+            "claimServer": "Ce serveur n’a pas encore de propriétaire. Si c’est vous, cliquez sur ce bouton !"
         },
         "hostPage": {
             "javaIP": "IP Java",
@@ -71,8 +71,8 @@
             "versions": "Versions",
             "playersOnline": "Joueurs en ligne",
             "addCategory": "Ajouter une catégorie",
-            "serverNamePlaceholder": "Écrivez le nom de votre serveur ici!",
-            "addBanner": "Ajoutez votre bannière ici!",
+            "serverNamePlaceholder": "Écrivez ici le nom de votre serveur !",
+            "addBanner": "Ajoutez votre bannière ici !",
             "categoriesModal": {
                 "title": "Choisissez les catégories du serveur",
                 "selectedCategoriesTitle": "Catégories sélectionnées",
@@ -81,25 +81,25 @@
                 "save": "Enregistrer les modifications"
             },
             "bannerModal": {
-                "title": "Veuillez ajouter une URL d'image",
-                "description": "Collez ci-dessous une URL d'image de la bannière (de préférence sur la plateforme IMGUR). Le rapport d'aspect affiché est de 5:1.",
+                "title": "Ajoutez une URL d'image",
+                "description": "Collez ci-dessous l’URL de l’image de la bannière (de préférence sur IMGUR). Le rapport d’aspect affiché est 5:1.",
                 "urlLabel": "URL de l'image",
-                "invalidUrl": "URL invalide. Seules les images de imgur.com avec les extensions jpg, jpeg, png ou gif sont autorisées.",
+                "invalidUrl": "URL invalide. Seules les images provenant de imgur.com avec les extensions jpg, jpeg, png ou gif sont autorisées.",
                 "save": "Enregistrer les modifications"
             },
             "srv": {
                 "header": "Clé",
                 "value": "Valeur"
             },
-            "srvRecord": "Données d'enregistrement SRV",
+            "srvRecord": "Données d’enregistrement SRV",
             "description": "Description",
             "noDescription": "Aucune description fournie.",
-            "editDescription": "Passer en mode édition",
+            "editDescription": "Mode édition",
             "saveDescription": "Enregistrer les modifications",
-            "exitEditingDescription": "Terminer l'édition",
-            "descriptionSavedTitle": "Description enregistrée!",
+            "exitEditingDescription": "Quitter l'édition",
+            "descriptionSavedTitle": "Description enregistrée !",
             "descriptionSavedMessage": "Nombre de caractères modifié de {initial} à {changed}",
-            "descriptionSaveErrorTitle": "Une erreur est survenue!",
+            "descriptionSaveErrorTitle": "Une erreur est survenue !",
             "descriptionSaveErrorMessage": "En raison d'une erreur inconnue, la description n'a pas été enregistrée."
         }
     },
@@ -116,9 +116,9 @@
             "addressRequired": "L'adresse du serveur est requise.",
             "invalidAddress": "Doit être une adresse IPv4 valide ou un nom d'hôte.",
             "portRequired": "Le port est requis.",
-            "portMin": "Le port doit être d'au moins 1.",
-            "portMax": "Le port doit être d'au plus 65535.",
-            "verificationInstructions": "Copiez le code de vérification <code></code> dans le fichier MOTD de votre serveur, puis cliquez sur le bouton ci-dessous pour démarrer le processus de vérification.",
+            "portMin": "Le port doit être au moins 1.",
+            "portMax": "Le port doit être au maximum 65535.",
+            "verificationInstructions": "Copiez le code de vérification <code></code> dans le fichier MOTD de votre serveur, puis cliquez sur le bouton ci-dessous pour commencer le processus de vérification.",
             "expiresAt": "Expire le <expirationDate></expirationDate>",
             "startVerification": "Démarrer la vérification",
             "serverVerificationTitle": "Vérifiez le serveur avec le code"

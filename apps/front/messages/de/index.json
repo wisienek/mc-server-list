@@ -3,24 +3,24 @@
     "genericError": "Ein Fehler ist aufgetreten.",
     "resetFilters": "Filter zurücksetzen",
     "themes": {
-        "switchToLight": "Zum hellen Thema wechseln",
-        "switchToDark": "Zum dunklen Thema wechseln"
+        "switchToLight": "Zum hellen Design wechseln",
+        "switchToDark": "Zum dunklen Design wechseln"
     },
     "profile": {
         "loginDiscord": "Mit Discord anmelden!",
-        "login": "Mit Anmeldeinformationen einloggen",
+        "login": "Mit Anmeldedaten einloggen",
         "logout": "Abmelden",
         "password": {
-            "setCredentials": "Legen Sie Ihre Anmeldedaten fest:",
-            "successfullySet": "Anmeldedaten erfolgreich gespeichert!",
-            "credentialsSaveError": "Fehler beim Speichern der Anmeldedaten.",
+            "setCredentials": "Geben Sie Ihre Zugangsdaten ein:",
+            "successfullySet": "Zugangsdaten erfolgreich gespeichert!",
+            "credentialsSaveError": "Fehler beim Speichern der Zugangsdaten.",
             "password": "Passwort",
-            "passwordPlaceholder": "Bitte ein Passwort eingeben",
+            "passwordPlaceholder": "Bitte Passwort eingeben",
             "saving": "Speichern",
-            "save": "Anmeldedaten speichern"
+            "save": "Zugangsdaten speichern"
         },
         "loginModal": {
-            "title": "Geben Sie Ihre Anmeldedaten ein",
+            "title": "Login-Daten eingeben",
             "email": "E-Mail-Adresse",
             "password": "Passwort",
             "submit": "Einloggen",
@@ -29,13 +29,13 @@
             "invalidPassword": "Das Passwort muss mindestens 6 Zeichen lang sein.",
             "loginNotification": {
                 "title": "Eingeloggt!",
-                "description": "Erfolgreich in das Konto {email} eingeloggt"
+                "description": "Erfolgreich bei {email} angemeldet"
             }
         }
     },
     "copy": {
         "copied": "Kopiert!",
-        "label": "In die Zwischenablage kopieren"
+        "label": "In Zwischenablage kopieren"
     },
     "filters": {
         "searchLabel": "Name oder Beschreibung suchen",
@@ -51,18 +51,77 @@
     "page": {
         "not-found": {
             "title": "Nicht gefunden",
-            "description": "Die angeforderte Seite konnte nicht gefunden werden. Bitte überprüfen Sie die Adresse und versuchen Sie es erneut.",
+            "description": "Die angeforderte Seite wurde nicht gefunden. Bitte überprüfen Sie die Adresse und versuchen Sie es erneut.",
             "return": "Zur Startseite zurückkehren"
         },
         "seo": {
-            "description": "Website, die eine einfache Möglichkeit bietet, Minecraft-Server hinzuzufügen und zu teilen!",
+            "description": "Eine Website zum einfachen Hinzufügen und Teilen von Minecraft-Servern!",
             "title": "Minecraft-Serverliste"
         },
         "list": {
             "playersOnline": "Spieler online:",
             "version": "Version:",
             "verify": "Server mit MOTD-Code verifizieren: <code></code>",
-            "claimServer": "Dieser Server hat noch keinen Besitzer. Falls er Ihnen gehört, klicken Sie auf diesen Button!"
+            "claimServer": "Dieser Server hat noch keinen Besitzer. Wenn er Ihnen gehört, klicken Sie auf diesen Button!"
+        },
+        "hostPage": {
+            "javaIP": "Java-IP",
+            "bedrockIP": "Bedrock-IP",
+            "serverCategories": "Server-Kategorien",
+            "versions": "Versionen",
+            "playersOnline": "Spieler online",
+            "addCategory": "Kategorie hinzufügen",
+            "serverNamePlaceholder": "Geben Sie hier den Namen Ihres Servers ein!",
+            "addBanner": "Fügen Sie hier Ihr Banner hinzu!",
+            "categoriesModal": {
+                "title": "Server-Kategorien auswählen",
+                "selectedCategoriesTitle": "Ausgewählte Kategorien",
+                "showCategories": "Kategorien anzeigen",
+                "hideCategories": "Kategorien ausblenden",
+                "save": "Änderungen speichern"
+            },
+            "bannerModal": {
+                "title": "Bitte Bild-URL hinzufügen",
+                "description": "Fügen Sie unten eine URL zu Ihrem Bannerbild ein (vorzugsweise von IMGUR). Das Seitenverhältnis des Bildes beträgt 5:1.",
+                "urlLabel": "Bild-URL",
+                "invalidUrl": "Ungültige URL. Nur Bilder von imgur.com mit den Endungen jpg, jpeg, png oder gif sind erlaubt.",
+                "save": "Änderungen speichern"
+            },
+            "srv": {
+                "header": "Schlüssel",
+                "value": "Wert"
+            },
+            "srvRecord": "SRV-Record-Daten",
+            "description": "Beschreibung",
+            "noDescription": "Keine Beschreibung vorhanden.",
+            "editDescription": "Bearbeitungsmodus starten",
+            "saveDescription": "Änderungen speichern",
+            "exitEditingDescription": "Bearbeitung beenden",
+            "descriptionSavedTitle": "Beschreibung gespeichert!",
+            "descriptionSavedMessage": "Zeichenanzahl geändert von {initial} auf {changed}",
+            "descriptionSaveErrorTitle": "Etwas ist schiefgelaufen!",
+            "descriptionSaveErrorMessage": "Die Beschreibung konnte aufgrund eines unbekannten Fehlers nicht gespeichert werden."
+        }
+    },
+    "server": {
+        "add": {
+            "newServer": "Neuen Server erstellen",
+            "title": "Server zur Liste hinzufügen",
+            "hostName": "Server-IP / Hostname",
+            "port": "Server-Port",
+            "type": "Server-Typ",
+            "isSubmitting": "Erstelle...",
+            "save": "Validierungscode erhalten",
+            "cancel": "Abbrechen",
+            "addressRequired": "Server-Adresse ist erforderlich.",
+            "invalidAddress": "Muss eine gültige IPv4-Adresse oder ein Hostname sein.",
+            "portRequired": "Port ist erforderlich.",
+            "portMin": "Port muss mindestens 1 sein.",
+            "portMax": "Port darf höchstens 65535 sein.",
+            "verificationInstructions": "Kopieren Sie den Verifizierungscode <code></code> in Ihre MOTD-Datei und klicken Sie dann auf die Schaltfläche unten, um die Verifizierung zu starten.",
+            "expiresAt": "Läuft ab am <expirationDate></expirationDate>",
+            "startVerification": "Verifizierung starten",
+            "serverVerificationTitle": "Server mit Code verifizieren"
         }
     }
 }
