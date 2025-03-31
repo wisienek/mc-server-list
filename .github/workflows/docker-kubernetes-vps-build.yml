@@ -1,9 +1,12 @@
 name: Build and Deploy to VPS Kubernetes
 
 on:
+    push:
+        branches:
+            - master
     pull_request:
-        types:
-            - opened
+        branches:
+            - master
     workflow_dispatch:
 
 jobs:
