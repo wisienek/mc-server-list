@@ -105,7 +105,7 @@
     },
     "server": {
         "add": {
-            "newServer": "Utwórz nowy serwer",
+            "newServer": "Dodaj serwer",
             "title": "Dodaj serwer do listy",
             "hostName": "IP / Nazwa hosta serwera",
             "port": "Port serwera",
