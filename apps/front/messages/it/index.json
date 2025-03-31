@@ -1,6 +1,7 @@
 {
     "cancel": "Annulla",
     "genericError": "Si è verificato un errore.",
+    "resetFilters": "Reimposta filtri",
     "themes": {
         "switchToLight": "Passa al tema chiaro",
         "switchToDark": "Passa al tema scuro"

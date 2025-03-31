@@ -1,6 +1,7 @@
 {
     "cancel": "Abbrechen",
     "genericError": "Ein Fehler ist aufgetreten.",
+    "resetFilters": "Filter zurücksetzen",
     "themes": {
         "switchToLight": "Zum hellen Thema wechseln",
         "switchToDark": "Zum dunklen Thema wechseln"
