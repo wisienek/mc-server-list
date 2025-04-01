@@ -8,6 +8,8 @@ export const useErrorNotification = () => {
     const t = useTranslations();
 
     return (error: unknown) => {
+        console.error(error);
+
         if (error instanceof TError || TError.isError(error)) {
             dispatch(
                 addNotification({
