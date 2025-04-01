@@ -8,6 +8,7 @@ import {useFirstLoginQuery} from '../queries/user/useFirstLoginQuery';
 import parseCookieString from '@front/components/helpers/parseCookieString';
 import DiscordLogo from '@front/components/atoms/DiscordSpinningLogo';
 import {BroadcastingChannels} from '@front/consts';
+import {useUserQuery} from '../queries/user/userLoginQuery';
 
 const StyledAuthContainer = styled('div')(() => ({
     display: 'flex',
@@ -43,32 +44,54 @@ const Page = ({cookieString}: PageProps) => {
         }
     }, [cookieString, cookieStore]);
 
-    const {data, isLoading, error} = useFirstLoginQuery(cookieReady);
+    const {
+        data: isFirstLogin,
+        isLoading: isFirstLoginLoading,
+        error: isFirstLoginError,
+    } = useFirstLoginQuery(cookieReady);
+    const {
+        data: user,
+        isLoading: isLoadingUser,
+        error: isErrorUser,
+    } = useUserQuery(cookieReady);
 
     useEffect(() => {
-        if (data) {
-            dispatch(setUser(data.user));
-            dispatch(setIsFirstLogin(data.isFirstLogin));
+        if (user) {
+            dispatch(setUser(user));
 
             const channel = new BroadcastChannel(BroadcastingChannels.logged_in);
-            channel.postMessage({user: data.user, isFirstLogin: data.isFirstLogin});
+            channel.postMessage({user});
         }
-    }, [data, dispatch]);
+    }, [user, dispatch]);
 
     useEffect(() => {
-        if (data && !isLoading) {
+        if (isFirstLogin !== undefined) {
+            dispatch(setIsFirstLogin(isFirstLogin));
+
+            const channel = new BroadcastChannel(BroadcastingChannels.logged_in);
+            channel.postMessage({isFirstLogin});
+        }
+    }, [isFirstLogin, dispatch]);
+
+    useEffect(() => {
+        if (
+            user &&
+            isFirstLogin !== undefined &&
+            !isLoadingUser &&
+            !isFirstLoginLoading
+        ) {
             const timeoutId = setTimeout(() => window.close(), 1_500);
             return () => clearTimeout(timeoutId);
         }
-    }, [data, isLoading]);
+    }, [user, isFirstLogin, isLoadingUser, isFirstLoginLoading]);
 
-    if (error) {
-        console.error(error);
+    if (isFirstLoginError || isErrorUser) {
+        console.error({isFirstLoginError, isErrorUser});
     }
 
     return (
         <StyledAuthContainer>
-            <DiscordLogo rotate={isLoading} />
+            <DiscordLogo rotate={isLoadingUser || isFirstLoginLoading} />
         </StyledAuthContainer>
     );
 };

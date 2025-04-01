@@ -74,7 +74,7 @@ const InitializeAuth: FC<InitializeAuthProps> = ({user, isFirstLogin}) => {
         const channel = new BroadcastChannel(BroadcastingChannels.logged_in);
         channel.onmessage = ({
             data,
-        }: MessageEvent<{user: UserDto; isFirstLogin: boolean}>) => {
+        }: MessageEvent<{user?: UserDto; isFirstLogin?: boolean}>) => {
             if (data.user) {
                 dispatch(setUser(data.user));
             }
