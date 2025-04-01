@@ -123,5 +123,53 @@
             "startVerification": "Start Verification",
             "serverVerificationTitle": "Verify server with code"
         }
+    },
+    "errors": {
+        "generic": {
+            "unknown": {
+                "title": "Unexpected Error",
+                "description": "Something went wrong while processing your request. Status: {status}."
+            },
+            "fetchFailed": {
+                "title": "Network Error",
+                "description": "We couldn't connect to the server. Please try again later. Error: {message}"
+            }
+        },
+        "server": {
+            "alreadyGivenAVote": {
+                "title": "Vote already submitted",
+                "description": "You have already voted for this server."
+            },
+            "alreadyClaimed": {
+                "title": "Server already claimed",
+                "description": "This server is already claimed. Contact the administrator or wait one week after the grace period to claim it again."
+            },
+            "exists": {
+                "title": "Server already exists",
+                "description": "This server already exists. {verificationCode}"
+            },
+            "notFound": {
+                "title": "Server not found",
+                "description": "No server found for hostname: {hostname}, port: {port}, IP: {ip}."
+            },
+            "notOwnedByUser": {
+                "title": "Access denied",
+                "description": "Server {hostName} is not owned by user {userId}."
+            },
+            "verificationOffline": {
+                "title": "Server offline",
+                "description": "The server must be online to verify."
+            },
+            "verificationUnsuccessful": {
+                "title": "Verification failed",
+                "description": "The verification code is expired or invalid. If the time and code are correct, please try again in a few minutes."
+            }
+        },
+        "user": {
+            "notFound": {
+                "title": "User not found",
+                "description": "The user you are looking for does not exist."
+            }
+        }
     }
 }

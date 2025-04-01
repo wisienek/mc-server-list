@@ -1,9 +1,13 @@
 'use server';
 
+import {SerializedResult, serializeResult, TError} from '@core';
 import {revalidateTag} from 'next/cache';
+import {Result} from 'oxide.ts';
 import {customFetch} from './baseFetch';
 
-export async function voteForServer(hostName: string): Promise<number> {
+export async function voteForServer(
+    hostName: string,
+): Promise<SerializedResult<number>> {
     const result = await customFetch<number>(
         `/servers/${hostName}/vote`,
         {
@@ -17,9 +21,5 @@ export async function voteForServer(hostName: string): Promise<number> {
         },
     );
 
-    if (result.isErr()) {
-        return null;
-    }
-
-    return result.unwrap();
+    return serializeResult(result);
 }

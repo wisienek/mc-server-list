@@ -98,7 +98,7 @@
             "saveDescription": "Salva modifiche",
             "exitEditingDescription": "Termina modifica",
             "descriptionSavedTitle": "Descrizione salvata!",
-            "descriptionSavedMessage": "Numero di caratteri cambiato da {initial} a {changed}",
+            "descriptionSavedMessage": "Numero di caratteri modificato da {initial} a {changed}",
             "descriptionSaveErrorTitle": "Qualcosa è andato storto!",
             "descriptionSaveErrorMessage": "A causa di un errore sconosciuto, la descrizione non è stata salvata."
         }
@@ -122,6 +122,54 @@
             "expiresAt": "Scade il <expirationDate></expirationDate>",
             "startVerification": "Avvia verifica",
             "serverVerificationTitle": "Verifica server con codice"
+        }
+    },
+    "errors": {
+        "generic": {
+            "unknown": {
+                "title": "Errore imprevisto",
+                "description": "Si è verificato un errore durante l'elaborazione della richiesta. Stato: {status}."
+            },
+            "fetchFailed": {
+                "title": "Errore di rete",
+                "description": "Impossibile connettersi al server. Riprova più tardi. Errore: {message}"
+            }
+        },
+        "server": {
+            "alreadyGivenAVote": {
+                "title": "Voto già inviato",
+                "description": "Hai già votato per questo server."
+            },
+            "alreadyClaimed": {
+                "title": "Server già rivendicato",
+                "description": "Questo server è già stato rivendicato. Contatta l'amministratore o attendi una settimana dopo il periodo di grazia per riprovare."
+            },
+            "exists": {
+                "title": "Server già esistente",
+                "description": "Questo server è già presente. {verificationCode}"
+            },
+            "notFound": {
+                "title": "Server non trovato",
+                "description": "Nessun server trovato per host: {hostname}, porta: {port}, IP: {ip}."
+            },
+            "notOwnedByUser": {
+                "title": "Accesso negato",
+                "description": "Il server {hostName} non appartiene all'utente {userId}."
+            },
+            "verificationOffline": {
+                "title": "Server offline",
+                "description": "Il server deve essere online per la verifica."
+            },
+            "verificationUnsuccessful": {
+                "title": "Verifica fallita",
+                "description": "Il codice di verifica è scaduto o non valido. Se l'ora e il codice sono corretti, riprova tra qualche minuto."
+            }
+        },
+        "user": {
+            "notFound": {
+                "title": "Utente non trovato",
+                "description": "L'utente cercato non esiste."
+            }
         }
     }
 }

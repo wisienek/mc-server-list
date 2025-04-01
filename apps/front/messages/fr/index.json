@@ -123,5 +123,53 @@
             "startVerification": "Démarrer la vérification",
             "serverVerificationTitle": "Vérifiez le serveur avec le code"
         }
+    },
+    "errors": {
+        "generic": {
+            "unknown": {
+                "title": "Erreur inattendue",
+                "description": "Une erreur s'est produite lors du traitement de votre demande. Statut : {status}."
+            },
+            "fetchFailed": {
+                "title": "Erreur réseau",
+                "description": "Impossible de se connecter au serveur. Veuillez réessayer plus tard. Erreur : {message}"
+            }
+        },
+        "server": {
+            "alreadyGivenAVote": {
+                "title": "Vote déjà soumis",
+                "description": "Vous avez déjà voté pour ce serveur."
+            },
+            "alreadyClaimed": {
+                "title": "Serveur déjà revendiqué",
+                "description": "Ce serveur a déjà été revendiqué. Contactez l'administrateur ou attendez une semaine après la période de grâce pour le revendiquer à nouveau."
+            },
+            "exists": {
+                "title": "Serveur déjà existant",
+                "description": "Ce serveur existe déjà. {verificationCode}"
+            },
+            "notFound": {
+                "title": "Serveur introuvable",
+                "description": "Aucun serveur trouvé pour l'hôte : {hostname}, port : {port}, IP : {ip}."
+            },
+            "notOwnedByUser": {
+                "title": "Accès refusé",
+                "description": "Le serveur {hostName} n'appartient pas à l'utilisateur {userId}."
+            },
+            "verificationOffline": {
+                "title": "Serveur hors ligne",
+                "description": "Le serveur doit être en ligne pour être vérifié."
+            },
+            "verificationUnsuccessful": {
+                "title": "Échec de la vérification",
+                "description": "Le code de vérification est expiré ou invalide. Si l'heure et le code sont corrects, veuillez réessayer dans quelques minutes."
+            }
+        },
+        "user": {
+            "notFound": {
+                "title": "Utilisateur introuvable",
+                "description": "L'utilisateur que vous recherchez n'existe pas."
+            }
+        }
     }
 }

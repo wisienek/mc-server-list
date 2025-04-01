@@ -1,15 +1,16 @@
 'use server';
 
+import {parseResult, TError, type TErrorConstructor} from '@core';
 import {CookieNames} from '@shared/enums';
 import {cookies} from 'next/headers';
-import {Result, Ok, Err} from 'oxide.ts';
+import {Result, Err} from 'oxide.ts';
 
 type CallbacksType<T> = {
     onSuccess?: (outputData?: {
         data?: T;
         response?: Response;
     }) => void | Promise<void>;
-    onError?: (error?: Error) => void | Promise<void>;
+    onError?: (error?: TErrorConstructor) => void | Promise<void>;
 };
 
 export async function customFetch<T>(
@@ -20,7 +21,7 @@ export async function customFetch<T>(
         },
     },
     callbacks: CallbacksType<T> = {},
-): Promise<Result<T, Error>> {
+): Promise<Result<T, TErrorConstructor>> {
     const cookieStore = await cookies();
     const sessionCookieValue = cookieStore.get(CookieNames.SESSION_ID)?.value;
 
@@ -41,24 +42,37 @@ export async function customFetch<T>(
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
-            const error = new Error(
-                errorData.message || response.statusText || 'Unknown fetch error',
-            );
 
-            error['status'] = response.status;
+            const tError = new TError({
+                key: 'errors.generic.unknown',
+                code: response.status as never,
+                data: {
+                    status: response.status,
+                    message: errorData?.message ?? response.statusText,
+                    url,
+                },
+            });
 
-            Err(error);
+            await callbacks.onError?.(tError.toJSON());
+            return Err(tError.toJSON());
         }
 
-        const returnData: T = await response.json();
-        await callbacks.onSuccess?.({data: returnData, response});
+        const returnData = parseResult<T, TError>(await response.json());
 
-        return Ok(returnData);
+        await callbacks.onSuccess?.({data: returnData.unwrap(), response});
+
+        return returnData;
     } catch (error) {
-        if (callbacks.onError) {
-            await callbacks.onError(error as Error);
-        }
+        const tError = new TError({
+            key: 'errors.generic.fetchFailed',
+            code: 500,
+            data: {
+                message: (error as Error)?.message,
+                url,
+            },
+        });
 
-        return Err(error);
+        await callbacks.onError?.(tError);
+        return Err(tError.toJSON());
     }
 }

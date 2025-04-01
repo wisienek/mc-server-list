@@ -139,16 +139,8 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
                     setVotes(serverVotes);
                 }
             })
-            .catch((error) => {
+            .catch(() => {
                 setVotes(votes - delta);
-                dispatch(
-                    addNotification({
-                        id: server.id,
-                        level: 'Error',
-                        description: error.message,
-                        title: error.name,
-                    }),
-                );
             });
     };
 

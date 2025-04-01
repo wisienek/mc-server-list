@@ -4,7 +4,7 @@ import {useAppDispatch} from '@lib/front/components/store/store';
 import {useCookies} from 'next-client-cookies';
 import {styled} from '@mui/material/styles';
 import {useEffect, useState} from 'react';
-import {userStatusQuery} from '@front/components/queries/user/userStatusQuery';
+import {useFirstLoginQuery} from '../queries/user/useFirstLoginQuery';
 import parseCookieString from '@front/components/helpers/parseCookieString';
 import DiscordLogo from '@front/components/atoms/DiscordSpinningLogo';
 import {BroadcastingChannels} from '@front/consts';
@@ -43,7 +43,7 @@ const Page = ({cookieString}: PageProps) => {
         }
     }, [cookieString, cookieStore]);
 
-    const {data, isLoading, error} = userStatusQuery(cookieReady);
+    const {data, isLoading, error} = useFirstLoginQuery(cookieReady);
 
     useEffect(() => {
         if (data) {

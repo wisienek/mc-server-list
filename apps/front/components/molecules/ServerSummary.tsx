@@ -1,4 +1,8 @@
+import {TError} from '@core';
+import {addNotification} from '@lib/front/components/store/notificationsSlice';
+import {useAppDispatch} from '@lib/front/components/store/store';
 import {type UseQueryResult} from '@tanstack/react-query';
+import {useTranslations} from 'next-intl';
 import React, {type FC} from 'react';
 import Skeleton from '@mui/material/Skeleton';
 import {styled} from '@mui/material/styles';
@@ -66,6 +70,9 @@ const ServerSummaryList: FC<ServerSummaryListProps> = ({
     fetchServersQuery,
     setShowVerificationModal,
 }) => {
+    const dispatch = useAppDispatch();
+    const t = useTranslations();
+
     const ServerData = () => {
         if (fetchServersQuery.isLoading) {
             return new Array(10)
@@ -77,6 +84,22 @@ const ServerSummaryList: FC<ServerSummaryListProps> = ({
                         height={80}
                     />
                 ));
+        }
+
+        if (fetchServersQuery.isError) {
+            const error = fetchServersQuery.error;
+            if (error instanceof TError || TError.isError(error)) {
+                dispatch(
+                    addNotification({
+                        title: t(`${error.key}.title`, error.data),
+                        description: t(`${error.key}.description`, error.data),
+                        id: btoa(JSON.stringify(error)),
+                        level: 'Error',
+                    }),
+                );
+            }
+
+            return <></>;
         }
 
         return (

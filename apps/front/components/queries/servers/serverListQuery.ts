@@ -1,6 +1,8 @@
+import {parseResult, TError} from '@core';
 import {ListServersDto, Pagination, ServerSummaryDto} from '@shared/dto';
 import {evaluate, type EvaluateResult} from 'next-mdx-remote-client/rsc';
 import {useQuery} from '@tanstack/react-query';
+import {Result} from 'oxide.ts';
 import qs from 'qs';
 import {markdownComponents} from '@front/components/atoms/CustomMdxRemote';
 import {getQueryClient} from '@lib/front/components/atoms/getQueryClient';
@@ -30,7 +32,15 @@ export const serverListQuery = (data: ListServersDto) => {
                     },
                 );
 
-                const servers: Pagination<ServerSummaryDto> = await response.json();
+                const result: Result<
+                    Pagination<ServerSummaryDto>,
+                    TError
+                > = parseResult(await response.json());
+
+                if (result.isErr()) {
+                    throw result.unwrapErr();
+                }
+                const servers = result.unwrap();
 
                 const mappedItems = await Promise.all(
                     servers.items.map(

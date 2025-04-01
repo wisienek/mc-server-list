@@ -3,7 +3,7 @@ import {HttpStatusCode} from '@shared/enums';
 export type TErrorConstructor = {
     key: string;
     code: HttpStatusCode;
-    data?: Record<string, unknown>;
+    data?: Record<string, any>;
 };
 
 export class TError {

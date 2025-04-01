@@ -69,7 +69,6 @@ const CreateServerModalContents = ({
     setServerResponse,
 }: CreateServerModalContentsProps) => {
     const t = useTranslations('server.add');
-    const dispatch = useAppDispatch();
 
     const {mutateAsync: sendCreateServer} = useCreateServer();
 
@@ -131,17 +130,7 @@ const CreateServerModalContents = ({
             .then((data) => {
                 setServerResponse(data);
             })
-            .catch((error: Error) => {
-                console.error(error);
-                dispatch(
-                    addNotification({
-                        description: error.message,
-                        id: `${error.stack}`,
-                        level: 'Error',
-                        title: error.name,
-                    }),
-                );
-            });
+            .catch(() => {});
     };
 
     return (

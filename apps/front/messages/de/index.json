@@ -11,21 +11,21 @@
         "login": "Mit Anmeldedaten einloggen",
         "logout": "Abmelden",
         "password": {
-            "setCredentials": "Geben Sie Ihre Zugangsdaten ein:",
+            "setCredentials": "Zugangsdaten festlegen:",
             "successfullySet": "Zugangsdaten erfolgreich gespeichert!",
             "credentialsSaveError": "Fehler beim Speichern der Zugangsdaten.",
             "password": "Passwort",
-            "passwordPlaceholder": "Bitte Passwort eingeben",
+            "passwordPlaceholder": "Bitte ein Passwort eingeben",
             "saving": "Speichern",
             "save": "Zugangsdaten speichern"
         },
         "loginModal": {
-            "title": "Login-Daten eingeben",
+            "title": "Zugangsdaten eingeben",
             "email": "E-Mail-Adresse",
             "password": "Passwort",
             "submit": "Einloggen",
             "cancel": "Schließen",
-            "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+            "invalidEmail": "Bitte eine gültige E-Mail-Adresse eingeben.",
             "invalidPassword": "Das Passwort muss mindestens 6 Zeichen lang sein.",
             "loginNotification": {
                 "title": "Eingeloggt!",
@@ -35,7 +35,7 @@
     },
     "copy": {
         "copied": "Kopiert!",
-        "label": "In Zwischenablage kopieren"
+        "label": "In die Zwischenablage kopieren"
     },
     "filters": {
         "searchLabel": "Name oder Beschreibung suchen",
@@ -55,7 +55,7 @@
             "return": "Zur Startseite zurückkehren"
         },
         "seo": {
-            "description": "Eine Website zum einfachen Hinzufügen und Teilen von Minecraft-Servern!",
+            "description": "Website zum einfachen Hinzufügen und Teilen von Minecraft-Servern!",
             "title": "Minecraft-Serverliste"
         },
         "list": {
@@ -82,7 +82,7 @@
             },
             "bannerModal": {
                 "title": "Bitte Bild-URL hinzufügen",
-                "description": "Fügen Sie unten eine URL zu Ihrem Bannerbild ein (vorzugsweise von IMGUR). Das Seitenverhältnis des Bildes beträgt 5:1.",
+                "description": "Fügen Sie unten eine URL zu Ihrem Bannerbild ein (vorzugsweise von IMGUR). Das Seitenverhältnis beträgt 5:1.",
                 "urlLabel": "Bild-URL",
                 "invalidUrl": "Ungültige URL. Nur Bilder von imgur.com mit den Endungen jpg, jpeg, png oder gif sind erlaubt.",
                 "save": "Änderungen speichern"
@@ -91,16 +91,16 @@
                 "header": "Schlüssel",
                 "value": "Wert"
             },
-            "srvRecord": "SRV-Record-Daten",
+            "srvRecord": "SRV-Datensatzdaten",
             "description": "Beschreibung",
             "noDescription": "Keine Beschreibung vorhanden.",
             "editDescription": "Bearbeitungsmodus starten",
             "saveDescription": "Änderungen speichern",
             "exitEditingDescription": "Bearbeitung beenden",
             "descriptionSavedTitle": "Beschreibung gespeichert!",
-            "descriptionSavedMessage": "Zeichenanzahl geändert von {initial} auf {changed}",
+            "descriptionSavedMessage": "Anzahl der Zeichen geändert von {initial} auf {changed}",
             "descriptionSaveErrorTitle": "Etwas ist schiefgelaufen!",
-            "descriptionSaveErrorMessage": "Die Beschreibung konnte aufgrund eines unbekannten Fehlers nicht gespeichert werden."
+            "descriptionSaveErrorMessage": "Aufgrund eines unbekannten Fehlers wurde die Beschreibung nicht gespeichert."
         }
     },
     "server": {
@@ -110,18 +110,66 @@
             "hostName": "Server-IP / Hostname",
             "port": "Server-Port",
             "type": "Server-Typ",
-            "isSubmitting": "Erstelle...",
+            "isSubmitting": "Wird erstellt...",
             "save": "Validierungscode erhalten",
             "cancel": "Abbrechen",
-            "addressRequired": "Server-Adresse ist erforderlich.",
+            "addressRequired": "Serveradresse ist erforderlich.",
             "invalidAddress": "Muss eine gültige IPv4-Adresse oder ein Hostname sein.",
             "portRequired": "Port ist erforderlich.",
             "portMin": "Port muss mindestens 1 sein.",
             "portMax": "Port darf höchstens 65535 sein.",
-            "verificationInstructions": "Kopieren Sie den Verifizierungscode <code></code> in Ihre MOTD-Datei und klicken Sie dann auf die Schaltfläche unten, um die Verifizierung zu starten.",
+            "verificationInstructions": "Kopieren Sie den Verifizierungscode <code></code> in Ihre MOTD-Datei und klicken Sie dann auf den Button unten, um den Verifizierungsprozess zu starten.",
             "expiresAt": "Läuft ab am <expirationDate></expirationDate>",
             "startVerification": "Verifizierung starten",
             "serverVerificationTitle": "Server mit Code verifizieren"
+        }
+    },
+    "errors": {
+        "generic": {
+            "unknown": {
+                "title": "Unerwarteter Fehler",
+                "description": "Beim Verarbeiten der Anfrage ist ein Fehler aufgetreten. Status: {status}."
+            },
+            "fetchFailed": {
+                "title": "Netzwerkfehler",
+                "description": "Es konnte keine Verbindung zum Server hergestellt werden. Bitte versuchen Sie es später erneut. Fehler: {message}"
+            }
+        },
+        "server": {
+            "alreadyGivenAVote": {
+                "title": "Stimme bereits abgegeben",
+                "description": "Sie haben bereits für diesen Server abgestimmt."
+            },
+            "alreadyClaimed": {
+                "title": "Server bereits beansprucht",
+                "description": "Dieser Server wurde bereits beansprucht. Kontaktieren Sie den Administrator oder warten Sie eine Woche nach der Schonfrist, um ihn erneut zu beanspruchen."
+            },
+            "exists": {
+                "title": "Server existiert bereits",
+                "description": "Dieser Server existiert bereits. {verificationCode}"
+            },
+            "notFound": {
+                "title": "Server nicht gefunden",
+                "description": "Kein Server gefunden für Hostname: {hostname}, Port: {port}, IP: {ip}."
+            },
+            "notOwnedByUser": {
+                "title": "Zugriff verweigert",
+                "description": "Server {hostName} gehört nicht dem Benutzer {userId}."
+            },
+            "verificationOffline": {
+                "title": "Server offline",
+                "description": "Der Server muss online sein, um verifiziert zu werden."
+            },
+            "verificationUnsuccessful": {
+                "title": "Verifizierung fehlgeschlagen",
+                "description": "Der Verifizierungscode ist ungültig oder abgelaufen. Wenn Zeit und Code korrekt sind, versuchen Sie es in ein paar Minuten erneut."
+            }
+        },
+        "user": {
+            "notFound": {
+                "title": "Benutzer nicht gefunden",
+                "description": "Der gesuchte Benutzer existiert nicht."
+            }
         }
     }
 }

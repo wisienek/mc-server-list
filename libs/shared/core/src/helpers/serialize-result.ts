@@ -1,14 +1,14 @@
 import {Result, Ok, Err} from 'oxide.ts';
-import {TError, TErrorConstructor} from '../errors';
+import type {TErrorConstructor} from '../errors';
 
-export class SerializedResult<T, E extends TError | TErrorConstructor = TError> {
+export class SerializedResult<T> {
     ok?: T;
-    err?: E;
+    err?: TErrorConstructor;
 }
 
-export function serializeResult<T, E extends TError | TErrorConstructor = TError>(
+export function serializeResult<T, E extends TErrorConstructor = TErrorConstructor>(
     result: Result<T, E>,
-): SerializedResult<T, TErrorConstructor> {
+): SerializedResult<T> {
     if (result.isOk()) return {ok: result.unwrap()};
     const err = result.unwrapErr();
     return {
@@ -20,8 +20,8 @@ export function serializeResult<T, E extends TError | TErrorConstructor = TError
     };
 }
 
-export function parseResult<T, E extends TError | TErrorConstructor = TError>(
-    data: SerializedResult<T, E>,
+export function parseResult<T, E extends TErrorConstructor = TErrorConstructor>(
+    data: SerializedResult<T>,
 ): Result<T, E> {
     return 'ok' in data ? Ok(data.ok as T) : Err(data.err as E);
 }

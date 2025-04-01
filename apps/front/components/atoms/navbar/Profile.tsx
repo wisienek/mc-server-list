@@ -1,4 +1,5 @@
-import {getUserData} from '@front/components/actions/getUserData';
+'use client';
+import {useAppSelector} from '@lib/front/components/store/store';
 import LocaleSwitcher from './LocaleSwitcher';
 import StyledProfileContainer from './StyledProfileContainer';
 import ThemeSwitch from './dark-mode-switcher/ThemeSwitch';
@@ -7,8 +8,8 @@ import StandardLogin from './StandardLogin';
 import UserProfile from './UserProfileIcon';
 import Logout from './Logout';
 
-export default async function Profile() {
-    const user = await getUserData();
+export default function Profile() {
+    const user = useAppSelector((store) => store.auth.user);
 
     const UserContent = () => {
         return (

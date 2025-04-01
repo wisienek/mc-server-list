@@ -123,5 +123,53 @@
             "startVerification": "Rozpocznij weryfikację",
             "serverVerificationTitle": "Zweryfikuj serwer kodem"
         }
+    },
+    "errors": {
+        "generic": {
+            "unknown": {
+                "title": "Nieoczekiwany błąd",
+                "description": "Wystąpił problem podczas przetwarzania żądania. Status: {status}."
+            },
+            "fetchFailed": {
+                "title": "Błąd sieci",
+                "description": "Nie udało się połączyć z serwerem. Spróbuj ponownie później. Błąd: {message}"
+            }
+        },
+        "server": {
+            "alreadyGivenAVote": {
+                "title": "Głos już oddany",
+                "description": "Już zagłosowałeś na ten serwer."
+            },
+            "alreadyClaimed": {
+                "title": "Serwer już przejęty",
+                "description": "Ten serwer został już przejęty. Skontaktuj się z administratorem lub poczekaj tydzień po okresie karencji, aby ponownie go przejąć."
+            },
+            "exists": {
+                "title": "Serwer już istnieje",
+                "description": "Ten serwer już istnieje. {verificationCode}"
+            },
+            "notFound": {
+                "title": "Nie znaleziono serwera",
+                "description": "Nie znaleziono serwera dla hosta: {hostname}, portu: {port}, IP: {ip}."
+            },
+            "notOwnedByUser": {
+                "title": "Brak dostępu",
+                "description": "Serwer {hostName} nie należy do użytkownika {userId}."
+            },
+            "verificationOffline": {
+                "title": "Serwer offline",
+                "description": "Serwer musi być online, aby go zweryfikować."
+            },
+            "verificationUnsuccessful": {
+                "title": "Weryfikacja nieudana",
+                "description": "Kod weryfikacyjny jest nieprawidłowy lub wygasł. Jeśli czas i kod są poprawne, spróbuj ponownie za kilka minut."
+            }
+        },
+        "user": {
+            "notFound": {
+                "title": "Nie znaleziono użytkownika",
+                "description": "Podany użytkownik nie istnieje."
+            }
+        }
     }
 }

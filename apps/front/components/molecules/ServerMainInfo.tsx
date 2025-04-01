@@ -88,10 +88,10 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
         return (
             <LeftSection>
                 <Typography variant="subtitle1" color="textPrimary">
-                    {t('versions', {length: server.versions.length})}:
+                    {t('versions', {length: (server.versions ?? []).length})}:
                 </Typography>
 
-                {server.versions.map((v) => (
+                {(server.versions ?? []).map((v) => (
                     <Typography key={`v-${v}`} variant="body1" color="textSecondary">
                         {v}
                     </Typography>
@@ -121,7 +121,7 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
                 </Typography>
                 <SelectedCategoriesSummary
                     showAddIcon={server.owner_id === profile?.id}
-                    selectedCategories={server.categories}
+                    selectedCategories={server.categories ?? []}
                     addIconAction={() => setShowingAddCategoryModal(true)}
                     removeIconAction={
                         server.owner_id === profile?.id

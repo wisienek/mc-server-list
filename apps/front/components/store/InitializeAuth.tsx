@@ -1,8 +1,10 @@
 'use client';
+
 import {useCookies} from 'next-client-cookies';
-import {type FC, useEffect, useCallback, useMemo} from 'react';
+import {type FC, useEffect, useCallback, useMemo, useRef} from 'react';
 import {useRouter} from 'next/navigation';
-import {userStatusQuery} from '@front/components/queries/user/userStatusQuery';
+import {useFirstLoginQuery} from '../queries/user/useFirstLoginQuery';
+import {useUserQuery} from '../queries/user/userLoginQuery';
 import {setIsFirstLogin, setUser} from '@lib/front/components/store/authSlice';
 import {useAppDispatch} from '@lib/front/components/store/store';
 import {BroadcastingChannels} from '@front/consts';
@@ -18,34 +20,55 @@ const InitializeAuth: FC<InitializeAuthProps> = ({user, isFirstLogin}) => {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const cookieStore = useCookies();
-    const {data, refetch, isFetching} = userStatusQuery(
-        Boolean(!user || isFirstLogin === undefined),
+
+    const initialized = useRef(false);
+
+    const shouldFetch = useMemo(
+        () => !user || isFirstLogin === undefined,
+        [user, isFirstLogin],
     );
+
+    const {
+        data: userData,
+        refetch: refetchUser,
+        isFetching: isUserFetching,
+    } = useUserQuery(shouldFetch && !initialized.current);
+
+    const {
+        data: firstLoginData,
+        refetch: refetchFirstLogin,
+        isFetching: isFirstLoginFetching,
+    } = useFirstLoginQuery(shouldFetch && !initialized.current);
 
     const locale = useMemo(() => {
         return cookieStore.get('NEXT_LOCALE') ?? routing.defaultLocale;
     }, [cookieStore]);
 
-    const initializeUser = useCallback(async () => {
-        if (isFetching) {
-            return;
-        }
+    const initializeUserData = useCallback(async () => {
+        if (isUserFetching) return;
+        const userRes = userData ?? (await refetchUser()).data;
+        if (userRes) dispatch(setUser(userRes));
+    }, [userData, refetchUser, isUserFetching, dispatch]);
 
-        const userFetchResponse = data ?? (await refetch()).data;
-        if (userFetchResponse) {
-            dispatch(setUser(userFetchResponse.user));
-            dispatch(setIsFirstLogin(userFetchResponse.isFirstLogin));
-        }
-    }, [data, refetch, dispatch, isFetching]);
+    const initializeFirstLogin = useCallback(async () => {
+        if (isFirstLoginFetching) return;
+        const firstLoginRes = firstLoginData ?? (await refetchFirstLogin()).data;
+        if (firstLoginRes !== undefined) dispatch(setIsFirstLogin(firstLoginRes));
+    }, [firstLoginData, refetchFirstLogin, isFirstLoginFetching, dispatch]);
 
     useEffect(() => {
         if (!user || isFirstLogin === undefined) {
-            initializeUser();
+            if (!initialized.current) {
+                initialized.current = true;
+                initializeUserData();
+                initializeFirstLogin();
+            }
         } else {
+            initialized.current = true;
             dispatch(setUser(user));
             dispatch(setIsFirstLogin(isFirstLogin));
         }
-    }, [user, isFirstLogin, initializeUser, dispatch]);
+    }, [user, isFirstLogin, initializeUserData, initializeFirstLogin, dispatch]);
 
     useEffect(() => {
         const channel = new BroadcastChannel(BroadcastingChannels.logged_in);
@@ -66,7 +89,7 @@ const InitializeAuth: FC<InitializeAuthProps> = ({user, isFirstLogin}) => {
         };
 
         return () => channel.close();
-    }, [dispatch, router]);
+    }, [dispatch, router, locale]);
 
     return null;
 };
