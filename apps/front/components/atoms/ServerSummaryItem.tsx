@@ -1,6 +1,5 @@
 'use client';
-import {useAppDispatch, useAppSelector} from '@lib/front/components/store/store';
-import {addNotification} from '@lib/front/components/store/notificationsSlice';
+import {useAppSelector} from '@lib/front/components/store/store';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import Typography from '@mui/material/Typography';
 import {styled} from '@mui/material/styles';
@@ -119,7 +118,6 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
 }) => {
     const t = useTranslations('page.list');
     const router = useRouter();
-    const dispatch = useAppDispatch();
     const profile = useAppSelector((store) => store.auth.user);
 
     const [isLikedByUser, setIsLikedByUser] = useState<boolean>(server.isLiked);
@@ -145,6 +143,10 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
     };
 
     const handleVerifyServerClick = () => {
+        if (!profile) {
+            return;
+        }
+
         setShowVerificationModal(server);
     };
 
@@ -154,7 +156,7 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
                 position: 'absolute',
                 top: 8,
                 right: 8,
-                cursor: 'pointer',
+                cursor: profile ? 'pointer' : 'cursor',
             }}
             onClick={handleVerifyServerClick}
         >
