@@ -1,9 +1,10 @@
+import {SerializedResult, serializeResult} from '@core';
 import {Body, Controller, Get, Post, Req, UseGuards} from '@nestjs/common';
 import {InjectMapper} from '@automapper/nestjs';
 import type {Mapper} from '@automapper/core';
-import {AuthGuard} from '@nestjs/passport';
 import {ApiTags} from '@nestjs/swagger';
 import {type Request} from 'express';
+import {Ok} from 'oxide.ts';
 import {
     AuthenticatedGuard,
     DiscordAuthGuard,
@@ -36,28 +37,32 @@ export class UsersController {
 
     @UseGuards(LoginGuard)
     @Post('login/credentials')
-    loginWithCredentials(@SessionUser() user: User) {
-        return this.mapper.map(user, User, UserDto);
+    loginWithCredentials(@SessionUser() user: User): SerializedResult<UserDto> {
+        return serializeResult(Ok(this.mapper.map(user, User, UserDto)));
     }
 
     @Get('status')
     @UseGuards(AuthenticatedGuard)
-    status(@SessionUser() user: User): UserDto {
-        return this.mapper.map(user, User, UserDto);
+    status(@SessionUser() user: User): SerializedResult<UserDto> {
+        return serializeResult(Ok(this.mapper.map(user, User, UserDto)));
     }
 
     @Get('has-credentials')
     @UseGuards(AuthenticatedGuard)
-    hasCredentials(@SessionUser() user: User): Promise<boolean> {
-        return this.usersService.isFirstLogin(user.discordId);
+    async hasCredentials(
+        @SessionUser() user: User,
+    ): Promise<SerializedResult<boolean>> {
+        return serializeResult(await this.usersService.isFirstLogin(user.discordId));
     }
 
     @Post('save-credentials')
     async setCredentials(
         @SessionUser() user: User,
         @Body() data: SaveUserCredentialsDto,
-    ): Promise<void> {
-        return this.usersService.saveCredentials(user.email, data);
+    ): Promise<SerializedResult<void>> {
+        return serializeResult(
+            await this.usersService.saveCredentials(user.email, data),
+        );
     }
 
     @Post('logout')
