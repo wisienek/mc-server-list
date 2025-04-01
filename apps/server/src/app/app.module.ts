@@ -1,5 +1,4 @@
 import {RedisModule} from '@backend/redis';
-import {createKeyv, Keyv} from '@keyv/redis';
 import type {ModuleMetadata} from '@nestjs/common/interfaces/modules/module-metadata.interface';
 import {APP_GUARD} from '@nestjs/core';
 import {EventEmitterModule} from '@nestjs/event-emitter';
@@ -14,7 +13,6 @@ import {CqrsModule} from '@nestjs/cqrs';
 import {ApiConfig, getConfigs, ProjectConfig, RedisConfig} from '@backend/config';
 import {DataBaseModule, Session} from '@backend/db';
 import {LoggerModule} from '@backend/logger';
-import {CacheableMemory} from 'cacheable';
 import {ServersModule} from '../servers';
 import {UsersModule} from '../users';
 
