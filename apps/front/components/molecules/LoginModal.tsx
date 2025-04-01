@@ -16,6 +16,7 @@ import {useUserLogin} from '@front/components/queries/user/userLogin';
 import {addNotification} from '@lib/front/components/store/notificationsSlice';
 import {closeModal} from '@lib/front/components/store/modalSlice';
 import {useAppDispatch} from '@lib/front/components/store/store';
+import {BroadcastingChannels} from '../../consts';
 
 type LoginFormInputs = {
     email: string;
@@ -60,6 +61,10 @@ const LoginModal = () => {
                 }),
             }),
         );
+
+        const channel = new BroadcastChannel(BroadcastingChannels.logged_in);
+        channel.postMessage({user: loggedInAs});
+        channel.close();
     };
 
     return (

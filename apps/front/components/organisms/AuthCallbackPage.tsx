@@ -61,6 +61,7 @@ const Page = ({cookieString}: PageProps) => {
 
             const channel = new BroadcastChannel(BroadcastingChannels.logged_in);
             channel.postMessage({user});
+            channel.close();
         }
     }, [user, dispatch]);
 
@@ -70,6 +71,7 @@ const Page = ({cookieString}: PageProps) => {
 
             const channel = new BroadcastChannel(BroadcastingChannels.logged_in);
             channel.postMessage({isFirstLogin});
+            channel.close();
         }
     }, [isFirstLogin, dispatch]);
 

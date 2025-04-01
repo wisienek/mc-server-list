@@ -5,7 +5,11 @@ import {type FC, useEffect, useCallback, useMemo, useRef} from 'react';
 import {useRouter} from 'next/navigation';
 import {useFirstLoginQuery} from '../queries/user/useFirstLoginQuery';
 import {useUserQuery} from '../queries/user/userLoginQuery';
-import {setIsFirstLogin, setUser} from '@lib/front/components/store/authSlice';
+import {
+    logout,
+    setIsFirstLogin,
+    setUser,
+} from '@lib/front/components/store/authSlice';
 import {useAppDispatch} from '@lib/front/components/store/store';
 import {BroadcastingChannels} from '@front/consts';
 import {routing} from '@front/i18n/routing';
@@ -56,6 +60,26 @@ const InitializeAuth: FC<InitializeAuthProps> = ({user, isFirstLogin}) => {
         if (firstLoginRes !== undefined) dispatch(setIsFirstLogin(firstLoginRes));
     }, [firstLoginData, refetchFirstLogin, isFirstLoginFetching, dispatch]);
 
+    const loginMessageHandler = ({
+        data,
+    }: MessageEvent<{user?: UserDto; isFirstLogin?: boolean}>) => {
+        if (data.user) {
+            dispatch(setUser(data.user));
+        }
+
+        if (data.isFirstLogin !== undefined) {
+            dispatch(setIsFirstLogin(data.isFirstLogin));
+
+            if (data.isFirstLogin === true) {
+                router.push(`/${locale}/set-password`);
+            }
+        }
+    };
+
+    const logoutMessageHandler = () => {
+        dispatch(logout());
+    };
+
     useEffect(() => {
         if (!user || isFirstLogin === undefined) {
             if (!initialized.current) {
@@ -71,24 +95,16 @@ const InitializeAuth: FC<InitializeAuthProps> = ({user, isFirstLogin}) => {
     }, [user, isFirstLogin, initializeUserData, initializeFirstLogin, dispatch]);
 
     useEffect(() => {
-        const channel = new BroadcastChannel(BroadcastingChannels.logged_in);
-        channel.onmessage = ({
-            data,
-        }: MessageEvent<{user?: UserDto; isFirstLogin?: boolean}>) => {
-            if (data.user) {
-                dispatch(setUser(data.user));
-            }
+        const loginChannel = new BroadcastChannel(BroadcastingChannels.logged_in);
+        const logoutChannel = new BroadcastChannel(BroadcastingChannels.logged_out);
 
-            if (data.isFirstLogin !== undefined) {
-                dispatch(setIsFirstLogin(data.isFirstLogin));
+        loginChannel.onmessage = loginMessageHandler;
+        logoutChannel.onmessage = logoutMessageHandler;
 
-                if (data.isFirstLogin === true) {
-                    router.push(`/${locale}/set-password`);
-                }
-            }
+        return () => {
+            loginChannel.close();
+            logoutChannel.close();
         };
-
-        return () => channel.close();
     }, [dispatch, router, locale]);
 
     return null;

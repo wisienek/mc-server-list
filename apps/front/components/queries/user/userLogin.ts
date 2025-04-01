@@ -1,17 +1,14 @@
-import {parseResult, TError} from '@core';
+import {parseResult} from '@core';
 import {useMutation} from '@tanstack/react-query';
 import {loginUser} from '@front/components/actions/loginUser';
-import {addNotification} from '@lib/front/components/store/notificationsSlice';
 import {getQueryClient} from '@lib/front/components/atoms/getQueryClient';
 import {useAppDispatch} from '@lib/front/components/store/store';
 import {setUser} from '@lib/front/components/store/authSlice';
-import {useTranslations} from 'next-intl';
-import {useErrorNotification} from '../../helpers/useErrorNotification';
+import {useErrorNotification} from '@front/components/helpers/useErrorNotification';
 
 export const useUserLogin = () => {
     const queryClient = getQueryClient();
     const dispatch = useAppDispatch();
-    const t = useTranslations();
 
     return useMutation({
         mutationFn: async (data: {email: string; password: string}) => {
