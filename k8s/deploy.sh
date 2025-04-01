@@ -31,8 +31,8 @@ kubectl apply -f $DEPLOYMENT_DIR/api-strip-middleware.yaml
 kubectl apply -f $DEPLOYMENT_DIR/api-ingress.yaml
 
 echo "Restarting api and frontend deployments..."
-kubectl rollout restart deployment api-deployment
-kubectl rollout restart deployment frontend-deployment
+kubectl rollout restart deployment api
+kubectl rollout restart deployment frontend
 
 kubectl get pods -o wide
 kubectl get services
