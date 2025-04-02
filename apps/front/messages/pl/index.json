@@ -146,7 +146,7 @@
             },
             "exists": {
                 "title": "Serwer już istnieje",
-                "description": "Ten serwer już istnieje. {verificationCode}"
+                "description": "Ten serwer już istnieje. Kod weryfikacyjny: {verificationCode}"
             },
             "notFound": {
                 "title": "Nie znaleziono serwera",

@@ -146,7 +146,7 @@
             },
             "exists": {
                 "title": "Server already exists",
-                "description": "This server already exists. {verificationCode}"
+                "description": "This server already exists. Verification code: {verificationCode}"
             },
             "notFound": {
                 "title": "Server not found",

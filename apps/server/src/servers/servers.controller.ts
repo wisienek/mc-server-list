@@ -62,10 +62,11 @@ export class ServersController {
     @UseGuards(AuthenticatedGuard)
     @Post()
     async createServer(
+        @SessionUser() user: User,
         @Body() createServerDto: CreateServerDto,
     ): Promise<SerializedResult<CreateServerResponseDto>> {
         return serializeResult(
-            await this.serversService.createServer(createServerDto),
+            await this.serversService.createServer(createServerDto, user.id),
         );
     }
 

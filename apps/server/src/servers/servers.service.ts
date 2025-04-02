@@ -239,13 +239,15 @@ export class ServersService {
 
     public async createServer(
         data: CreateServerDto,
+        userId?: string,
     ): Promise<Result<CreateServerResponseDto, TError>> {
         const existsServer = await this.getServerByHostNameOrIP(data);
 
         if (existsServer) {
             return Err(
                 Errors.ServerExists(
-                    existsServer.verifications?.find((v) => v.verified)?.code,
+                    existsServer.verifications?.find((v) => v.user_id === userId)
+                        ?.code,
                 ),
             );
         }
@@ -253,7 +255,7 @@ export class ServersService {
         const fetchedServer = await this.queryBus.execute(
             plainToInstance(GetServerStatsQuery, {
                 type: data.type,
-                host: data.hostname,
+                host: `${data.hostname}${data?.port ? `:${data.port}` : ''}`,
             }),
         );
 
@@ -262,16 +264,19 @@ export class ServersService {
         }
 
         const server = await this.serverRepository.save(fetchedServer.server);
-        const verification = await this.commandBus.execute(
-            new CreateServerVerificationCommand(server.id, server.owner_id),
-        );
+        let verification: ServerVerification;
+        if (userId) {
+            verification = await this.commandBus.execute(
+                new CreateServerVerificationCommand(server.id, userId),
+            );
+        }
 
         this.logger.log(
             `Created server: ${server.host} for ${server.type} with verification: ${verification.code}`,
         );
 
         return Ok({
-            ...verification,
+            ...(verification ?? <ServerVerification>{}),
             host: server.host,
         });
     }

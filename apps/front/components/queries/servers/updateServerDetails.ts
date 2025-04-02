@@ -1,3 +1,4 @@
+import {parseResult} from '@core';
 import {updateServerDetails} from '@front/components/actions/updateServerDetails';
 import {getQueryClient} from '@lib/front/components/atoms/getQueryClient';
 import {ServerDetailsDto, UpdateServerDetailsDto} from '@shared/dto';
@@ -10,7 +11,9 @@ export const updateServerDetailsCommand = (hostName: string) => {
     return useMutation<ServerDetailsDto, Error, UpdateServerDetailsDto>(
         {
             mutationFn: async (details) => {
-                const result = await updateServerDetails(hostName, details);
+                const result = parseResult(
+                    await updateServerDetails(hostName, details),
+                );
                 if (result.isErr()) {
                     throw result.unwrapErr();
                 }

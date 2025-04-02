@@ -7,7 +7,7 @@ import {Result, Err} from 'oxide.ts';
 
 type CallbacksType<T> = {
     onSuccess?: (outputData?: {
-        data?: T;
+        data?: Result<T, TErrorConstructor>;
         response?: Response;
     }) => void | Promise<void>;
     onError?: (error?: TErrorConstructor) => void | Promise<void>;
@@ -57,9 +57,10 @@ export async function customFetch<T>(
             return Err(tError.toJSON());
         }
 
-        const returnData = parseResult<T, TError>(await response.json());
+        const body = await response.json();
+        const returnData = parseResult<T, TError>(body);
 
-        await callbacks.onSuccess?.({data: returnData.unwrap(), response});
+        await callbacks.onSuccess?.({data: returnData, response});
 
         return returnData;
     } catch (error) {

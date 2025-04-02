@@ -9,7 +9,7 @@ const MenuLogo = () => {
     return (
         <StyledLogo onClick={() => router.push('/')}>
             <LogoIcon width={60} />
-            <StyledTitle variant="h6" noWrap suppressHydrationWarning>
+            <StyledTitle variant="h1" noWrap suppressHydrationWarning>
                 MSL
             </StyledTitle>
         </StyledLogo>

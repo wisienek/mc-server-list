@@ -12,6 +12,7 @@ export const useCreateServer = () => {
         {
             mutationFn: async (data) => {
                 const result = parseResult(await createServer(data));
+
                 if (result.isErr()) {
                     throw result.unwrapErr();
                 }

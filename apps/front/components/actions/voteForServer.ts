@@ -1,8 +1,7 @@
 'use server';
 
-import {SerializedResult, serializeResult, TError} from '@core';
+import {SerializedResult, serializeResult} from '@core';
 import {revalidateTag} from 'next/cache';
-import {Result} from 'oxide.ts';
 import {customFetch} from './baseFetch';
 
 export async function voteForServer(
