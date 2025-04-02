@@ -4,7 +4,7 @@ import {evaluate, type EvaluateResult} from 'next-mdx-remote-client/rsc';
 import {useQuery} from '@tanstack/react-query';
 import {Result} from 'oxide.ts';
 import qs from 'qs';
-import {markdownComponents} from '@front/components/atoms/CustomMdxRemote';
+import {markdownComponentsWithoutAnchor} from '@front/components/atoms/CustomMdxRemote';
 import {getQueryClient} from '@lib/front/components/atoms/getQueryClient';
 
 export type ServerPaginatedListWithMDXSource = {
@@ -49,7 +49,7 @@ export const serverListQuery = (data: ListServersDto) => {
                                 ...server,
                                 mdxSource: await evaluate({
                                     source: server?.description ?? '',
-                                    components: markdownComponents,
+                                    components: markdownComponentsWithoutAnchor,
                                 }),
                             },
                     ),
