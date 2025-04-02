@@ -3,10 +3,14 @@ import {getUserSetCredentials} from '@front/components/actions/getUserSetCredent
 import {getUserData} from '@front/components/actions/getUserData';
 import {ReactQueryClientProvider} from '@lib/front/components/atoms/ReactQueryClientProvider';
 import Providers from '@front/components/atoms/Providers';
+import {CookieNames} from '@shared/enums';
 import {CookiesProvider} from 'next-client-cookies/server';
+import {cookies} from 'next/headers';
 
 export default async function RootLayout({children}) {
-    const userResponse = parseResult(await getUserData());
+    const sessionCookie = (await cookies()).get(CookieNames.SESSION_ID)?.value;
+
+    const userResponse = parseResult(await getUserData(sessionCookie));
     const loginResponse = parseResult(await getUserSetCredentials());
 
     const user = userResponse.isOk() ? userResponse.unwrap() : undefined;

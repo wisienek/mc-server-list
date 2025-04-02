@@ -2,14 +2,12 @@
 
 import {SerializedResult, serializeResult} from '@core';
 import {UserDto} from '@shared/dto';
-import {CookieNames} from '@shared/enums';
-import {cookies} from 'next/headers';
 import {Ok} from 'oxide.ts';
 import {customFetch} from './baseFetch';
 
-export async function getUserData(): Promise<SerializedResult<UserDto | null>> {
-    const sessionId = (await cookies()).get(CookieNames.SESSION_ID)?.value;
-
+export async function getUserData(
+    sessionId: string,
+): Promise<SerializedResult<UserDto | null>> {
     if (!sessionId) {
         return serializeResult(Ok(null));
     }
