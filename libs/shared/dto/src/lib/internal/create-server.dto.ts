@@ -1,5 +1,4 @@
 import {IsEnum, IsInt, IsPositive, IsString, Max, ValidateIf} from 'class-validator';
-import {ApiProperty} from '@nestjs/swagger';
 import {AutoMap} from '@automapper/classes';
 import {ServerType} from '@shared/enums';
 
@@ -26,13 +25,6 @@ export class CreateServerDto {
 }
 
 export class CreateServerResponseDto {
-    @ApiProperty({
-        description: `Code that has to be put inside a MOTD file and verified.`,
-    })
-    @IsString()
-    @AutoMap()
-    code: string;
-
     @IsString()
     @AutoMap()
     host: string;

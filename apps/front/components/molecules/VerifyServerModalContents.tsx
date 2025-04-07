@@ -1,8 +1,5 @@
 'use client';
-import {addNotification} from '@lib/front/components/store/notificationsSlice';
-import {useAppDispatch} from '@lib/front/components/store/store';
 import {useTranslations} from 'next-intl';
-import {AxiosError} from 'axios';
 import type {FC} from 'react';
 import Typography from '@mui/material/Typography';
 import {styled} from '@mui/material/styles';
@@ -11,6 +8,7 @@ import Box from '@mui/material/Box';
 import CopyableTypography from '@front/components/atoms/CopyableTypography';
 import {useVerifyServer} from '@front/components/queries/servers/verifyServer';
 import {ServerSummaryDto} from '@shared/dto';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const StyledCode = styled('code')(({theme}) => ({
     wordBreak: 'normal',
@@ -23,26 +21,37 @@ const StyledCode = styled('code')(({theme}) => ({
 
 interface VerifyServerModalContentsProps {
     server: ServerSummaryDto;
+    handleClose: () => void;
 }
 
-const VerifyServerModalContents: FC<VerifyServerModalContentsProps> = ({server}) => {
+const PendingIcon = () => {
+    return (
+        <Box
+            sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}
+        >
+            <CircularProgress size={20} thickness={5} />
+        </Box>
+    );
+};
+
+const VerifyServerModalContents: FC<VerifyServerModalContentsProps> = ({
+    server,
+    handleClose,
+}) => {
     const t = useTranslations('server.add');
-    const dispatch = useAppDispatch();
 
-    const {mutateAsync: verifyServer} = useVerifyServer();
+    const {mutateAsync: verifyServer, isPending} = useVerifyServer();
 
-    const onStartVerification = () => {
-        verifyServer(server).catch((error: AxiosError) => {
-            console.error(error);
-            dispatch(
-                addNotification({
-                    description: error.response.data['message'] ?? error.message,
-                    id: `${error.status}`,
-                    level: 'Error',
-                    title: error.response.statusText,
-                }),
-            );
-        });
+    const onStartVerification = async () => {
+        const handled = await verifyServer(server);
+        if (handled) {
+            // TODO: add notification
+            handleClose();
+        }
     };
 
     return (
@@ -61,6 +70,8 @@ const VerifyServerModalContents: FC<VerifyServerModalContentsProps> = ({server})
                 variant="contained"
                 color="primary"
                 onClick={onStartVerification}
+                disabled={isPending}
+                endIcon={isPending ? <PendingIcon /> : null}
                 sx={{mt: 3}}
             >
                 <Typography variant="button" color="textPrimary">

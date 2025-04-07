@@ -12,6 +12,7 @@ export const useVerifyServer = () => {
         {
             mutationFn: async (data) => {
                 const result = parseResult(await verifyServer(data));
+
                 if (result.isErr()) {
                     throw result.unwrapErr();
                 }

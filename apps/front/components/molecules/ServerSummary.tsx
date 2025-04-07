@@ -21,16 +21,18 @@ const ServerSummaryListContainer = styled(Grid)(({theme}) => ({
 
 type ServerSummaryListProps = {
     setShowVerificationModal: (server: ServerSummaryDto) => void;
+    changePagination: (page: number) => void;
     fetchServersQuery: UseQueryResult<Pagination<ServerPaginatedListWithMDXSource>>;
 };
 
 type ServerSummaryAwaitedProps = {
     fetchedServers: UseQueryResult<Pagination<ServerPaginatedListWithMDXSource>>;
-} & Pick<ServerSummaryListProps, 'setShowVerificationModal'>;
+} & Pick<ServerSummaryListProps, 'setShowVerificationModal' | 'changePagination'>;
 
 const ServerSummaryAwaited: FC<ServerSummaryAwaitedProps> = ({
     fetchedServers,
     setShowVerificationModal,
+    changePagination,
 }) => {
     const data = fetchedServers.data;
 
@@ -42,7 +44,7 @@ const ServerSummaryAwaited: FC<ServerSummaryAwaitedProps> = ({
                     currentPage={data.currentPage}
                     pages={data.totalPages}
                     totalItems={data.total}
-                    setCurrentPage={() => {}}
+                    setCurrentPage={changePagination}
                 />
             )
         );
@@ -69,6 +71,7 @@ const ServerSummaryAwaited: FC<ServerSummaryAwaitedProps> = ({
 const ServerSummaryList: FC<ServerSummaryListProps> = ({
     fetchServersQuery,
     setShowVerificationModal,
+    changePagination,
 }) => {
     const dispatch = useAppDispatch();
     const t = useTranslations();
@@ -106,6 +109,7 @@ const ServerSummaryList: FC<ServerSummaryListProps> = ({
             <ServerSummaryAwaited
                 fetchedServers={fetchServersQuery}
                 setShowVerificationModal={setShowVerificationModal}
+                changePagination={changePagination}
             />
         );
     };

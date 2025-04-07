@@ -89,15 +89,19 @@ export class VerifyServerCommandHandler
         verification: ServerVerification,
     ): Promise<{verification: ServerVerification; status: boolean}> {
         const {server} = verification;
-        const address = server.host ?? `${server.ip_address}:${server.port}`;
+        const address = `${server.host ? server.host : server.ip_address}${
+            server.port ? `:${server.port}` : ''
+        }`;
 
-        const {stats}: GetServerStatsQueryHandlerReturnType =
-            await this.queryBus.execute(
-                plainToInstance(GetServerStatsQuery, {
-                    type: server.type,
-                    host: address,
-                }),
-            );
+        const {stats} = await this.queryBus.execute<
+            GetServerStatsQuery,
+            GetServerStatsQueryHandlerReturnType
+        >(
+            plainToInstance(GetServerStatsQuery, {
+                type: server.type,
+                host: address,
+            }),
+        );
 
         if (stats instanceof MinecraftServerOfflineStatus) {
             return {verification, status: false};
@@ -105,6 +109,7 @@ export class VerifyServerCommandHandler
 
         const cleanMotd = stats.motd.clean.join(' ').toLowerCase();
         const motdHasData = cleanMotd.includes(verification.code.toLowerCase());
+
         return {verification, status: motdHasData};
     }
 }

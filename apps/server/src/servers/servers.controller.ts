@@ -1,6 +1,6 @@
 import {AuthenticatedGuard, SessionUser} from '@backend/auth';
 import {VerifyServerCommand} from '@backend/commander';
-import {serializeResult, SerializedResult} from '@core';
+import {serializeResult, SerializedResult, Errors} from '@core';
 import {CommandBus} from '@nestjs/cqrs';
 import {
     ApiBadRequestResponse,
@@ -20,7 +20,7 @@ import {
     Query,
     UseGuards,
 } from '@nestjs/common';
-import {User} from '@backend/db';
+import {Server, User} from '@backend/db';
 import {seconds, SkipThrottle, Throttle} from '@nestjs/throttler';
 import {
     CreateServerDto,
@@ -33,12 +33,16 @@ import {
     VerifyServerDto,
 } from '@shared/dto';
 import {ServersService} from './servers.service';
+import {InjectMapper} from '@automapper/nestjs';
+import type {Mapper} from '@automapper/core';
+import {Err} from 'oxide.ts';
 
 @Controller('servers')
 export class ServersController {
     constructor(
         private readonly serversService: ServersService,
         private readonly commandBus: CommandBus,
+        @InjectMapper() private readonly mapper: Mapper,
     ) {}
 
     @SkipThrottle()
@@ -95,15 +99,21 @@ export class ServersController {
     @Patch(':host/verify')
     async verifyServer(
         @SessionUser() user: User,
+        @Param('host') host: string,
         @Body() data: VerifyServerDto,
     ): Promise<SerializedResult<ServerSummaryDto>> {
-        await this.commandBus.execute(
-            new VerifyServerCommand(data.hostname, user.id),
-        );
+        const verifiedServers = await this.commandBus.execute<
+            VerifyServerCommand,
+            Server[]
+        >(new VerifyServerCommand(data.hostname, user.id));
+        const verifiedServer = verifiedServers.find((s) => s.host === host);
+        if (verifiedServer) {
+            return serializeResult(
+                await this.serversService.getServer(data.hostname, user.id),
+            );
+        }
 
-        return serializeResult(
-            await this.serversService.getServer(data.hostname, user.id),
-        );
+        return serializeResult(Err(Errors.ServerVerificationUnsuccessful()));
     }
 
     @ApiParam({name: 'host', required: true, description: 'hostname of the server'})

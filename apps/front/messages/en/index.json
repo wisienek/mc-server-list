@@ -1,175 +1,183 @@
 {
-    "cancel": "Cancel",
-    "genericError": "An error occurred.",
-    "resetFilters": "Reset filters",
-    "themes": {
-        "switchToLight": "Switch to light theme",
-        "switchToDark": "Switch to dark theme"
+  "cancel": "Cancel",
+  "genericError": "An error occurred.",
+  "resetFilters": "Reset filters",
+  "themes": {
+    "switchToLight": "Switch to light theme",
+    "switchToDark": "Switch to dark theme"
+  },
+  "profile": {
+    "loginDiscord": "Login with discord!",
+    "login": "Login with credentials",
+    "logout": "Logout",
+    "password": {
+      "setCredentials": "Set Your credentials:",
+      "successfullySet": "Credentials saved successfully!",
+      "credentialsSaveError": "An error occurred while saving credentials.",
+      "password": "Password",
+      "passwordPlaceholder": "Please enter a password",
+      "saving": "Saving",
+      "save": "Save credentials"
     },
-    "profile": {
-        "loginDiscord": "Login with discord!",
-        "login": "Login with credentials",
-        "logout": "Logout",
-        "password": {
-            "setCredentials": "Set Your credentials:",
-            "successfullySet": "Credentials saved successfully!",
-            "credentialsSaveError": "An error occurred while saving credentials.",
-            "password": "Password",
-            "passwordPlaceholder": "Please enter a password",
-            "saving": "Saving",
-            "save": "Save credentials"
-        },
-        "loginModal": {
-            "title": "Enter your login credentials",
-            "email": "Email Address",
-            "password": "Password",
-            "submit": "Login",
-            "cancel": "Close",
-            "invalidEmail": "Enter a valid email address.",
-            "invalidPassword": "Password must be at least 6 characters long.",
-            "loginNotification": {
-                "title": "Logged in!",
-                "description": "Successfully logged into {email} account"
-            }
-        }
+    "loginModal": {
+      "title": "Enter your login credentials",
+      "email": "Email Address",
+      "password": "Password",
+      "submit": "Login",
+      "cancel": "Close",
+      "invalidEmail": "Enter a valid email address.",
+      "invalidPassword": "Password must be at least 6 characters long.",
+      "loginNotification": {
+        "title": "Logged in!",
+        "description": "Successfully logged into {email} account"
+      }
+    }
+  },
+  "copy": {
+    "copied": "Copied!",
+    "label": "Copy to clipboard"
+  },
+  "filters": {
+    "searchLabel": "Search name or description",
+    "showMyServers": "Show my servers",
+    "categories": {
+      "show": "Show categories",
+      "hide": "Hide categories"
+    }
+  },
+  "footer": {
+    "credits": "Created and designed by <author>@Wisienek</author> 2025"
+  },
+  "page": {
+    "not-found": {
+      "title": "Not Found",
+      "description": "The page that you requested could not be found, please check the address and try again.",
+      "return": "Return Home"
     },
-    "copy": {
-        "copied": "Copied!",
-        "label": "Copy to clipboard"
+    "seo": {
+      "description": "Website providing easy way to add and share minecraft servers!",
+      "title": "Minecraft server list"
     },
-    "filters": {
-        "searchLabel": "Search name or description",
-        "showMyServers": "Show my servers",
-        "categories": {
-            "show": "Show categories",
-            "hide": "Hide categories"
-        }
+    "list": {
+      "playersOnline": "Players online:",
+      "version": "Version:",
+      "verify": "Verify server with MOTD code: <code></code>",
+      "claimServer": "Server doesn't have an owner yet. If it's you click this button!"
     },
-    "footer": {
-        "credits": "Created and designed by <author>@Wisienek</author> 2025"
+    "hostPage": {
+      "javaIP": "Java IP",
+      "bedrockIP": "Bedrock IP",
+      "serverCategories": "Server Categories",
+      "versions": "Versions",
+      "playersOnline": "Online players",
+      "addCategory": "Add category",
+      "serverNamePlaceholder": "Write your server name here!",
+      "addBanner": "Add your banner here!",
+      "categoriesModal": {
+        "title": "Pick server categories",
+        "selectedCategoriesTitle": "Selected categories",
+        "showCategories": "Show categories",
+        "hideCategories": "Hide categories",
+        "save": "Save changes"
+      },
+      "bannerModal": {
+        "title": "Please add an image URL",
+        "description": "In the input below paste in an URL to the banner image (preferably on IMGUR platform). The aspect ratio for image displayed is 5:1.",
+        "urlLabel": "Image URL",
+        "invalidUrl": "Invalid URL. Only images from imgur.com with jpg, jpeg, png, or gif extensions are allowed.",
+        "save": "Save changes"
+      },
+      "srv": {
+        "header": "Key",
+        "value": "Value"
+      },
+      "srvRecord": "SRV Record data",
+      "description": "Description",
+      "noDescription": "No description provided.",
+      "editDescription": "Enter editing mode",
+      "saveDescription": "Save changes",
+      "exitEditingDescription": "Finish editing",
+      "descriptionSavedTitle": "Description saved!",
+      "descriptionSavedMessage": "Changed number of characters from {initial} to {changed}",
+      "descriptionSaveErrorTitle": "Something went wrong!",
+      "descriptionSaveErrorMessage": "Due to some unknown error description was not saved."
+    }
+  },
+  "server": {
+    "add": {
+      "newServer": "Create new server",
+      "title": "Add server to the list",
+      "hostName": "Server IP / Hostname",
+      "port": "Server Port",
+      "type": "Server Type",
+      "isSubmitting": "Creating...",
+      "save": "Get validation code",
+      "cancel": "Cancel",
+      "addressRequired": "Server address is required.",
+      "invalidAddress": "Must be a valid IPv4 address or hostname.",
+      "portRequired": "Port is required.",
+      "portMin": "Port must be at least 1.",
+      "portMax": "Port must be at most 65535.",
+      "verificationInstructions": "Copy the verification code <code></code> into your server MOTD file, then click the button below to start the verification process.",
+      "expiresAt": "Expires at <expirationDate></expirationDate>",
+      "startVerification": "Start Verification",
+      "serverVerificationTitle": "Verify server with code"
     },
-    "page": {
-        "not-found": {
-            "title": "Not Found",
-            "description": "The page that you requested could not be found, please check the address and try again.",
-            "return": "Return Home"
-        },
-        "seo": {
-            "description": "Website providing easy way to add and share minecraft servers!",
-            "title": "Minecraft server list"
-        },
-        "list": {
-            "playersOnline": "Players online:",
-            "version": "Version:",
-            "verify": "Verify server with MOTD code: <code></code>",
-            "claimServer": "Server doesn't have an owner yet. If it's you click this button!"
-        },
-        "hostPage": {
-            "javaIP": "Java IP",
-            "bedrockIP": "Bedrock IP",
-            "serverCategories": "Server Categories",
-            "versions": "Versions",
-            "playersOnline": "Online players",
-            "addCategory": "Add category",
-            "serverNamePlaceholder": "Write your server name here!",
-            "addBanner": "Add your banner here!",
-            "categoriesModal": {
-                "title": "Pick server categories",
-                "selectedCategoriesTitle": "Selected categories",
-                "showCategories": "Show categories",
-                "hideCategories": "Hide categories",
-                "save": "Save changes"
-            },
-            "bannerModal": {
-                "title": "Please add an image URL",
-                "description": "In the input below paste in an URL to the banner image (preferably on IMGUR platform). The aspect ratio for image displayed is 5:1.",
-                "urlLabel": "Image URL",
-                "invalidUrl": "Invalid URL. Only images from imgur.com with jpg, jpeg, png, or gif extensions are allowed.",
-                "save": "Save changes"
-            },
-            "srv": {
-                "header": "Key",
-                "value": "Value"
-            },
-            "srvRecord": "SRV Record data",
-            "description": "Description",
-            "noDescription": "No description provided.",
-            "editDescription": "Enter editing mode",
-            "saveDescription": "Save changes",
-            "exitEditingDescription": "Finish editing",
-            "descriptionSavedTitle": "Description saved!",
-            "descriptionSavedMessage": "Changed number of characters from {initial} to {changed}",
-            "descriptionSaveErrorTitle": "Something went wrong!",
-            "descriptionSaveErrorMessage": "Due to some unknown error description was not saved."
-        }
+    "created": {
+      "title": "Server Added!",
+      "description": "Server with hostname: {host} has been successfully added!"
+    }
+  },
+  "errors": {
+    "generic": {
+      "unknown": {
+        "title": "Unexpected Error",
+        "description": "Something went wrong while processing your request. Status: {status}."
+      },
+      "fetchFailed": {
+        "title": "Network Error",
+        "description": "We couldn't connect to the server. Please try again later. Error: {message}"
+      },
+      "tooFast": {
+        "title": "Too fast!",
+        "description": "Request is made too fast, wait a second and try again!"
+      }
     },
     "server": {
-        "add": {
-            "newServer": "Create new server",
-            "title": "Add server to the list",
-            "hostName": "Server IP / Hostname",
-            "port": "Server Port",
-            "type": "Server Type",
-            "isSubmitting": "Creating...",
-            "save": "Get validation code",
-            "cancel": "Cancel",
-            "addressRequired": "Server address is required.",
-            "invalidAddress": "Must be a valid IPv4 address or hostname.",
-            "portRequired": "Port is required.",
-            "portMin": "Port must be at least 1.",
-            "portMax": "Port must be at most 65535.",
-            "verificationInstructions": "Copy the verification code <code></code> into your server MOTD file, then click the button below to start the verification process.",
-            "expiresAt": "Expires at <expirationDate></expirationDate>",
-            "startVerification": "Start Verification",
-            "serverVerificationTitle": "Verify server with code"
-        }
+      "alreadyGivenAVote": {
+        "title": "Vote already submitted",
+        "description": "You have already voted for this server."
+      },
+      "alreadyClaimed": {
+        "title": "Server already claimed",
+        "description": "This server is already claimed. Contact the administrator or wait one week after the grace period to claim it again."
+      },
+      "exists": {
+        "title": "Server already exists",
+        "description": "This server already exists. Verification code: {verificationCode}"
+      },
+      "notFound": {
+        "title": "Server not found",
+        "description": "No server found for hostname: {hostname}, port: {port}, IP: {ip}."
+      },
+      "notOwnedByUser": {
+        "title": "Access denied",
+        "description": "Server {hostName} is not owned by user {userId}."
+      },
+      "verificationOffline": {
+        "title": "Server offline",
+        "description": "The server must be online to verify."
+      },
+      "verificationUnsuccessful": {
+        "title": "Verification failed",
+        "description": "The verification code is expired or invalid. If the time and code are correct, please try again in a few minutes."
+      }
     },
-    "errors": {
-        "generic": {
-            "unknown": {
-                "title": "Unexpected Error",
-                "description": "Something went wrong while processing your request. Status: {status}."
-            },
-            "fetchFailed": {
-                "title": "Network Error",
-                "description": "We couldn't connect to the server. Please try again later. Error: {message}"
-            }
-        },
-        "server": {
-            "alreadyGivenAVote": {
-                "title": "Vote already submitted",
-                "description": "You have already voted for this server."
-            },
-            "alreadyClaimed": {
-                "title": "Server already claimed",
-                "description": "This server is already claimed. Contact the administrator or wait one week after the grace period to claim it again."
-            },
-            "exists": {
-                "title": "Server already exists",
-                "description": "This server already exists. Verification code: {verificationCode}"
-            },
-            "notFound": {
-                "title": "Server not found",
-                "description": "No server found for hostname: {hostname}, port: {port}, IP: {ip}."
-            },
-            "notOwnedByUser": {
-                "title": "Access denied",
-                "description": "Server {hostName} is not owned by user {userId}."
-            },
-            "verificationOffline": {
-                "title": "Server offline",
-                "description": "The server must be online to verify."
-            },
-            "verificationUnsuccessful": {
-                "title": "Verification failed",
-                "description": "The verification code is expired or invalid. If the time and code are correct, please try again in a few minutes."
-            }
-        },
-        "user": {
-            "notFound": {
-                "title": "User not found",
-                "description": "The user you are looking for does not exist."
-            }
-        }
+    "user": {
+      "notFound": {
+        "title": "User not found",
+        "description": "The user you are looking for does not exist."
+      }
     }
+  }
 }

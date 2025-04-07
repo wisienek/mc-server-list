@@ -2,6 +2,7 @@ import {TError} from '@core';
 import {addNotification} from '@lib/front/components/store/notificationsSlice';
 import {useAppDispatch} from '@lib/front/components/store/store';
 import {useTranslations} from 'next-intl';
+import {HttpStatusCode} from '@shared/enums';
 
 export const useErrorNotification = () => {
     const dispatch = useAppDispatch();
@@ -16,7 +17,10 @@ export const useErrorNotification = () => {
                     title: t(`${error.key}.title`, error.data),
                     description: t(`${error.key}.description`, error.data),
                     id: btoa(JSON.stringify(error)),
-                    level: 'Error',
+                    level:
+                        error.code === HttpStatusCode.TOO_MANY_REQUESTS
+                            ? 'Warning'
+                            : 'Error',
                 }),
             );
         }

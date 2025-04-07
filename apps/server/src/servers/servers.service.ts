@@ -29,6 +29,7 @@ import {
     ServerSummaryDto,
     UpdateServerDetailsDto,
 } from '@shared/dto';
+import type {GetServerStatsQueryHandlerReturnType} from '@api/src/servers/handlers';
 
 @Injectable()
 export class ServersService {
@@ -177,6 +178,10 @@ export class ServersService {
                     item,
                 );
 
+                if (Array.isArray(dto.description)) {
+                    dto.description = dto.description.join(' ');
+                }
+
                 dto.isLiked = userId
                     ? await this.voteRepository.exists({
                           where: {server_id: item.id, user_id: userId},
@@ -186,10 +191,10 @@ export class ServersService {
                 dto.ranking = ranking;
 
                 if (userId) {
-                    const verification: ServerVerification =
-                        await this.commandBus.execute(
-                            new CreateServerVerificationCommand(item.id, userId),
-                        );
+                    const verification = await this.commandBus.execute<
+                        CreateServerVerificationCommand,
+                        ServerVerification
+                    >(new CreateServerVerificationCommand(item.id, userId));
 
                     dto.verificationCode = verification.code;
                 }
@@ -228,9 +233,10 @@ export class ServersService {
         dto.isOwner = baseServer.owner_id === userId;
 
         if (userId) {
-            const verification: ServerVerification = await this.commandBus.execute(
-                new CreateServerVerificationCommand(baseServer.id, userId),
-            );
+            const verification = await this.commandBus.execute<
+                CreateServerVerificationCommand,
+                ServerVerification
+            >(new CreateServerVerificationCommand(baseServer.id, userId));
             dto.verificationCode = verification.code;
         }
 
@@ -252,10 +258,15 @@ export class ServersService {
             );
         }
 
-        const fetchedServer = await this.queryBus.execute(
+        const fetchedServer = await this.queryBus.execute<
+            GetServerStatsQuery,
+            GetServerStatsQueryHandlerReturnType
+        >(
             plainToInstance(GetServerStatsQuery, {
                 type: data.type,
-                host: `${data.hostname}${data?.port ? `:${data.port}` : ''}`,
+                host: `${data.hostname}${
+                    data?.port ? `:${data.port}` : ''
+                }`.toLowerCase(),
             }),
         );
 
@@ -264,19 +275,10 @@ export class ServersService {
         }
 
         const server = await this.serverRepository.save(fetchedServer.server);
-        let verification: ServerVerification;
-        if (userId) {
-            verification = await this.commandBus.execute(
-                new CreateServerVerificationCommand(server.id, userId),
-            );
-        }
 
-        this.logger.log(
-            `Created server: ${server.host} for ${server.type} with verification: ${verification.code}`,
-        );
+        this.logger.log(`Created server: ${server.host} for ${server.type}`);
 
         return Ok({
-            ...(verification ?? <ServerVerification>{}),
             host: server.host,
         });
     }

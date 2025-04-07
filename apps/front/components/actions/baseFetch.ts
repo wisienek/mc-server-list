@@ -1,7 +1,7 @@
 'use server';
 
 import {parseResult, TError, type TErrorConstructor} from '@core';
-import {CookieNames} from '@shared/enums';
+import {CookieNames, HttpStatusCode} from '@shared/enums';
 import {cookies} from 'next/headers';
 import {Result, Err} from 'oxide.ts';
 
@@ -44,7 +44,10 @@ export async function customFetch<T>(
             const errorData = await response.json().catch(() => ({}));
 
             const tError = new TError({
-                key: 'errors.generic.unknown',
+                key:
+                    response.status === HttpStatusCode.TOO_MANY_REQUESTS
+                        ? 'errors.generic.tooFast'
+                        : 'errors.generic.unknown',
                 code: response.status as never,
                 data: {
                     status: response.status,
