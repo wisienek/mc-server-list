@@ -41,7 +41,7 @@ export class ServerVerificationService implements OnApplicationBootstrap {
         }
 
         const timeoutJob = new CronJob(
-            `0 0 * * * *`,
+            `0 */10 * * * *`,
             async () => {
                 this.logger.log(`Starting timeout verification...`);
                 await this.commandBus.execute(new VerifyTimeoutsCommand());

@@ -1,6 +1,6 @@
 import type {Mapper} from '@automapper/core';
 import {InjectMapper} from '@automapper/nestjs';
-import {CommandBus, type IQueryHandler, QueryHandler} from '@nestjs/cqrs';
+import {type IQueryHandler, QueryHandler} from '@nestjs/cqrs';
 import {InjectRepository} from '@nestjs/typeorm';
 import {
     MinecraftServerOfflineStatus,
@@ -11,6 +11,8 @@ import {Repository} from 'typeorm';
 import {BedrockServer, JavaServer, Server} from '@backend/db';
 import {GetServerStatsQuery} from '@backend/commander';
 import {MCStatsService} from '@backend/mc-stats';
+import {Logger} from '@nestjs/common';
+import {omit} from 'lodash';
 
 export type GetServerStatsQueryHandlerReturnType = {
     server: Server;
@@ -21,11 +23,12 @@ export type GetServerStatsQueryHandlerReturnType = {
 export class GetServerStatsQueryHandler
     implements IQueryHandler<GetServerStatsQuery>
 {
+    private readonly logger = new Logger(GetServerStatsQueryHandler.name);
+
     constructor(
         private readonly mcStatsService: MCStatsService,
         @InjectRepository(Server)
         private readonly serverRepository: Repository<Server>,
-        private readonly commandBus: CommandBus,
         @InjectMapper()
         private readonly mapper: Mapper,
     ) {}
@@ -38,6 +41,16 @@ export class GetServerStatsQueryHandler
             query.type === ServerType.BEDROCK,
         );
         let server: Server;
+
+        this.logger.log(
+            `Fetched server info for ${query.host} of type ${
+                query.type
+            } with return type of ${
+                stats instanceof MinecraftServerOnlineStatus ? 'Online' : 'Offline'
+            } status: ${JSON.stringify(
+                omit(stats, 'icon', 'motd', 'players', 'mods', 'version', 'plugins'),
+            )}`,
+        );
 
         if (stats instanceof MinecraftServerOnlineStatus) {
             server = await this.updateServer(stats, query.type);

@@ -29,13 +29,18 @@ export class VerifyTimeoutsCommandHandler
         let offset = 0;
         let hasMore = true;
 
+        this.logger.log(`Starting timeout verification...`);
+
         while (hasMore) {
             const servers = await this.serverRepository
                 .createQueryBuilder('server')
-                .where('server.isActive = :active', {active: true})
                 .limit(this.apiConfig.AUTOMATIC_SERVER_TIMEOUT_BATCH)
                 .offset(offset)
                 .getMany();
+
+            this.logger.log(
+                `Fetched ${servers.length} servers that will be verified`,
+            );
 
             if (servers.length === 0) {
                 hasMore = false;
@@ -46,38 +51,40 @@ export class VerifyTimeoutsCommandHandler
 
             const results = await Promise.allSettled(
                 servers.map(async (server) => {
-                    const address = server.ip_address || server.host;
+                    const address = `${
+                        server.host ? server.host : server.ip_address
+                    }${server.port ? `:${server.port}` : ''}`;
 
                     try {
-                        const {stats}: GetServerStatsQueryHandlerReturnType =
-                            await this.queryBus.execute(
-                                plainToInstance(GetServerStatsQuery, {
-                                    type: server.type,
-                                    host: address,
-                                }),
-                            );
+                        const {stats} = await this.queryBus.execute<
+                            GetServerStatsQuery,
+                            GetServerStatsQueryHandlerReturnType
+                        >(
+                            plainToInstance(GetServerStatsQuery, {
+                                type: server.type,
+                                host: address,
+                            }),
+                        );
 
                         return {server, stats};
                     } catch (error) {
                         this.logger.error(
                             `Failed to fetch stats for server ${server.id}: ${error.message}`,
                         );
-                        return null;
+                        return {server};
                     }
                 }),
             );
 
-            const updates: Promise<void>[] = results
-                .filter((result) => result.status === 'fulfilled' && result.value)
-                .map(
-                    (
-                        result: PromiseFulfilledResult<GetServerStatsQueryHandlerReturnType>,
-                    ) =>
-                        this.processServerStatus(
-                            result.value.server,
-                            result.value.stats,
-                        ),
-                );
+            const updates: Promise<void>[] = results.map(
+                (
+                    result: PromiseFulfilledResult<GetServerStatsQueryHandlerReturnType>,
+                ) =>
+                    this.processServerStatus(
+                        result.value.server,
+                        result.value.stats,
+                    ),
+            );
 
             await Promise.all(updates);
         }
@@ -87,17 +94,27 @@ export class VerifyTimeoutsCommandHandler
 
     private async processServerStatus(
         server: Server,
-        stats: GetServerStatsQueryHandlerReturnType['stats'],
+        stats?: GetServerStatsQueryHandlerReturnType['stats'],
     ): Promise<void> {
         const offlineCountKey = `server:offlineCount:${server.id}`;
         let offlineCount = (await this.redisService.get(offlineCountKey)) || 0;
         offlineCount = Number(offlineCount);
 
-        if (stats instanceof MinecraftServerOnlineStatus) {
+        if (stats && stats instanceof MinecraftServerOnlineStatus) {
             await this.redisService.del(offlineCountKey);
-            await this.serverRepository.update(server.id, {
-                isTimedOut: false,
-            });
+            if (server.isTimedOut) {
+                await this.serverRepository.update(server.id, {
+                    isTimedOut: false,
+                });
+            }
+
+            this.logger.log(
+                `Server ${server.host} - ${
+                    offlineCount > 0
+                        ? `Has been ${offlineCount} times offline, now online - resetting count.`
+                        : 'still online'
+                } `,
+            );
         } else {
             offlineCount++;
 
@@ -106,7 +123,15 @@ export class VerifyTimeoutsCommandHandler
                     isTimedOut: true,
                 });
                 await this.redisService.del(offlineCountKey);
+
+                this.logger.warn(
+                    `Server ${server.host} - ${offlineCount} times offline, setting timed out info!`,
+                );
             } else {
+                this.logger.warn(
+                    `Server ${server.host} - has been offline for ${offlineCount} / ${this.apiConfig.AUTOMATIC_SERVER_TIMEOUT_TIMES} times.`,
+                );
+
                 await this.redisService.set(
                     offlineCountKey,
                     offlineCount,

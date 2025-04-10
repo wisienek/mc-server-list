@@ -18,6 +18,7 @@ import {Link} from '@front/i18n/routing';
 import CopyableTypography from './CopyableTypography';
 import ServerLikeButton from './ServerLikeButton';
 import CategoryIcon from './CategoryIcon';
+import Badge from '@mui/material/Badge';
 
 const StyledServerSummary = styled(Paper)(({theme}) => ({
     padding: theme.spacing(1),
@@ -44,6 +45,21 @@ const IconContainer = styled(Box)(({theme}) => ({
     justifyContent: 'center',
     alignItems: 'center',
     gap: theme.spacing(1),
+}));
+
+const StyledIconWrapper = styled(Box, {
+    shouldForwardProp: (name) => name !== 'timedOut',
+})<{timedOut: boolean}>(({theme, timedOut}) => ({
+    justifyContent: 'center',
+    alignItems: 'center',
+    display: 'flex',
+    overflow: 'hidden',
+    borderRadius: theme.shape.borderRadius,
+    ...(timedOut && {
+        backgroundColor: theme.palette.grey[500],
+        opacity: 0.5,
+        zIndex: 1,
+    }),
 }));
 
 const StyledServerIcon = styled(Image)(({theme}) => ({
@@ -174,6 +190,7 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
     const categories = server.categories ?? [];
     const description = shortenText(server?.description ?? '', 512);
     const linkTo = `/${server.host}`;
+    const isTimedOut = server.isTimedOut;
 
     const LinkWrapper = ({children}: {children: ReactNode}) => (
         <Link
@@ -193,12 +210,20 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
         <StyledServerSummary elevation={3}>
             <LinkWrapper>
                 <IconContainer>
-                    <StyledServerIcon
-                        src={server.icon ?? defaultServerIcon}
-                        alt="server icon"
-                        width={50}
-                        height={50}
-                    />
+                    <Badge
+                        overlap="rectangular"
+                        color={isTimedOut ? 'error' : 'success'}
+                        variant="dot"
+                    >
+                        <StyledIconWrapper timedOut={isTimedOut}>
+                            <StyledServerIcon
+                                src={server.icon ?? defaultServerIcon}
+                                alt="server icon"
+                                width={50}
+                                height={50}
+                            />
+                        </StyledIconWrapper>
+                    </Badge>
 
                     <StyledNameAndRankingContainer>
                         <Typography variant="h6" color="textPrimary" noWrap>
