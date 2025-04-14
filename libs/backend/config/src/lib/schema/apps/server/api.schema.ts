@@ -1,6 +1,7 @@
 import {Injectable} from '@nestjs/common';
 import {Config} from 'nest-zod-config';
 import {z} from 'zod';
+import {cronRegex} from '@core';
 
 export const ApiSchema = z.object({
     APP_PORT: z.coerce
@@ -22,6 +23,14 @@ export const ApiSchema = z.object({
     AUTOMATIC_VERIFICATION: z.boolean().default(true),
     AUTOMATIC_SERVER_TIMEOUT_TIMES: z.coerce.number().gt(0),
     AUTOMATIC_SERVER_TIMEOUT_BATCH: z.coerce.number().gt(20),
+    AUTOMATIC_VERIFICATION_CRON: z
+        .string()
+        .regex(cronRegex)
+        .default(`0 */15 * * * *`),
+    AUTOMATIC_SERVER_TIMEOUT_CRON: z
+        .string()
+        .regex(cronRegex)
+        .default(`0 */5 * * * *`),
 });
 
 @Injectable()

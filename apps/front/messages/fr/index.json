@@ -62,7 +62,8 @@
       "playersOnline": "Joueurs en ligne :",
       "version": "Version :",
       "verify": "Vérifiez le serveur avec le code MOTD : <code></code>",
-      "claimServer": "Ce serveur n’a pas encore de propriétaire. Si c’est vous, cliquez sur ce bouton !"
+      "claimServer": "Ce serveur n’a pas encore de propriétaire. Si c’est vous, cliquez sur ce bouton !",
+      "refetchTimedOut": "Recharger"
     },
     "hostPage": {
       "javaIP": "IP Java",

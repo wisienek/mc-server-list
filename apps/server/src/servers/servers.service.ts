@@ -19,6 +19,7 @@ import {
     CreateServerVerificationCommand,
     GetServerStatsQuery,
     GetUserQuery,
+    VerifyTimeoutsCommand,
 } from '@backend/commander';
 import {
     CreateServerDto,
@@ -80,6 +81,29 @@ export class ServersService {
             where: {server: {host: hostName}},
         });
         return Ok(count);
+    }
+
+    public async reVerifyTimeout(
+        hostName: string,
+    ): Promise<Result<ServerDetailsDto, TError>> {
+        const server = await this.getServerByHostNameOrIP({hostname: hostName});
+        if (!server) {
+            return Err(Errors.ServerNotFound(hostName));
+        }
+        if (!server.isTimedOut) {
+            return Ok(this.mapper.map(server, Server, ServerDetailsDto));
+        }
+
+        await this.commandBus.execute<VerifyTimeoutsCommand, Server>(
+            new VerifyTimeoutsCommand(hostName),
+        );
+
+        const dto = this.mapper.map(
+            await this.getServerByHostNameOrIP({hostname: hostName}),
+            Server,
+            ServerDetailsDto,
+        );
+        return Ok(dto);
     }
 
     public async updateServerDetails(

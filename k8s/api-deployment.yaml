@@ -20,6 +20,10 @@ spec:
           env:
             - name: NODE_ENV
               value: "production"
+            - name: AUTOMATIC_VERIFICATION_CRON
+              value: "0 */15 * * *"
+            - name: AUTOMATIC_SERVER_TIMEOUT_CRON
+              value: "0 */5 * * *"
             - name: APP_PORT
               value: "3000"
             - name: DB_DATABASE

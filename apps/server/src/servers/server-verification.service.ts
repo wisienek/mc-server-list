@@ -20,7 +20,7 @@ export class ServerVerificationService implements OnApplicationBootstrap {
 
         if (this.apiConfig.AUTOMATIC_VERIFICATION) {
             const verificationJob = new CronJob(
-                `0 */15 * * * *`,
+                this.apiConfig.AUTOMATIC_VERIFICATION_CRON,
                 async () => {
                     this.logger.log(`Starting server verification...`);
                     await this.commandBus.execute(
@@ -41,7 +41,7 @@ export class ServerVerificationService implements OnApplicationBootstrap {
         }
 
         const timeoutJob = new CronJob(
-            `0 */10 * * * *`,
+            this.apiConfig.AUTOMATIC_SERVER_TIMEOUT_CRON,
             async () => {
                 this.logger.log(`Starting timeout verification...`);
                 await this.commandBus.execute(new VerifyTimeoutsCommand());

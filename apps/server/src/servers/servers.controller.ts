@@ -151,4 +151,20 @@ export class ServersController {
             await this.serversService.voteForServer(host, user.email),
         );
     }
+
+    @Throttle({
+        default: {
+            limit: 1,
+            ttl: seconds(30),
+            getTracker: (req) => req.user?.id || req.ip,
+        },
+    })
+    @ApiParam({name: 'host', required: true, description: 'hostname of the server'})
+    @UseGuards(AuthenticatedGuard)
+    @Post(':host/re-verify-timeout')
+    async reVerifyTimeout(
+        @Param('host') host: string,
+    ): Promise<SerializedResult<ServerDetailsDto>> {
+        return serializeResult(await this.serversService.reVerifyTimeout(host));
+    }
 }

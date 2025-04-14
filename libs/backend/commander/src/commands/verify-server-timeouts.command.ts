@@ -1,3 +1,5 @@
 import type {ICommand} from '@nestjs/cqrs';
 
-export class VerifyTimeoutsCommand implements ICommand {}
+export class VerifyTimeoutsCommand implements ICommand {
+    constructor(public readonly hostName?: string) {}
+}

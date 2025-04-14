@@ -62,7 +62,8 @@
       "playersOnline": "Spieler online:",
       "version": "Version:",
       "verify": "Server mit MOTD-Code verifizieren: <code></code>",
-      "claimServer": "Dieser Server hat noch keinen Besitzer. Wenn er Ihnen gehört, klicken Sie auf diesen Button!"
+      "claimServer": "Dieser Server hat noch keinen Besitzer. Wenn er Ihnen gehört, klicken Sie auf diesen Button!",
+      "refetchTimedOut": "Erneut laden"
     },
     "hostPage": {
       "javaIP": "Java-IP",

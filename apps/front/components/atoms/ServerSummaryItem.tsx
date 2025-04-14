@@ -4,6 +4,8 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import Typography from '@mui/material/Typography';
 import {styled} from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+import Badge from '@mui/material/Badge';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import {type FC, type ReactNode, useState} from 'react';
@@ -18,7 +20,7 @@ import {Link} from '@front/i18n/routing';
 import CopyableTypography from './CopyableTypography';
 import ServerLikeButton from './ServerLikeButton';
 import CategoryIcon from './CategoryIcon';
-import Badge from '@mui/material/Badge';
+import {useReVerifyTimeout} from '@front/components/queries/servers/reverifyTimeout';
 
 const StyledServerSummary = styled(Paper)(({theme}) => ({
     padding: theme.spacing(1),
@@ -117,6 +119,29 @@ const StatsContainer = styled(Box)(() => ({
     height: '100%',
 }));
 
+const OverlayWrapper = styled(Box)({
+    position: 'relative',
+    display: 'inline-block',
+    width: 'fit-content',
+    height: 'fit-content',
+});
+
+const OverlayButton = styled(Button)(({theme}) => ({
+    position: 'absolute',
+    top: theme.spacing(1),
+    left: '50%',
+    transform: 'translateX(-50%) scale(1)',
+    zIndex: 2,
+    transition: 'transform 0.4s ease, box-shadow 0.4s ease',
+
+    '&:hover': {
+        boxShadow: theme.shadows[4],
+        backgroundColor: theme.palette.warning.main,
+        color: theme.palette.getContrastText(theme.palette.warning.main),
+        borderColor: theme.palette.warning.main,
+    },
+}));
+
 const CategoriesContainer = styled(Box)(({theme}) => ({
     display: 'flex',
     flexDirection: 'row',
@@ -139,6 +164,8 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
     const [isLikedByUser, setIsLikedByUser] = useState<boolean>(server.isLiked);
     const [votes, setVotes] = useState<number>(server.votes ?? 0);
     const {mutateAsync: voteForServer} = useVoteForServer();
+    const {mutateAsync: reVerifyTimeout, isPending: isReVerifying} =
+        useReVerifyTimeout();
 
     const handleFavoriteClick = () => {
         if (!profile) return;
@@ -206,36 +233,59 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
         </Link>
     );
 
+    const IconSection = () => {
+        const InnerIconSection = (
+            <IconContainer>
+                <Badge
+                    overlap="rectangular"
+                    color={isTimedOut ? 'error' : 'success'}
+                    variant="dot"
+                >
+                    <StyledIconWrapper timedOut={isTimedOut}>
+                        <StyledServerIcon
+                            src={server.icon ?? defaultServerIcon}
+                            alt="server icon"
+                            width={50}
+                            height={50}
+                        />
+                    </StyledIconWrapper>
+                </Badge>
+
+                <StyledNameAndRankingContainer>
+                    <Typography variant="h6" color="textPrimary" noWrap>
+                        {server.name}
+                    </Typography>
+
+                    <Typography variant="subtitle1" color="textPrimary" noWrap>
+                        #{server.ranking ?? 'n/a'}
+                    </Typography>
+                </StyledNameAndRankingContainer>
+            </IconContainer>
+        );
+
+        if (isTimedOut) {
+            return (
+                <OverlayWrapper>
+                    <OverlayButton
+                        variant="outlined"
+                        color="warning"
+                        disabled={isReVerifying}
+                        size="small"
+                        onClick={() => reVerifyTimeout(server.host)}
+                    >
+                        {t('refetchTimedOut')}
+                    </OverlayButton>
+                    {InnerIconSection}
+                </OverlayWrapper>
+            );
+        }
+
+        return <LinkWrapper>{InnerIconSection}</LinkWrapper>;
+    };
+
     return (
         <StyledServerSummary elevation={3}>
-            <LinkWrapper>
-                <IconContainer>
-                    <Badge
-                        overlap="rectangular"
-                        color={isTimedOut ? 'error' : 'success'}
-                        variant="dot"
-                    >
-                        <StyledIconWrapper timedOut={isTimedOut}>
-                            <StyledServerIcon
-                                src={server.icon ?? defaultServerIcon}
-                                alt="server icon"
-                                width={50}
-                                height={50}
-                            />
-                        </StyledIconWrapper>
-                    </Badge>
-
-                    <StyledNameAndRankingContainer>
-                        <Typography variant="h6" color="textPrimary" noWrap>
-                            {server.name}
-                        </Typography>
-
-                        <Typography variant="subtitle1" color="textPrimary" noWrap>
-                            #{server.ranking ?? 'n/a'}
-                        </Typography>
-                    </StyledNameAndRankingContainer>
-                </IconContainer>
-            </LinkWrapper>
+            <IconSection />
 
             <LinkWrapper>
                 <ServerDescription>
