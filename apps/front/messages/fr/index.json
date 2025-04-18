@@ -112,7 +112,7 @@
       "port": "Port du serveur",
       "type": "Type de serveur",
       "isSubmitting": "Création en cours...",
-      "save": "Obtenir le code de validation",
+      "save": "Ajouter le serveur",
       "cancel": "Annuler",
       "addressRequired": "L'adresse du serveur est requise.",
       "invalidAddress": "Doit être une adresse IPv4 valide ou un nom d'hôte.",

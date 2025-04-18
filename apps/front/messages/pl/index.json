@@ -112,7 +112,7 @@
       "port": "Port serwera",
       "type": "Typ serwera",
       "isSubmitting": "Tworzenie...",
-      "save": "Pobierz kod weryfikacyjny",
+      "save": "Dodaj serwer",
       "cancel": "Anuluj",
       "addressRequired": "Adres serwera jest wymagany.",
       "invalidAddress": "Musi być poprawnym adresem IPv4 lub nazwą hosta.",

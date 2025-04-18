@@ -112,7 +112,6 @@
       "port": "Porta del server",
       "type": "Tipo di server",
       "isSubmitting": "Creazione...",
-      "save": "Ottieni codice di verifica",
       "cancel": "Annulla",
       "addressRequired": "L'indirizzo del server è obbligatorio.",
       "invalidAddress": "Deve essere un indirizzo IPv4 valido o un nome host.",
