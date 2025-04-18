@@ -66,7 +66,7 @@ export class GetServerStatsQueryHandler
         const found = await this.serverRepository
             .createQueryBuilder('server')
             .where({ip_address: data.ip, port: data.port})
-            .orWhere({host: data.hostname})
+            .orWhere({host: data.hostname, port: data.port})
             .getOne();
 
         let mappedData: JavaServer | BedrockServer;

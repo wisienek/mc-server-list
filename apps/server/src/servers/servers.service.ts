@@ -300,7 +300,9 @@ export class ServersService {
 
         const server = await this.serverRepository.save(fetchedServer.server);
 
-        this.logger.log(`Created server: ${server.host} for ${server.type}`);
+        this.logger.log(
+            `Created server: ${server.host}:${server.port} for ${server.type}`,
+        );
 
         return Ok({
             host: server.host,
