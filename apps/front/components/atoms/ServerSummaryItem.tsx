@@ -216,7 +216,7 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
     const maxPlayers = server.maxPlayers ?? 0;
     const categories = server.categories ?? [];
     const description = shortenText(server?.description ?? '', 512);
-    const linkTo = `/${server.host}`;
+    const linkTo = `/${server.host}${server.port ? `:${server.port}` : ''}`;
     const isTimedOut = server.isTimedOut;
 
     const LinkWrapper = ({children}: {children: ReactNode}) => (

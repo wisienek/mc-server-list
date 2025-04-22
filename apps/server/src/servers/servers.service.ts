@@ -234,8 +234,14 @@ export class ServersService {
         hostName: string,
         userId?: string,
     ): Promise<Result<ServerDetailsDto, TError>> {
+        const [host, port] = hostName.split(':');
+
+        const whereOptions: FindOptionsWhere<Server> = {host};
+
+        port && (whereOptions.port = Number(port));
+
         const baseServer = await this.serverRepository.findOne({
-            where: {host: hostName},
+            where: whereOptions,
             relations: {owner: true},
         });
 
