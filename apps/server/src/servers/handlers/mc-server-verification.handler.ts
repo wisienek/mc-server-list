@@ -107,7 +107,7 @@ export class VerifyServerCommandHandler
             return {verification, status: false};
         }
 
-        const cleanMotd = stats.motd.clean.join(' ').toLowerCase();
+        const cleanMotd = stats.motd.raw.join(' ').toLowerCase();
         const motdHasData = cleanMotd.includes(verification.code.toLowerCase());
 
         return {verification, status: motdHasData};
