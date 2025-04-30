@@ -24,6 +24,7 @@ export const serverSummaryMocks: ServerSummaryDto[] = [
         name: 'Adv Surf server',
         ranking: 1,
         banner: defaultServerBanner,
+        motd: 'test motd',
         description: `[1.21] OPBlocks is a high-quality Minecraft Prison, Skyblock, Cobblemon/Pixelmon, and Survival SMP server featuring unique content and an amazing community, friendly staff, and awesome players like you!
 
 BEDROCK SUPPORTED!
@@ -65,6 +66,7 @@ Daily Challenges`,
         name: 'Classic MC',
         ranking: 122,
         banner: defaultServerBanner,
+        motd: 'test motd',
         description: `IP: MCSL.MANACUBE.COM [1.20 Java/Bedrock]
 Over the past 10 years, 5 million players have enjoyed our unique game modes: Parkour, Skyblock, SMP, KitPvP, Factions, Prison, Earth Towny, Anarchy and Creative
 
@@ -111,6 +113,7 @@ We host community events and offer daily chances to win Cubits and exclusive pri
         votes: 128,
         ranking: 59221,
         banner: defaultServerBanner,
+        motd: 'test motd',
         description: `Welcome to BlossomCraft,
         an excellent server known for its amazing experiences. We are a laid-back, no grief, economy, SMP server where we value community above all else.
 1.20+
