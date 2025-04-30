@@ -255,6 +255,14 @@ export class ServerMapperProfile extends AutomapperProfile {
                     mapFrom((src) => src.name),
                 ),
                 forMember(
+                    (dest) => dest.motd,
+                    mapFrom((src) =>
+                        Array.isArray(src.motd.raw)
+                            ? src.motd.raw.join(' ')
+                            : src.motd.raw,
+                    ),
+                ),
+                forMember(
                     (dest) => dest.description,
                     mapFrom((src) => src.description),
                 ),
@@ -278,8 +286,16 @@ export class ServerMapperProfile extends AutomapperProfile {
                     mapFrom((src) => src.categories),
                 ),
                 forMember(
+                    (dest) => dest.motd,
+                    mapFrom((src) =>
+                        Array.isArray(src.motd.raw)
+                            ? src.motd.raw.join(' ')
+                            : src.motd.raw,
+                    ),
+                ),
+                forMember(
                     (dest) => dest.description,
-                    mapFrom((src) => src.description ?? src.motd.clean),
+                    mapFrom((src) => src.description),
                 ),
                 forMember(
                     (dest) => dest.onlinePlayers,
@@ -307,6 +323,14 @@ export class ServerMapperProfile extends AutomapperProfile {
                 forMember(
                     (dest) => dest.categories,
                     mapFrom((src) => src.categories),
+                ),
+                forMember(
+                    (dest) => dest.motd,
+                    mapFrom((src) =>
+                        Array.isArray(src.motd.raw)
+                            ? src.motd.raw.join(' ')
+                            : src.motd.raw,
+                    ),
                 ),
                 forMember(
                     (dest) => dest.description,

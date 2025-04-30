@@ -17,6 +17,7 @@ import Image from 'next/image';
 import {useState} from 'react';
 import {ServerCategory, ServerType} from '@shared/enums';
 import {ServerDetailsDto} from '@shared/dto';
+import MinecraftMotd from '@front/components/atoms/MinecraftMOTD';
 
 type ServerMainInfoProps = {
     server: ServerDetailsDto;
@@ -262,6 +263,18 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
                     <PlayersOnline />
                 </ServerInfoContainer>
             </ServerInfoContainer>
+
+            {server.motd && (
+                <ServerInfoContainer
+                    direction="column"
+                    sx={{whiteSpace: 'pre-line'}}
+                >
+                    <Typography variant="subtitle1" color="textPrimary">
+                        MOTD:
+                    </Typography>
+                    <MinecraftMotd motd={server.motd} />
+                </ServerInfoContainer>
+            )}
 
             <ServerInfoContainer
                 direction="row"

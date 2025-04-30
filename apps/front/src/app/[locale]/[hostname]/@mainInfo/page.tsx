@@ -12,9 +12,5 @@ export default async function Page(props: HostnamePageProps) {
         return notFound();
     }
 
-    return (
-        <>
-            <ServerMainInfo server={serverDetailsResponse.unwrap()} />
-        </>
-    );
+    return <ServerMainInfo server={serverDetailsResponse.unwrap()} />;
 }

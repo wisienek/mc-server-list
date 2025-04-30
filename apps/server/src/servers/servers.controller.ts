@@ -33,8 +33,6 @@ import {
     VerifyServerDto,
 } from '@shared/dto';
 import {ServersService} from './servers.service';
-import {InjectMapper} from '@automapper/nestjs';
-import type {Mapper} from '@automapper/core';
 import {Err} from 'oxide.ts';
 
 @Controller('servers')
@@ -42,7 +40,6 @@ export class ServersController {
     constructor(
         private readonly serversService: ServersService,
         private readonly commandBus: CommandBus,
-        @InjectMapper() private readonly mapper: Mapper,
     ) {}
 
     @SkipThrottle()

@@ -21,13 +21,16 @@ import CopyableTypography from './CopyableTypography';
 import ServerLikeButton from './ServerLikeButton';
 import CategoryIcon from './CategoryIcon';
 import {useReVerifyTimeout} from '@front/components/queries/servers/reverifyTimeout';
+import MinecraftMotd from '@front/components/atoms/MinecraftMOTD';
 
 const StyledServerSummary = styled(Paper)(({theme}) => ({
     padding: theme.spacing(1),
     marginBottom: theme.spacing(1),
     display: 'grid',
     gridTemplateColumns: '1fr 6fr 1fr',
-    minWidth: 'min-content',
+    width: '100%',
+    maxWidth: '100%',
+    boxSizing: 'border-box',
     gap: theme.spacing(1),
     position: 'relative',
     transition:
@@ -99,6 +102,7 @@ const ServerDescriptionContainer = styled('div')(() => ({
     position: 'relative',
     maxWidth: '100%',
     overflow: 'hidden',
+    wordBreak: 'break-word',
     display: '-webkit-box',
     WebkitLineClamp: 3,
     WebkitBoxOrient: 'vertical',
@@ -215,7 +219,7 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
     const onlinePlayers = server.onlinePlayers ?? 0;
     const maxPlayers = server.maxPlayers ?? 0;
     const categories = server.categories ?? [];
-    const description = shortenText(server?.description ?? '', 512);
+    const description = shortenText(server?.description ?? server?.motd ?? '', 512);
     const linkTo = `/${server.host}${server.port ? `:${server.port}` : ''}`;
     const isTimedOut = server.isTimedOut;
 
@@ -302,9 +306,20 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
                         </ServerBannerContainer>
                     )}
 
-                    {description && (
+                    {(!!server.mdxSource.content ||
+                        !!server.motd ||
+                        !!description) && (
                         <ServerDescriptionContainer>
-                            {server.mdxSource.content ?? description}
+                            {server.motd.length > 0 ? (
+                                <MinecraftMotd
+                                    motd={shortenText(server.motd, 512)}
+                                    background={false}
+                                />
+                            ) : description.length > 0 ? (
+                                description
+                            ) : (
+                                server.mdxSource.content
+                            )}
                         </ServerDescriptionContainer>
                     )}
                 </ServerDescription>
