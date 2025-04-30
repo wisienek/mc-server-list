@@ -1,5 +1,6 @@
-import {Result, Ok, Err} from 'oxide.ts';
+import {Err, Ok, Result} from 'oxide.ts';
 import type {TErrorConstructor} from '../errors';
+import {HttpStatusCode} from '@shared/enums';
 
 export class SerializedResult<T> {
     ok?: T;
@@ -13,9 +14,9 @@ export function serializeResult<T, E extends TErrorConstructor = TErrorConstruct
     const err = result.unwrapErr();
     return {
         err: {
-            key: err.key,
-            code: err.code,
-            data: err.data,
+            key: err?.key ?? '',
+            code: err?.code ?? HttpStatusCode.INTERNAL_SERVER_ERROR,
+            data: err?.data ?? {},
         },
     };
 }

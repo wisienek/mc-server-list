@@ -66,7 +66,7 @@ export class UsersController {
     }
 
     @Post('logout')
-    async logout(@Req() request: Request): Promise<any> {
-        return this.usersService.logout(request);
+    async logout(@Req() request: Request): Promise<SerializedResult<boolean>> {
+        return serializeResult(await this.usersService.logout(request));
     }
 }
