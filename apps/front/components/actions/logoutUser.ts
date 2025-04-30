@@ -14,19 +14,19 @@ export async function logoutUser(): Promise<SerializedResult<void>> {
         return serializeResult(Ok(null));
     }
 
-    return serializeResult(
-        await customFetch<null>(
-            `/users/logout`,
-            {
-                method: 'POST',
-                next: {tags: ['/users/logout']},
+    const logoutResponse = await customFetch<null>(
+        `/users/logout`,
+        {
+            method: 'POST',
+            next: {tags: ['/users/logout']},
+        },
+        {
+            onSuccess: () => {
+                revalidateTag('/users/status');
+                revalidateTag('/users/has-credentials');
             },
-            {
-                onSuccess: () => {
-                    revalidateTag('/users/status');
-                    revalidateTag('/users/has-credentials');
-                },
-            },
-        ),
+        },
     );
+
+    return serializeResult(logoutResponse);
 }
