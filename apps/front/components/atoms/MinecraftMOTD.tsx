@@ -34,7 +34,8 @@ const styleMap: Record<string, CSSProperties> = {
 function parseMotd(motd: string) {
     const parts = [];
     let i = 0;
-    let currentStyle: any = {};
+    let currentStyle = {};
+
     while (i < motd.length) {
         if (motd[i] === '§' && i + 1 < motd.length) {
             const code = motd[i + 1].toLowerCase();
