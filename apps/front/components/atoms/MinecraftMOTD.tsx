@@ -1,10 +1,25 @@
 'use client';
 import Box from '@mui/material/Box';
-import {styled} from '@mui/material/styles';
-import {CSSProperties} from 'react';
+import {styled, Theme, useTheme} from '@mui/material/styles';
+import type {CSSProperties, ReactElement} from 'react';
 
-const colorMap: Record<string, string> = {
-    '0': '#000000',
+type MinecraftMotdProps = {
+    motd: string;
+    background: boolean;
+};
+
+type FormattingCode = string;
+
+const styleMap: Record<FormattingCode, CSSProperties> = {
+    l: {fontWeight: 'bold'},
+    m: {textDecoration: 'line-through'},
+    n: {textDecoration: 'underline'},
+    o: {fontStyle: 'italic'},
+    r: {fontWeight: 'normal', textDecoration: 'none', fontStyle: 'normal'},
+};
+
+const getColorMap = (theme: Theme): Record<FormattingCode, string> => ({
+    '0': theme.palette.common.black,
     '1': '#0000AA',
     '2': '#00AA00',
     '3': '#00AAAA',
@@ -19,30 +34,43 @@ const colorMap: Record<string, string> = {
     c: '#FF5555',
     d: '#FF55FF',
     e: '#FFFF55',
-    f: '#FFFFFF',
-    r: '#FFFFFF',
-};
+    f: theme.palette.common.white,
+    r: theme.palette.text.primary,
+});
 
-const styleMap: Record<string, CSSProperties> = {
-    l: {fontWeight: 'bold'},
-    m: {textDecoration: 'line-through'},
-    n: {textDecoration: 'underline'},
-    o: {fontStyle: 'italic'},
-    r: {fontWeight: 'normal', textDecoration: 'none', fontStyle: 'normal'},
-};
+const MotdContainer = styled(Box, {
+    shouldForwardProp: (prop) => prop !== 'background',
+})<{background: boolean}>(({theme, background}) => ({
+    backgroundColor: background
+        ? theme.palette.common.black
+        : theme.palette.background.default,
+    padding: theme.spacing(2),
+    fontFamily: 'monospace',
+    borderRadius: theme.spacing(0.15),
+    overflowX: 'auto',
+    color: theme.palette.text.primary,
+    fontSize: theme.typography.body2.fontSize,
+    whiteSpace: 'pre-wrap',
+    wordBreak: 'break-word',
+    maxWidth: '100%',
+}));
 
-function parseMotd(motd: string) {
-    const parts = [];
+function parseMotd(
+    motd: string,
+    colorMap: Record<FormattingCode, string>,
+): ReactElement[] {
+    const result: ReactElement[] = [];
     let i = 0;
-    let currentStyle = {};
+    let currentStyle: CSSProperties = {};
 
     while (i < motd.length) {
         if (motd[i] === '§' && i + 1 < motd.length) {
             const code = motd[i + 1].toLowerCase();
             i += 2;
-            if (colorMap[code]) {
+
+            if (code in colorMap) {
                 currentStyle = {...currentStyle, color: colorMap[code]};
-            } else if (styleMap[code]) {
+            } else if (code in styleMap) {
                 currentStyle = {...currentStyle, ...styleMap[code]};
             }
             continue;
@@ -55,36 +83,24 @@ function parseMotd(motd: string) {
         }
 
         if (text) {
-            parts.push(
-                <span style={currentStyle} key={parts.length}>
+            result.push(
+                <span style={{...currentStyle}} key={result.length}>
                     {text}
                 </span>,
             );
         }
     }
-    return parts;
+
+    return result;
 }
 
-const MotdContainer = styled(Box, {
-    shouldForwardProp: (name) => name !== 'background',
-})<{background: boolean}>(({theme, background = true}) => ({
-    backgroundColor: background ? '#000' : undefined,
-    padding: theme.spacing(2),
-    fontFamily: 'monospace',
-    borderRadius: theme.spacing(1),
-    overflowX: 'auto',
-    color: '#fff',
-    fontSize: theme.typography.body2.fontSize,
-    whiteSpace: 'pre-wrap',
-    wordBreak: 'break-word',
-    maxWidth: '100%',
-}));
+export default function MinecraftMotd({
+    motd,
+    background,
+}: MinecraftMotdProps): ReactElement {
+    const theme = useTheme();
+    const colorMap = getColorMap(theme);
+    const parsedMotd = parseMotd(motd, colorMap);
 
-type MinecraftMotdProps = {
-    motd: string;
-    background: boolean;
-};
-
-export default function MinecraftMotd({motd, background}: MinecraftMotdProps) {
-    return <MotdContainer background={background}>{parseMotd(motd)}</MotdContainer>;
+    return <MotdContainer background={background}>{parsedMotd}</MotdContainer>;
 }
