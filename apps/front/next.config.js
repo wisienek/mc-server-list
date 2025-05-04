@@ -1,3 +1,4 @@
+const {withSentryConfig} = require('@sentry/nextjs');
 const path = require('path');
 
 const withNextIntl = require('next-intl/plugin')();
@@ -46,10 +47,22 @@ module.exports = async (phase, context) => {
         eslint: {
             ignoreDuringBuilds: true,
         },
+        experimental: {
+            instrumentationHook: true,
+        },
     };
 
     let config = withNx(defaultConfig);
     config = withNextIntl(config);
+    config = withSentryConfig(config, {
+        org: process.env.SENTRY_ORG,
+        project: process.env.SENTRY_PROJECT,
+        silent: !process.env.CI,
+        disableLogger: true,
+        reactComponentAnnotation: {
+            enabled: true,
+        },
+    });
 
     config.redirects = function () {
         const localeRedirects = ['pl', 'en', 'de', 'fr', 'it'].join('|');

@@ -1,6 +1,6 @@
 import {RedisModule} from '@backend/redis';
 import type {ModuleMetadata} from '@nestjs/common/interfaces/modules/module-metadata.interface';
-import {APP_GUARD} from '@nestjs/core';
+import {APP_FILTER, APP_GUARD} from '@nestjs/core';
 import {EventEmitterModule} from '@nestjs/event-emitter';
 import {Module, type Provider} from '@nestjs/common';
 import {AutomapperModule} from '@automapper/nestjs';
@@ -15,8 +15,14 @@ import {DataBaseModule, Session} from '@backend/db';
 import {LoggerModule} from '@backend/logger';
 import {ServersModule} from '../servers';
 import {UsersModule} from '../users';
+import {SentryGlobalFilter, SentryModule} from '@sentry/nestjs/setup';
 
-const interceptors: Provider[] = [];
+const interceptors: Provider[] = [
+    {
+        provide: APP_FILTER,
+        useClass: SentryGlobalFilter,
+    },
+];
 const guards: Provider[] = [
     {
         provide: APP_GUARD,
@@ -35,6 +41,7 @@ const serverModules: ModuleMetadata['imports'] = [
 
 @Module({
     imports: [
+        SentryModule.forRoot(),
         EventEmitterModule.forRoot(),
         CqrsModule.forRoot(),
         AutomapperModule.forRoot({

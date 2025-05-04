@@ -1,3 +1,10 @@
+import * as Sentry from '@sentry/nestjs';
+
+Sentry.init({
+    dsn: process.env.BE_SENTRY_URL,
+    sendDefaultPii: true,
+});
+
 import {ClassSerializerInterceptor, Logger, ValidationPipe} from '@nestjs/common';
 import type {NestExpressApplication} from '@nestjs/platform-express';
 import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';

@@ -19,7 +19,8 @@
     "format:write": "nx format:write",
     "format:check": "nx format:check",
     "dep-graph": "nx dep-graph",
-    "typeorm": "typeorm-ts-node-commonjs"
+    "typeorm": "typeorm-ts-node-commonjs",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org wisienek-it --project mc-rank-be ./dist && sentry-cli sourcemaps upload --org wisienek-it --project mc-rank-be ./dist"
   },
   "private": true,
   "type": "commonjs",
@@ -51,6 +52,9 @@
     "@nestjs/throttler": "^6.4.0",
     "@nestjs/typeorm": "^11.0.0",
     "@reduxjs/toolkit": "^2.5.1",
+    "@sentry/cli": "^2.43.1",
+    "@sentry/nestjs": "^9.15.0",
+    "@sentry/nextjs": "^9.15.0",
     "@svgr/webpack": "^8.1.0",
     "@tanstack/react-query": "^5.66.0",
     "@tanstack/react-query-next-experimental": "^5.66.7",
