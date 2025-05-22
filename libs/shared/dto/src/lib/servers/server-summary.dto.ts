@@ -19,6 +19,7 @@ export class ServerSummaryDto extends MapperPickType(ServerDto, [
     'banner',
     'description',
     'motd',
+    'motdHTML',
     'isActive',
     'verification',
     'isTimedOut',

@@ -128,6 +128,12 @@ export class ServerDto {
     motd: string;
 
     @AutoMap()
+    @IsOptional()
+    @IsString()
+    @MaxLength(2048)
+    motdHTML?: string;
+
+    @AutoMap()
     @IsInt()
     @IsPositive()
     @Type(() => Number)

@@ -264,7 +264,7 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
                 </ServerInfoContainer>
             </ServerInfoContainer>
 
-            {server.motd && (
+            {(server.motd || server.motdHTML) && (
                 <ServerInfoContainer
                     direction="column"
                     sx={{whiteSpace: 'pre-line'}}
@@ -272,7 +272,11 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
                     <Typography variant="subtitle1" color="textPrimary">
                         MOTD:
                     </Typography>
-                    <MinecraftMotd motd={server.motd} />
+                    <MinecraftMotd
+                        motd={server.motd}
+                        background={false}
+                        motdHtml={server.motdHTML}
+                    />
                 </ServerInfoContainer>
             )}
 

@@ -5,6 +5,7 @@ import type {CSSProperties, ReactElement} from 'react';
 
 type MinecraftMotdProps = {
     motd: string;
+    motdHtml?: string;
     background: boolean;
 };
 
@@ -96,11 +97,21 @@ function parseMotd(
 
 export default function MinecraftMotd({
     motd,
+    motdHtml,
     background,
 }: MinecraftMotdProps): ReactElement {
     const theme = useTheme();
     const colorMap = getColorMap(theme);
-    const parsedMotd = parseMotd(motd, colorMap);
 
+    if (motdHtml) {
+        return (
+            <MotdContainer
+                background={background}
+                dangerouslySetInnerHTML={{__html: motdHtml}}
+            ></MotdContainer>
+        );
+    }
+
+    const parsedMotd = parseMotd(motd, colorMap);
     return <MotdContainer background={background}>{parsedMotd}</MotdContainer>;
 }

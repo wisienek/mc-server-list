@@ -263,6 +263,14 @@ export class ServerMapperProfile extends AutomapperProfile {
                     ),
                 ),
                 forMember(
+                    (dest) => dest.motdHTML,
+                    mapFrom((src) =>
+                        Array.isArray(src.motd.raw)
+                            ? src.motd.html.join('<br />')
+                            : src.motd.html,
+                    ),
+                ),
+                forMember(
                     (dest) => dest.description,
                     mapFrom((src) => src.description),
                 ),
@@ -291,6 +299,14 @@ export class ServerMapperProfile extends AutomapperProfile {
                         Array.isArray(src.motd.raw)
                             ? src.motd.raw.join(' ')
                             : src.motd.raw,
+                    ),
+                ),
+                forMember(
+                    (dest) => dest.motdHTML,
+                    mapFrom((src) =>
+                        Array.isArray(src.motd.raw)
+                            ? src.motd.html.join('<br />')
+                            : src.motd.html,
                     ),
                 ),
                 forMember(
@@ -330,6 +346,14 @@ export class ServerMapperProfile extends AutomapperProfile {
                         Array.isArray(src.motd.raw)
                             ? src.motd.raw.join(' ')
                             : src.motd.raw,
+                    ),
+                ),
+                forMember(
+                    (dest) => dest.motdHTML,
+                    mapFrom((src) =>
+                        Array.isArray(src.motd.raw)
+                            ? src.motd.html.join('<br />')
+                            : src.motd.html,
                     ),
                 ),
                 forMember(

@@ -308,11 +308,13 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
 
                     {(!!server.mdxSource.content ||
                         !!server.motd ||
+                        !!server.motdHTML ||
                         !!description) && (
                         <ServerDescriptionContainer>
-                            {server.motd.length > 0 ? (
+                            {(server.motd.length ?? server.motdHTML.length) > 0 ? (
                                 <MinecraftMotd
                                     motd={shortenText(server.motd, 512)}
+                                    motdHtml={server?.motdHTML}
                                     background={false}
                                 />
                             ) : description.length > 0 ? (
