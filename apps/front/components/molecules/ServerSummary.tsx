@@ -1,4 +1,8 @@
+import {TError} from '@core';
+import {addNotification} from '@lib/front/components/store/notificationsSlice';
+import {useAppDispatch} from '@lib/front/components/store/store';
 import {type UseQueryResult} from '@tanstack/react-query';
+import {useTranslations} from 'next-intl';
 import React, {type FC} from 'react';
 import Skeleton from '@mui/material/Skeleton';
 import {styled} from '@mui/material/styles';
@@ -17,16 +21,18 @@ const ServerSummaryListContainer = styled(Grid)(({theme}) => ({
 
 type ServerSummaryListProps = {
     setShowVerificationModal: (server: ServerSummaryDto) => void;
+    changePagination: (page: number) => void;
     fetchServersQuery: UseQueryResult<Pagination<ServerPaginatedListWithMDXSource>>;
 };
 
 type ServerSummaryAwaitedProps = {
     fetchedServers: UseQueryResult<Pagination<ServerPaginatedListWithMDXSource>>;
-} & Pick<ServerSummaryListProps, 'setShowVerificationModal'>;
+} & Pick<ServerSummaryListProps, 'setShowVerificationModal' | 'changePagination'>;
 
 const ServerSummaryAwaited: FC<ServerSummaryAwaitedProps> = ({
     fetchedServers,
     setShowVerificationModal,
+    changePagination,
 }) => {
     const data = fetchedServers.data;
 
@@ -38,7 +44,7 @@ const ServerSummaryAwaited: FC<ServerSummaryAwaitedProps> = ({
                     currentPage={data.currentPage}
                     pages={data.totalPages}
                     totalItems={data.total}
-                    setCurrentPage={() => {}}
+                    setCurrentPage={changePagination}
                 />
             )
         );
@@ -65,7 +71,11 @@ const ServerSummaryAwaited: FC<ServerSummaryAwaitedProps> = ({
 const ServerSummaryList: FC<ServerSummaryListProps> = ({
     fetchServersQuery,
     setShowVerificationModal,
+    changePagination,
 }) => {
+    const dispatch = useAppDispatch();
+    const t = useTranslations();
+
     const ServerData = () => {
         if (fetchServersQuery.isLoading) {
             return new Array(10)
@@ -79,10 +89,27 @@ const ServerSummaryList: FC<ServerSummaryListProps> = ({
                 ));
         }
 
+        if (fetchServersQuery.isError) {
+            const error = fetchServersQuery.error;
+            if (error instanceof TError || TError.isError(error)) {
+                dispatch(
+                    addNotification({
+                        title: t(`${error.key}.title`, error.data),
+                        description: t(`${error.key}.description`, error.data),
+                        id: btoa(JSON.stringify(error)),
+                        level: 'Error',
+                    }),
+                );
+            }
+
+            return <></>;
+        }
+
         return (
             <ServerSummaryAwaited
                 fetchedServers={fetchServersQuery}
                 setShowVerificationModal={setShowVerificationModal}
+                changePagination={changePagination}
             />
         );
     };

@@ -1,8 +1,6 @@
 import {RedisModule} from '@backend/redis';
-import {createKeyv, Keyv} from '@keyv/redis';
-import {CacheModule} from '@nestjs/cache-manager';
 import type {ModuleMetadata} from '@nestjs/common/interfaces/modules/module-metadata.interface';
-import {APP_GUARD} from '@nestjs/core';
+import {APP_FILTER, APP_GUARD} from '@nestjs/core';
 import {EventEmitterModule} from '@nestjs/event-emitter';
 import {Module, type Provider} from '@nestjs/common';
 import {AutomapperModule} from '@automapper/nestjs';
@@ -15,11 +13,16 @@ import {CqrsModule} from '@nestjs/cqrs';
 import {ApiConfig, getConfigs, ProjectConfig, RedisConfig} from '@backend/config';
 import {DataBaseModule, Session} from '@backend/db';
 import {LoggerModule} from '@backend/logger';
-import {CacheableMemory} from 'cacheable';
 import {ServersModule} from '../servers';
 import {UsersModule} from '../users';
+import {SentryGlobalFilter, SentryModule} from '@sentry/nestjs/setup';
 
-const interceptors: Provider[] = [];
+const interceptors: Provider[] = [
+    {
+        provide: APP_FILTER,
+        useClass: SentryGlobalFilter,
+    },
+];
 const guards: Provider[] = [
     {
         provide: APP_GUARD,
@@ -38,6 +41,7 @@ const serverModules: ModuleMetadata['imports'] = [
 
 @Module({
     imports: [
+        SentryModule.forRoot(),
         EventEmitterModule.forRoot(),
         CqrsModule.forRoot(),
         AutomapperModule.forRoot({
@@ -58,26 +62,6 @@ const serverModules: ModuleMetadata['imports'] = [
         ...serverModules,
         TypeOrmModule.forFeature([Session]),
         RedisModule,
-        CacheModule.registerAsync({
-            imports: [...getConfigs(RedisConfig)],
-            isGlobal: true,
-            useFactory: async (config: RedisConfig) => {
-                return {
-                    stores: [
-                        new Keyv({
-                            store: new CacheableMemory({
-                                ttl: config.DEFAULT_CACHE_TIME,
-                                lruSize: 5_000,
-                            }),
-                        }),
-                        createKeyv(
-                            `redis://${config.REDIS_HOST}:${config.REDIS_PORT}`,
-                        ),
-                    ],
-                };
-            },
-            inject: [RedisConfig],
-        }),
     ],
     providers: [...interceptors, ...guards],
 })

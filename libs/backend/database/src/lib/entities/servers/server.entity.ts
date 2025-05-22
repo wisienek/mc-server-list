@@ -58,7 +58,6 @@ export class Server {
     @Column({type: 'jsonb'})
     srv_record: McServerSrvRecord;
 
-    @AutoMap()
     @Column({type: 'jsonb'})
     motd: McServerMotd;
 

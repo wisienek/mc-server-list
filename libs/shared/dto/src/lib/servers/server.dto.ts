@@ -122,6 +122,18 @@ export class ServerDto {
     description: string;
 
     @AutoMap()
+    @IsOptional()
+    @IsString()
+    @MaxLength(512)
+    motd: string;
+
+    @AutoMap()
+    @IsOptional()
+    @IsString()
+    @MaxLength(2048)
+    motdHTML?: string;
+
+    @AutoMap()
     @IsInt()
     @IsPositive()
     @Type(() => Number)

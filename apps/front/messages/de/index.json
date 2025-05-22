@@ -1,67 +1,184 @@
 {
-    "cancel": "Abbrechen",
-    "genericError": "Ein Fehler ist aufgetreten.",
-    "themes": {
-        "switchToLight": "Zum hellen Thema wechseln",
-        "switchToDark": "Zum dunklen Thema wechseln"
+  "cancel": "Abbrechen",
+  "genericError": "Ein Fehler ist aufgetreten.",
+  "resetFilters": "Filter zurücksetzen",
+  "themes": {
+    "switchToLight": "Zum hellen Design wechseln",
+    "switchToDark": "Zum dunklen Design wechseln"
+  },
+  "profile": {
+    "loginDiscord": "Mit Discord anmelden!",
+    "login": "Mit Anmeldedaten einloggen",
+    "logout": "Abmelden",
+    "password": {
+      "setCredentials": "Zugangsdaten festlegen:",
+      "successfullySet": "Zugangsdaten erfolgreich gespeichert!",
+      "credentialsSaveError": "Fehler beim Speichern der Zugangsdaten.",
+      "password": "Passwort",
+      "passwordPlaceholder": "Bitte ein Passwort eingeben",
+      "saving": "Speichern",
+      "save": "Zugangsdaten speichern"
     },
-    "profile": {
-        "loginDiscord": "Mit Discord anmelden!",
-        "login": "Mit Anmeldeinformationen einloggen",
-        "logout": "Abmelden",
-        "password": {
-            "setCredentials": "Legen Sie Ihre Anmeldedaten fest:",
-            "successfullySet": "Anmeldedaten erfolgreich gespeichert!",
-            "credentialsSaveError": "Fehler beim Speichern der Anmeldedaten.",
-            "password": "Passwort",
-            "passwordPlaceholder": "Bitte ein Passwort eingeben",
-            "saving": "Speichern",
-            "save": "Anmeldedaten speichern"
-        },
-        "loginModal": {
-            "title": "Geben Sie Ihre Anmeldedaten ein",
-            "email": "E-Mail-Adresse",
-            "password": "Passwort",
-            "submit": "Einloggen",
-            "cancel": "Schließen",
-            "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
-            "invalidPassword": "Das Passwort muss mindestens 6 Zeichen lang sein.",
-            "loginNotification": {
-                "title": "Eingeloggt!",
-                "description": "Erfolgreich in das Konto {email} eingeloggt"
-            }
-        }
-    },
-    "copy": {
-        "copied": "Kopiert!",
-        "label": "In die Zwischenablage kopieren"
-    },
-    "filters": {
-        "searchLabel": "Name oder Beschreibung suchen",
-        "showMyServers": "Meine Server anzeigen",
-        "categories": {
-            "show": "Kategorien anzeigen",
-            "hide": "Kategorien ausblenden"
-        }
-    },
-    "footer": {
-        "credits": "Erstellt und gestaltet von <author>@Wisienek</author> 2025"
-    },
-    "page": {
-        "not-found": {
-            "title": "Nicht gefunden",
-            "description": "Die angeforderte Seite konnte nicht gefunden werden. Bitte überprüfen Sie die Adresse und versuchen Sie es erneut.",
-            "return": "Zur Startseite zurückkehren"
-        },
-        "seo": {
-            "description": "Website, die eine einfache Möglichkeit bietet, Minecraft-Server hinzuzufügen und zu teilen!",
-            "title": "Minecraft-Serverliste"
-        },
-        "list": {
-            "playersOnline": "Spieler online:",
-            "version": "Version:",
-            "verify": "Server mit MOTD-Code verifizieren: <code></code>",
-            "claimServer": "Dieser Server hat noch keinen Besitzer. Falls er Ihnen gehört, klicken Sie auf diesen Button!"
-        }
+    "loginModal": {
+      "title": "Zugangsdaten eingeben",
+      "email": "E-Mail-Adresse",
+      "password": "Passwort",
+      "submit": "Einloggen",
+      "cancel": "Schließen",
+      "invalidEmail": "Bitte eine gültige E-Mail-Adresse eingeben.",
+      "invalidPassword": "Das Passwort muss mindestens 6 Zeichen lang sein.",
+      "loginNotification": {
+        "title": "Eingeloggt!",
+        "description": "Erfolgreich bei {email} angemeldet"
+      }
     }
+  },
+  "copy": {
+    "copied": "Kopiert!",
+    "label": "In die Zwischenablage kopieren"
+  },
+  "filters": {
+    "searchLabel": "Name oder Beschreibung suchen",
+    "showMyServers": "Meine Server anzeigen",
+    "categories": {
+      "show": "Kategorien anzeigen",
+      "hide": "Kategorien ausblenden"
+    }
+  },
+  "footer": {
+    "credits": "Erstellt und gestaltet von <author>@Wisienek</author> 2025"
+  },
+  "page": {
+    "not-found": {
+      "title": "Nicht gefunden",
+      "description": "Die angeforderte Seite wurde nicht gefunden. Bitte überprüfen Sie die Adresse und versuchen Sie es erneut.",
+      "return": "Zur Startseite zurückkehren"
+    },
+    "seo": {
+      "description": "Website zum einfachen Hinzufügen und Teilen von Minecraft-Servern!",
+      "title": "Minecraft-Serverliste"
+    },
+    "list": {
+      "playersOnline": "Spieler online:",
+      "version": "Version:",
+      "verify": "Server mit MOTD-Code verifizieren: <code></code>",
+      "claimServer": "Dieser Server hat noch keinen Besitzer. Wenn er Ihnen gehört, klicken Sie auf diesen Button!",
+      "refetchTimedOut": "Erneut laden"
+    },
+    "hostPage": {
+      "javaIP": "Java-IP",
+      "bedrockIP": "Bedrock-IP",
+      "serverCategories": "Server-Kategorien",
+      "versions": "Versionen",
+      "playersOnline": "Spieler online",
+      "addCategory": "Kategorie hinzufügen",
+      "serverNamePlaceholder": "Geben Sie hier den Namen Ihres Servers ein!",
+      "addBanner": "Fügen Sie hier Ihr Banner hinzu!",
+      "categoriesModal": {
+        "title": "Server-Kategorien auswählen",
+        "selectedCategoriesTitle": "Ausgewählte Kategorien",
+        "showCategories": "Kategorien anzeigen",
+        "hideCategories": "Kategorien ausblenden",
+        "save": "Änderungen speichern"
+      },
+      "bannerModal": {
+        "title": "Bitte Bild-URL hinzufügen",
+        "description": "Fügen Sie unten eine URL zu Ihrem Bannerbild ein (vorzugsweise von IMGUR). Das Seitenverhältnis beträgt 5:1.",
+        "urlLabel": "Bild-URL",
+        "invalidUrl": "Ungültige URL. Nur Bilder von imgur.com mit den Endungen jpg, jpeg, png oder gif sind erlaubt.",
+        "save": "Änderungen speichern"
+      },
+      "srv": {
+        "header": "Schlüssel",
+        "value": "Wert"
+      },
+      "srvRecord": "SRV-Datensatzdaten",
+      "description": "Beschreibung",
+      "noDescription": "Keine Beschreibung vorhanden.",
+      "editDescription": "Bearbeitungsmodus starten",
+      "saveDescription": "Änderungen speichern",
+      "exitEditingDescription": "Bearbeitung beenden",
+      "descriptionSavedTitle": "Beschreibung gespeichert!",
+      "descriptionSavedMessage": "Anzahl der Zeichen geändert von {initial} auf {changed}",
+      "descriptionSaveErrorTitle": "Etwas ist schiefgelaufen!",
+      "descriptionSaveErrorMessage": "Aufgrund eines unbekannten Fehlers wurde die Beschreibung nicht gespeichert."
+    }
+  },
+  "server": {
+    "add": {
+      "newServer": "Neuen Server erstellen",
+      "title": "Server zur Liste hinzufügen",
+      "hostName": "Server-IP / Hostname",
+      "port": "Server-Port",
+      "type": "Server-Typ",
+      "isSubmitting": "Wird erstellt...",
+      "save": "Server hinzufügen",
+      "cancel": "Abbrechen",
+      "addressRequired": "Serveradresse ist erforderlich.",
+      "invalidAddress": "Muss eine gültige IPv4-Adresse oder ein Hostname sein.",
+      "portRequired": "Port ist erforderlich.",
+      "portMin": "Port muss mindestens 1 sein.",
+      "portMax": "Port darf höchstens 65535 sein.",
+      "verificationInstructions": "Kopieren Sie den Verifizierungscode <code></code> in Ihre MOTD-Datei und klicken Sie dann auf den Button unten, um den Verifizierungsprozess zu starten.",
+      "expiresAt": "Läuft ab am <expirationDate></expirationDate>",
+      "startVerification": "Verifizierung starten",
+      "serverVerificationTitle": "Server mit Code verifizieren"
+    },
+    "created": {
+      "title": "Server hinzugefügt!",
+      "description": "Server mit Hostname: {host} wurde erfolgreich hinzugefügt!"
+    }
+  },
+  "errors": {
+    "generic": {
+      "unknown": {
+        "title": "Unerwarteter Fehler",
+        "description": "Beim Verarbeiten der Anfrage ist ein Fehler aufgetreten. Status: {status}."
+      },
+      "fetchFailed": {
+        "title": "Netzwerkfehler",
+        "description": "Es konnte keine Verbindung zum Server hergestellt werden. Bitte versuchen Sie es später erneut. Fehler: {message}"
+      },
+      "tooFast": {
+        "title": "Zu schnell!",
+        "description": "Die Anfrage wurde zu schnell gesendet, bitte warte einen Moment und versuche es erneut!"
+      }
+    },
+    "server": {
+      "alreadyGivenAVote": {
+        "title": "Stimme bereits abgegeben",
+        "description": "Sie haben bereits für diesen Server abgestimmt."
+      },
+      "alreadyClaimed": {
+        "title": "Server bereits beansprucht",
+        "description": "Dieser Server wurde bereits beansprucht. Kontaktieren Sie den Administrator oder warten Sie eine Woche nach der Schonfrist, um ihn erneut zu beanspruchen."
+      },
+      "exists": {
+        "title": "Server existiert bereits",
+        "description": "Dieser Server existiert bereits. {verificationCode}"
+      },
+      "notFound": {
+        "title": "Server nicht gefunden",
+        "description": "Kein Server gefunden für Hostname: {hostname}, Port: {port}, IP: {ip}."
+      },
+      "notOwnedByUser": {
+        "title": "Zugriff verweigert",
+        "description": "Server {hostName} gehört nicht dem Benutzer {userId}."
+      },
+      "verificationOffline": {
+        "title": "Server offline",
+        "description": "Der Server muss online sein, um verifiziert zu werden."
+      },
+      "verificationUnsuccessful": {
+        "title": "Verifizierung fehlgeschlagen",
+        "description": "Der Verifizierungscode ist ungültig oder abgelaufen. Wenn Zeit und Code korrekt sind, versuchen Sie es in ein paar Minuten erneut."
+      }
+    },
+    "user": {
+      "notFound": {
+        "title": "Benutzer nicht gefunden",
+        "description": "Der gesuchte Benutzer existiert nicht."
+      }
+    }
+  }
 }

@@ -76,7 +76,7 @@ const DescriptionSection: FC<DescriptionSectionProps> = ({
                 server.mdxSource.content
             ) : (
                 <Typography variant="body2" color="textSecondary">
-                    {t('noDescription')}
+                    {server?.motd ?? t('noDescription')}
                 </Typography>
             )}
         </>

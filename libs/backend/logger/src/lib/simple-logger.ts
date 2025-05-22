@@ -16,12 +16,15 @@ export class SimpleLogger extends Logger {
     constructor(@Inject(INQUIRER) protected parentClass: object | undefined) {
         super();
         const parentName = parentClass?.['name'] || parentClass?.constructor?.name;
+
         if (parentName) {
             this.loggerContext = parentName;
         } else if (parentClass?.constructor?.name) {
             this.loggerContext = parentClass.constructor.name;
         }
+
         this._logger = this.initLogger();
+
         if (this.isDev()) {
             PrettyError.start();
         }

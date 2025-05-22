@@ -1,5 +1,7 @@
+import {parseResult} from '@core';
 import {getServerDetails} from '@front/components/actions/getServerDetails';
 import {Metadata, ResolvingMetadata} from 'next';
+import {notFound} from 'next/navigation';
 import type {HostnamePageProps} from './layout';
 
 export const revalidate = 3_600;
@@ -10,7 +12,13 @@ export async function generateMetadata(
     parent: ResolvingMetadata,
 ): Promise<Metadata> {
     const hostName = (await props.params).hostname;
-    const serverDetails = await getServerDetails(hostName);
+    const serverDetailsResponse = parseResult(await getServerDetails(hostName));
+
+    if (serverDetailsResponse.isErr()) {
+        return notFound();
+    }
+
+    const serverDetails = serverDetailsResponse.unwrap();
 
     const previousImages = (await parent).openGraph?.images || [];
 

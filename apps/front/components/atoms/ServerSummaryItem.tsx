@@ -1,10 +1,11 @@
 'use client';
-import {useAppDispatch, useAppSelector} from '@lib/front/components/store/store';
-import {addNotification} from '@lib/front/components/store/notificationsSlice';
+import {useAppSelector} from '@lib/front/components/store/store';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import Typography from '@mui/material/Typography';
 import {styled} from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+import Badge from '@mui/material/Badge';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import {type FC, type ReactNode, useState} from 'react';
@@ -19,15 +20,28 @@ import {Link} from '@front/i18n/routing';
 import CopyableTypography from './CopyableTypography';
 import ServerLikeButton from './ServerLikeButton';
 import CategoryIcon from './CategoryIcon';
+import {useReVerifyTimeout} from '@front/components/queries/servers/reverifyTimeout';
+import MinecraftMotd from '@front/components/atoms/MinecraftMOTD';
 
 const StyledServerSummary = styled(Paper)(({theme}) => ({
     padding: theme.spacing(1),
     marginBottom: theme.spacing(1),
     display: 'grid',
     gridTemplateColumns: '1fr 6fr 1fr',
-    minWidth: 'min-content',
+    width: '100%',
+    maxWidth: '100%',
+    boxSizing: 'border-box',
     gap: theme.spacing(1),
     position: 'relative',
+    transition:
+        'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease',
+
+    '&:hover': {
+        backgroundColor: theme.palette.action.hover,
+        transform: 'scale(1.01)',
+        boxShadow: theme.shadows[3],
+        zIndex: 1,
+    },
 }));
 
 const IconContainer = styled(Box)(({theme}) => ({
@@ -36,6 +50,21 @@ const IconContainer = styled(Box)(({theme}) => ({
     justifyContent: 'center',
     alignItems: 'center',
     gap: theme.spacing(1),
+}));
+
+const StyledIconWrapper = styled(Box, {
+    shouldForwardProp: (name) => name !== 'timedOut',
+})<{timedOut: boolean}>(({theme, timedOut}) => ({
+    justifyContent: 'center',
+    alignItems: 'center',
+    display: 'flex',
+    overflow: 'hidden',
+    borderRadius: theme.shape.borderRadius,
+    ...(timedOut && {
+        backgroundColor: theme.palette.grey[500],
+        opacity: 0.5,
+        zIndex: 1,
+    }),
 }));
 
 const StyledServerIcon = styled(Image)(({theme}) => ({
@@ -73,6 +102,7 @@ const ServerDescriptionContainer = styled('div')(() => ({
     position: 'relative',
     maxWidth: '100%',
     overflow: 'hidden',
+    wordBreak: 'break-word',
     display: '-webkit-box',
     WebkitLineClamp: 3,
     WebkitBoxOrient: 'vertical',
@@ -93,6 +123,29 @@ const StatsContainer = styled(Box)(() => ({
     height: '100%',
 }));
 
+const OverlayWrapper = styled(Box)({
+    position: 'relative',
+    display: 'inline-block',
+    width: 'fit-content',
+    height: 'fit-content',
+});
+
+const OverlayButton = styled(Button)(({theme}) => ({
+    position: 'absolute',
+    top: theme.spacing(1),
+    left: '50%',
+    transform: 'translateX(-50%) scale(1)',
+    zIndex: 2,
+    transition: 'transform 0.4s ease, box-shadow 0.4s ease',
+
+    '&:hover': {
+        boxShadow: theme.shadows[4],
+        backgroundColor: theme.palette.warning.main,
+        color: theme.palette.getContrastText(theme.palette.warning.main),
+        borderColor: theme.palette.warning.main,
+    },
+}));
+
 const CategoriesContainer = styled(Box)(({theme}) => ({
     display: 'flex',
     flexDirection: 'row',
@@ -110,12 +163,13 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
 }) => {
     const t = useTranslations('page.list');
     const router = useRouter();
-    const dispatch = useAppDispatch();
     const profile = useAppSelector((store) => store.auth.user);
 
     const [isLikedByUser, setIsLikedByUser] = useState<boolean>(server.isLiked);
     const [votes, setVotes] = useState<number>(server.votes ?? 0);
     const {mutateAsync: voteForServer} = useVoteForServer();
+    const {mutateAsync: reVerifyTimeout, isPending: isReVerifying} =
+        useReVerifyTimeout();
 
     const handleFavoriteClick = () => {
         if (!profile) return;
@@ -130,20 +184,16 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
                     setVotes(serverVotes);
                 }
             })
-            .catch((error) => {
+            .catch(() => {
                 setVotes(votes - delta);
-                dispatch(
-                    addNotification({
-                        id: server.id,
-                        level: 'Error',
-                        description: error.message,
-                        title: error.name,
-                    }),
-                );
             });
     };
 
     const handleVerifyServerClick = () => {
+        if (!profile) {
+            return;
+        }
+
         setShowVerificationModal(server);
     };
 
@@ -153,7 +203,7 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
                 position: 'absolute',
                 top: 8,
                 right: 8,
-                cursor: 'pointer',
+                cursor: profile ? 'pointer' : 'cursor',
             }}
             onClick={handleVerifyServerClick}
         >
@@ -169,8 +219,9 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
     const onlinePlayers = server.onlinePlayers ?? 0;
     const maxPlayers = server.maxPlayers ?? 0;
     const categories = server.categories ?? [];
-    const description = shortenText(server?.description ?? '', 512);
-    const linkTo = `/${server.host}`;
+    const description = shortenText(server?.description ?? server?.motd ?? '', 512);
+    const linkTo = `/${server.host}${server.port ? `:${server.port}` : ''}`;
+    const isTimedOut = server.isTimedOut;
 
     const LinkWrapper = ({children}: {children: ReactNode}) => (
         <Link
@@ -178,22 +229,31 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
             href={linkTo}
             onMouseEnter={() => router.prefetch(linkTo)}
             className="cursor-pointer"
+            style={{
+                textDecoration: 'none',
+            }}
         >
             {children}
         </Link>
     );
 
-    return (
-        <StyledServerSummary elevation={3}>
+    const IconSection = () => {
+        const InnerIconSection = (
             <IconContainer>
-                <LinkWrapper>
-                    <StyledServerIcon
-                        src={server.icon ?? defaultServerIcon}
-                        alt="server icon"
-                        width={50}
-                        height={50}
-                    />
-                </LinkWrapper>
+                <Badge
+                    overlap="rectangular"
+                    color={isTimedOut ? 'error' : 'success'}
+                    variant="dot"
+                >
+                    <StyledIconWrapper timedOut={isTimedOut}>
+                        <StyledServerIcon
+                            src={server.icon ?? defaultServerIcon}
+                            alt="server icon"
+                            width={50}
+                            height={50}
+                        />
+                    </StyledIconWrapper>
+                </Badge>
 
                 <StyledNameAndRankingContainer>
                     <Typography variant="h6" color="textPrimary" noWrap>
@@ -205,10 +265,35 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
                     </Typography>
                 </StyledNameAndRankingContainer>
             </IconContainer>
+        );
 
-            <ServerDescription>
-                {server.banner && (
-                    <LinkWrapper>
+        if (isTimedOut) {
+            return (
+                <OverlayWrapper>
+                    <OverlayButton
+                        variant="outlined"
+                        color="warning"
+                        disabled={isReVerifying}
+                        size="small"
+                        onClick={() => reVerifyTimeout(server.host)}
+                    >
+                        {t('refetchTimedOut')}
+                    </OverlayButton>
+                    {InnerIconSection}
+                </OverlayWrapper>
+            );
+        }
+
+        return <LinkWrapper>{InnerIconSection}</LinkWrapper>;
+    };
+
+    return (
+        <StyledServerSummary elevation={3}>
+            <IconSection />
+
+            <LinkWrapper>
+                <ServerDescription>
+                    {server.banner && (
                         <ServerBannerContainer>
                             <StyledServerBanner
                                 unoptimized
@@ -219,15 +304,28 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
                                 height="60"
                             />
                         </ServerBannerContainer>
-                    </LinkWrapper>
-                )}
+                    )}
 
-                {description && (
-                    <ServerDescriptionContainer>
-                        {server.mdxSource.content ?? description}
-                    </ServerDescriptionContainer>
-                )}
-            </ServerDescription>
+                    {(!!server.mdxSource.content ||
+                        !!server.motd ||
+                        !!server.motdHTML ||
+                        !!description) && (
+                        <ServerDescriptionContainer>
+                            {(server.motd.length ?? server.motdHTML.length) > 0 ? (
+                                <MinecraftMotd
+                                    motd={shortenText(server.motd, 512)}
+                                    motdHtml={server?.motdHTML}
+                                    background={false}
+                                />
+                            ) : description.length > 0 ? (
+                                description
+                            ) : (
+                                server.mdxSource.content
+                            )}
+                        </ServerDescriptionContainer>
+                    )}
+                </ServerDescription>
+            </LinkWrapper>
 
             <StatsContainer>
                 <Box

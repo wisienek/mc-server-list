@@ -1,4 +1,12 @@
+import * as Sentry from '@sentry/nestjs';
+
+Sentry.init({
+    dsn: process.env.BE_SENTRY_URL,
+    sendDefaultPii: true,
+});
+
 import {ClassSerializerInterceptor, Logger, ValidationPipe} from '@nestjs/common';
+import type {NestExpressApplication} from '@nestjs/platform-express';
 import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
 import {NestFactory, Reflector} from '@nestjs/core';
 import {getRepositoryToken} from '@nestjs/typeorm';
@@ -13,9 +21,14 @@ import {Repository} from 'typeorm';
 import {AppModule} from './app/app.module';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule, {
+    const app = await NestFactory.create<NestExpressApplication>(AppModule, {
         logger: SimpleLogger.create('bootstrap'),
     });
+
+    app.setGlobalPrefix('api');
+
+    // Traefic proxy
+    app.set('trust proxy', 1);
 
     app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
     app.useGlobalPipes(new ValidationPipe({transform: true, whitelist: true}));
@@ -42,7 +55,7 @@ async function bootstrap() {
                 httpOnly: true,
                 secure: projectConfig.isProd,
                 maxAge: 1000 * 60 * 60 * 24 * 7,
-                sameSite: 'lax',
+                sameSite: projectConfig.isProd ? 'lax' : 'none',
             },
             store: new TypeormStore().connect(sessionRepository),
         }),
@@ -69,7 +82,7 @@ async function bootstrap() {
         deepScanRoutes: true,
         autoTagControllers: true,
     });
-    SwaggerModule.setup('docs', app, document, {explorer: true});
+    SwaggerModule.setup('api/docs', app, document, {explorer: true});
 
     const port = configService.APP_PORT;
     await app.listen(port);

@@ -47,3 +47,7 @@ out
 
 .env
 !.env.example*
+github-actions-key
+
+# Sentry Config File
+.sentryclirc

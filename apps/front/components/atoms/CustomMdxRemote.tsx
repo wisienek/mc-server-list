@@ -54,6 +54,19 @@ export const markdownComponents: MDXComponents = {
     hr: () => <Divider sx={{marginY: 2}} />,
 };
 
+export const markdownComponentsWithoutAnchor: MDXComponents = {
+    ...markdownComponents,
+    a: (props) => (
+        <Typography
+            color="primary"
+            variant="body2"
+            component="span"
+            sx={{textDecoration: 'underline'}}
+            {...props}
+        />
+    ),
+};
+
 type CustomMdxRemoteProps = {
     mdx: string;
 } & MDXProps;

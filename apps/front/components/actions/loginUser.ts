@@ -1,5 +1,6 @@
 'use server';
 
+import {SerializedResult, serializeResult} from '@core';
 import {UserDto} from '@shared/dto';
 import {CookieNames} from '@shared/enums';
 import {revalidateTag} from 'next/cache';
@@ -10,8 +11,8 @@ import {customFetch} from './baseFetch';
 export async function loginUser(data: {
     email: string;
     password: string;
-}): Promise<UserDto> {
-    return await customFetch<UserDto>(
+}): Promise<SerializedResult<UserDto>> {
+    const result = await customFetch<UserDto>(
         `/users/login/credentials`,
         {
             method: 'POST',
@@ -37,4 +38,5 @@ export async function loginUser(data: {
             },
         },
     );
+    return serializeResult(result);
 }

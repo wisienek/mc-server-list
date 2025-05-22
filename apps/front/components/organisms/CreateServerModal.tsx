@@ -7,6 +7,9 @@ import {
     CreateServerResponseDto,
     ServerSummaryDto,
 } from '@shared/dto';
+import {useAppDispatch} from '@lib/front/components/store/store';
+import {addNotification} from '@lib/front/components/store/notificationsSlice';
+import {useTranslations} from 'next-intl';
 
 export type ModalMode = 'create' | 'verify';
 
@@ -14,12 +17,9 @@ interface ServerModalProps {
     open: boolean;
     handleClose: () => void;
     modalMode: ModalMode;
-    setModalMode: (mode: ModalMode) => void;
     serverToVerify?: ServerSummaryDto | null;
-    setServerResponse?: (data: CreateServerResponseDto) => void;
     setCreateData?: (data: CreateServerDto) => void;
     serverResponse?: CreateServerResponseDto;
-    createData?: CreateServerDto;
 }
 
 function ServerModal({
@@ -27,22 +27,39 @@ function ServerModal({
     handleClose,
     modalMode,
     serverToVerify,
-    setServerResponse,
-    setCreateData,
 }: ServerModalProps) {
+    const t = useTranslations('server');
+    const dispatch = useAppDispatch();
+
     const renderContent = () => {
         if (modalMode === 'create') {
             return (
                 <CreateServerModalContents
                     handleClose={handleClose}
-                    setServerResponse={setServerResponse!}
-                    setCreateDto={setCreateData!}
+                    setServerResponse={(data) => {
+                        dispatch(
+                            addNotification({
+                                id: 'success-create-server',
+                                level: 'Success',
+                                title: t('created.title'),
+                                description: t('created.description', {
+                                    host: data.host,
+                                }),
+                            }),
+                        );
+                        handleClose();
+                    }}
                 />
             );
         }
 
         if (modalMode === 'verify' && serverToVerify) {
-            return <VerifyServerModalContents server={serverToVerify} />;
+            return (
+                <VerifyServerModalContents
+                    server={serverToVerify}
+                    handleClose={handleClose}
+                />
+            );
         }
 
         return null;

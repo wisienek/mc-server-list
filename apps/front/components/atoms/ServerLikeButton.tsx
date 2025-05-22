@@ -1,3 +1,5 @@
+import {openModal} from '@lib/front/components/store/modalSlice';
+import {useAppDispatch, useAppSelector} from '@lib/front/components/store/store';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -16,6 +18,9 @@ const ServerLikeButton = ({
     isLikedByUser,
     votes,
 }: ServerLikeButtonProps) => {
+    const user = useAppSelector((store) => store.auth.user);
+    const dispatch = useAppDispatch();
+
     return (
         <Box
             display="flex"
@@ -24,9 +29,13 @@ const ServerLikeButton = ({
             justifyContent="center"
         >
             <IconButton
-                onClick={handleFavoriteClick}
+                onClick={
+                    user
+                        ? () => handleFavoriteClick()
+                        : () => dispatch(openModal('login'))
+                }
                 size="small"
-                sx={{cursor: profile ? 'pointer' : 'not-allowed'}}
+                sx={{cursor: 'pointer'}}
                 disabled={!profile}
             >
                 <FavoriteIcon sx={{color: isLikedByUser ? 'red' : 'grey'}} />

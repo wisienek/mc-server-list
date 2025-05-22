@@ -1,4 +1,3 @@
-import {MapperOmitType} from '@automapper/classes/mapped-types';
 import {AutoMap} from '@automapper/classes';
 import {Type} from 'class-transformer';
 import {
@@ -17,6 +16,7 @@ import {Protocol} from './protocol.dto';
 import {MapInfo} from './map-info.dto';
 import {Players} from './player.dto';
 import {MOTD} from './motd.dto';
+import {OmitType} from '@nestjs/swagger';
 
 export class MinecraftServerOfflineStatus {
     @AutoMap()
@@ -46,7 +46,7 @@ export class MinecraftServerOfflineStatus {
     debug: DebugInfo;
 }
 
-export class MinecraftServerOnlineStatus extends MapperOmitType(
+export class MinecraftServerOnlineStatus extends OmitType(
     MinecraftServerOfflineStatus,
     ['ip', 'port'],
 ) {

@@ -64,7 +64,9 @@ export default function CredentialsPage() {
     const onSubmit: SubmitHandler<CredentialsFormData> = (data) => {
         axios
             .post(
-                `${process.env.NEXT_PUBLIC_API_URL}/users/save-credentials`,
+                `${
+                    process.env.NEXT_PUBLIC_API_URL ?? '/api'
+                }/users/save-credentials`,
                 {password: data.password},
                 {withCredentials: true},
             )

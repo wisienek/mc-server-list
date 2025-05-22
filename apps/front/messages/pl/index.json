@@ -1,126 +1,184 @@
 {
-    "cancel": "Anuluj",
-    "genericError": "Wystąpił błąd.",
-    "themes": {
-        "switchToLight": "Przełącz na jasny motyw",
-        "switchToDark": "Przełącz na ciemny motyw"
+  "cancel": "Anuluj",
+  "genericError": "Wystąpił błąd.",
+  "resetFilters": "Resetuj filtry",
+  "themes": {
+    "switchToLight": "Przełącz na jasny motyw",
+    "switchToDark": "Przełącz na ciemny motyw"
+  },
+  "profile": {
+    "loginDiscord": "Zaloguj się przez Discorda!",
+    "login": "Zaloguj się za pomocą danych uwierzytelniających",
+    "logout": "Wyloguj",
+    "password": {
+      "setCredentials": "Ustaw swoje dane:",
+      "successfullySet": "Dane zapisane pomyślnie!",
+      "credentialsSaveError": "Wystąpił błąd podczas zapisywania danych.",
+      "password": "Hasło",
+      "passwordPlaceholder": "Wprowadź hasło",
+      "saving": "Zapisywanie",
+      "save": "Zapisz dane"
     },
-    "profile": {
-        "loginDiscord": "Zaloguj się przez Discorda!",
-        "login": "Zaloguj się za pomocą danych uwierzytelniających",
-        "logout": "Wyloguj",
-        "password": {
-            "setCredentials": "Ustaw swoje dane:",
-            "successfullySet": "Dane zapisane pomyślnie!",
-            "credentialsSaveError": "Wystąpił błąd podczas zapisywania danych.",
-            "password": "Hasło",
-            "passwordPlaceholder": "Wprowadź hasło",
-            "saving": "Zapisywanie",
-            "save": "Zapisz dane"
-        },
-        "loginModal": {
-            "title": "Podaj dane logowania",
-            "email": "Adres E-Mail",
-            "password": "Hasło",
-            "submit": "Zaloguj",
-            "cancel": "Zamknij",
-            "invalidEmail": "Wprowadź poprawny adres e-mail.",
-            "invalidPassword": "Hasło musi mieć co najmniej 6 znaków.",
-            "loginNotification": {
-                "title": "Zalogowano!",
-                "description": "Pomyślnie zalogowano na konto {email}"
-            }
-        }
+    "loginModal": {
+      "title": "Podaj dane logowania",
+      "email": "Adres E-Mail",
+      "password": "Hasło",
+      "submit": "Zaloguj",
+      "cancel": "Zamknij",
+      "invalidEmail": "Wprowadź poprawny adres e-mail.",
+      "invalidPassword": "Hasło musi mieć co najmniej 6 znaków.",
+      "loginNotification": {
+        "title": "Zalogowano!",
+        "description": "Pomyślnie zalogowano na konto {email}"
+      }
+    }
+  },
+  "copy": {
+    "copied": "Skopiowano!",
+    "label": "Skopiuj do schowka"
+  },
+  "filters": {
+    "searchLabel": "Szukaj nazwy lub opisu",
+    "showMyServers": "Pokaż moje serwery",
+    "categories": {
+      "show": "Pokaż kategorie",
+      "hide": "Ukryj kategorie"
+    }
+  },
+  "footer": {
+    "credits": "Stworzone i zaprojektowane przez <author>@Wisienek</author> 2025"
+  },
+  "page": {
+    "not-found": {
+      "title": "Nie znaleziono",
+      "description": "Strona, której szukasz, nie została znaleziona. Sprawdź adres i spróbuj ponownie.",
+      "return": "Powrót do strony głównej"
     },
-    "copy": {
-        "copied": "Skopiowano!",
-        "label": "Skopiuj do schowka"
+    "seo": {
+      "description": "Strona ułatwiająca dodawanie i udostępnianie serwerów Minecraft!",
+      "title": "Lista serwerów Minecraft"
     },
-    "filters": {
-        "searchLabel": "Szukaj nazwy lub opisu",
-        "showMyServers": "Pokaż moje serwery",
-        "categories": {
-            "show": "Pokaż kategorie",
-            "hide": "Ukryj kategorie"
-        }
+    "list": {
+      "playersOnline": "Gracze online:",
+      "version": "Wersja:",
+      "verify": "Zweryfikuj serwer kodem MOTD: <code></code>",
+      "claimServer": "Serwer nie ma jeszcze właściciela. Jeśli to Ty, kliknij ten przycisk!",
+      "refetchTimedOut": "Pobierz info"
     },
-    "footer": {
-        "credits": "Stworzone i zaprojektowane przez <author>@Wisienek</author> 2025"
+    "hostPage": {
+      "javaIP": "IP Java",
+      "bedrockIP": "IP Bedrock",
+      "serverCategories": "Kategorie serwera",
+      "versions": "Wersje",
+      "playersOnline": "Gracze online",
+      "addCategory": "Dodaj kategorię",
+      "serverNamePlaceholder": "Wpisz tutaj nazwę swojego serwera!",
+      "addBanner": "Dodaj swój baner tutaj!",
+      "categoriesModal": {
+        "title": "Wybierz kategorie serwera",
+        "selectedCategoriesTitle": "Wybrane kategorie",
+        "showCategories": "Pokaż kategorie",
+        "hideCategories": "Ukryj kategorie",
+        "save": "Zapisz zmiany"
+      },
+      "bannerModal": {
+        "title": "Dodaj adres URL obrazu",
+        "description": "Wklej poniżej adres URL obrazu banera (najlepiej z platformy IMGUR). Współczynnik proporcji obrazu wynosi 5:1.",
+        "urlLabel": "Adres URL obrazu",
+        "invalidUrl": "Nieprawidłowy adres URL. Dozwolone są tylko obrazy z imgur.com z rozszerzeniami jpg, jpeg, png lub gif.",
+        "save": "Zapisz zmiany"
+      },
+      "srv": {
+        "header": "Klucz",
+        "value": "Wartość"
+      },
+      "srvRecord": "Dane rekordu SRV",
+      "description": "Opis",
+      "noDescription": "Brak opisu.",
+      "editDescription": "Przejdź do edycji",
+      "saveDescription": "Zapisz zmiany",
+      "exitEditingDescription": "Zakończ edycję",
+      "descriptionSavedTitle": "Opis zapisany!",
+      "descriptionSavedMessage": "Liczba znaków zmieniona z {initial} na {changed}",
+      "descriptionSaveErrorTitle": "Coś poszło nie tak!",
+      "descriptionSaveErrorMessage": "Z powodu nieznanego błędu opis nie został zapisany."
+    }
+  },
+  "server": {
+    "add": {
+      "newServer": "Dodaj serwer",
+      "title": "Dodaj serwer do listy",
+      "hostName": "IP / Nazwa hosta serwera",
+      "port": "Port serwera",
+      "type": "Typ serwera",
+      "isSubmitting": "Tworzenie...",
+      "save": "Dodaj serwer",
+      "cancel": "Anuluj",
+      "addressRequired": "Adres serwera jest wymagany.",
+      "invalidAddress": "Musi być poprawnym adresem IPv4 lub nazwą hosta.",
+      "portRequired": "Port jest wymagany.",
+      "portMin": "Port musi wynosić co najmniej 1.",
+      "portMax": "Port może wynosić maksymalnie 65535.",
+      "verificationInstructions": "Skopiuj kod weryfikacyjny <code></code> do pliku MOTD serwera, a następnie kliknij przycisk poniżej, aby rozpocząć proces weryfikacji.",
+      "expiresAt": "Wygasa o <expirationDate></expirationDate>",
+      "startVerification": "Rozpocznij weryfikację",
+      "serverVerificationTitle": "Zweryfikuj serwer kodem"
     },
-    "page": {
-        "not-found": {
-            "title": "Nie znaleziono",
-            "description": "Strona, której szukasz, nie została znaleziona. Sprawdź adres i spróbuj ponownie.",
-            "return": "Powrót do strony głównej"
-        },
-        "seo": {
-            "description": "Strona ułatwiająca dodawanie i udostępnianie serwerów Minecraft!",
-            "title": "Lista serwerów Minecraft"
-        },
-        "list": {
-            "playersOnline": "Gracze online:",
-            "version": "Wersja:",
-            "verify": "Zweryfikuj serwer kodem MOTD: <code></code>",
-            "claimServer": "Serwer nie ma jeszcze właściciela. Jeśli to Ty, kliknij ten przycisk!"
-        },
-        "hostPage": {
-            "javaIP": "IP Java",
-            "bedrockIP": "IP Bedrock",
-            "serverCategories": "Kategorie serwera",
-            "versions": "Wersje",
-            "playersOnline": "Gracze online",
-            "addCategory": "Dodaj kategorię",
-            "serverNamePlaceholder": "Wpisz tutaj nazwę swojego serwera!",
-            "addBanner": "Dodaj swój baner tutaj!",
-            "categoriesModal": {
-                "title": "Wybierz kategorie serwera",
-                "selectedCategoriesTitle": "Wybrane kategorie",
-                "showCategories": "Pokaż kategorie",
-                "hideCategories": "Ukryj kategorie",
-                "save": "Zapisz zmiany"
-            },
-            "bannerModal": {
-                "title": "Dodaj adres URL obrazu",
-                "description": "Wklej poniżej adres URL obrazu banera (najlepiej z platformy IMGUR). Współczynnik proporcji obrazu wynosi 5:1.",
-                "urlLabel": "Adres URL obrazu",
-                "invalidUrl": "Nieprawidłowy adres URL. Dozwolone są tylko obrazy z imgur.com z rozszerzeniami jpg, jpeg, png lub gif.",
-                "save": "Zapisz zmiany"
-            },
-            "srv": {
-                "header": "Klucz",
-                "value": "Wartość"
-            },
-            "srvRecord": "Dane rekordu SRV",
-            "description": "Opis",
-            "noDescription": "Brak opisu.",
-            "editDescription": "Przejdź do edycji",
-            "saveDescription": "Zapisz zmiany",
-            "exitEditingDescription": "Zakończ edycję",
-            "descriptionSavedTitle": "Opis zapisany!",
-            "descriptionSavedMessage": "Liczba znaków zmieniona z {initial} na {changed}",
-            "descriptionSaveErrorTitle": "Coś poszło nie tak!",
-            "descriptionSaveErrorMessage": "Z powodu nieznanego błędu opis nie został zapisany."
-        }
+    "created": {
+      "title": "Serwer dodany!",
+      "description": "Serwer z hostem: {host} został pomyślnie dodany!"
+    }
+  },
+  "errors": {
+    "generic": {
+      "unknown": {
+        "title": "Nieoczekiwany błąd",
+        "description": "Wystąpił problem podczas przetwarzania żądania. Status: {status}."
+      },
+      "fetchFailed": {
+        "title": "Błąd sieci",
+        "description": "Nie udało się połączyć z serwerem. Spróbuj ponownie później. Błąd: {message}"
+      },
+      "tooFast": {
+        "title": "Za szybko!",
+        "description": "Żądanie zostało wysłane zbyt szybko, poczekaj chwilę i spróbuj ponownie!"
+      }
     },
     "server": {
-        "add": {
-            "newServer": "Utwórz nowy serwer",
-            "title": "Dodaj serwer do listy",
-            "hostName": "IP / Nazwa hosta serwera",
-            "port": "Port serwera",
-            "type": "Typ serwera",
-            "isSubmitting": "Tworzenie...",
-            "save": "Pobierz kod weryfikacyjny",
-            "cancel": "Anuluj",
-            "addressRequired": "Adres serwera jest wymagany.",
-            "invalidAddress": "Musi być poprawnym adresem IPv4 lub nazwą hosta.",
-            "portRequired": "Port jest wymagany.",
-            "portMin": "Port musi wynosić co najmniej 1.",
-            "portMax": "Port może wynosić maksymalnie 65535.",
-            "verificationInstructions": "Skopiuj kod weryfikacyjny <code></code> do pliku MOTD serwera, a następnie kliknij przycisk poniżej, aby rozpocząć proces weryfikacji.",
-            "expiresAt": "Wygasa o <expirationDate></expirationDate>",
-            "startVerification": "Rozpocznij weryfikację",
-            "serverVerificationTitle": "Zweryfikuj serwer kodem"
-        }
+      "alreadyGivenAVote": {
+        "title": "Głos już oddany",
+        "description": "Już zagłosowałeś na ten serwer."
+      },
+      "alreadyClaimed": {
+        "title": "Serwer już przejęty",
+        "description": "Ten serwer został już przejęty. Skontaktuj się z administratorem lub poczekaj tydzień po okresie karencji, aby ponownie go przejąć."
+      },
+      "exists": {
+        "title": "Serwer już istnieje",
+        "description": "Ten serwer już istnieje. Kod weryfikacyjny: {verificationCode}"
+      },
+      "notFound": {
+        "title": "Nie znaleziono serwera",
+        "description": "Nie znaleziono serwera dla hosta: {hostname}, portu: {port}, IP: {ip}."
+      },
+      "notOwnedByUser": {
+        "title": "Brak dostępu",
+        "description": "Serwer {hostName} nie należy do użytkownika {userId}."
+      },
+      "verificationOffline": {
+        "title": "Serwer offline",
+        "description": "Serwer musi być online, aby go zweryfikować."
+      },
+      "verificationUnsuccessful": {
+        "title": "Weryfikacja nieudana",
+        "description": "Kod weryfikacyjny jest nieprawidłowy lub wygasł. Jeśli czas i kod są poprawne, spróbuj ponownie za kilka minut."
+      }
+    },
+    "user": {
+      "notFound": {
+        "title": "Nie znaleziono użytkownika",
+        "description": "Podany użytkownik nie istnieje."
+      }
     }
+  }
 }

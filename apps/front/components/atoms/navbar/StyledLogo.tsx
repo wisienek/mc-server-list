@@ -10,6 +10,7 @@ export const StyledLogo = styled('div')(({theme}) => ({
     justifyContent: 'center',
     marginRight: theme.spacing(1),
     cursor: 'pointer',
+    overflow: 'hidden',
 
     [theme.breakpoints.down('sm')]: {
         display: 'none',
@@ -23,6 +24,8 @@ export const StyledTitle = styled(Typography)(({theme}) => ({
     letterSpacing: '.3rem',
     textDecoration: 'none',
     color: theme.palette.text.primary,
+    fontSize: theme.spacing(4),
+
     [theme.breakpoints.down('sm')]: {
         display: 'none',
     },

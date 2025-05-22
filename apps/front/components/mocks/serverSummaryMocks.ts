@@ -1,5 +1,5 @@
-import {ServerSummaryDto} from '@shared/dto';
-import {ServerCategory} from '@shared/enums';
+import type {ServerSummaryDto} from '@shared/dto';
+import {ServerCategory, ServerType} from '@shared/enums';
 
 export const defaultServerIcon = '/logo_minecraft.png';
 
@@ -24,6 +24,7 @@ export const serverSummaryMocks: ServerSummaryDto[] = [
         name: 'Adv Surf server',
         ranking: 1,
         banner: defaultServerBanner,
+        motd: 'test motd',
         description: `[1.21] OPBlocks is a high-quality Minecraft Prison, Skyblock, Cobblemon/Pixelmon, and Survival SMP server featuring unique content and an amazing community, friendly staff, and awesome players like you!
 
 BEDROCK SUPPORTED!
@@ -37,6 +38,18 @@ Mob Armor
 Dungeons
 Quests
 Daily Challenges`,
+        type: ServerType.JAVA,
+        isActive: false,
+        verification: {
+            id: '',
+            code: 'aaabbbccc',
+            expiresAt: 0,
+            verified: false,
+            server_id: '',
+        },
+        verificationCode: 'aaabbbccc',
+        isTimedOut: false,
+        owner_id: '',
     },
     {
         id: '2',
@@ -53,6 +66,7 @@ Daily Challenges`,
         name: 'Classic MC',
         ranking: 122,
         banner: defaultServerBanner,
+        motd: 'test motd',
         description: `IP: MCSL.MANACUBE.COM [1.20 Java/Bedrock]
 Over the past 10 years, 5 million players have enjoyed our unique game modes: Parkour, Skyblock, SMP, KitPvP, Factions, Prison, Earth Towny, Anarchy and Creative
 
@@ -68,6 +82,17 @@ Our in-game currency, Cubits, can be used across all servers. Store special item
 
 We host community events and offer daily chances to win Cubits and exclusive prizes. At ManaCube, we're not just a server – we're a community that promises a rich and immersive Minecraft experience. Come join us!
 `,
+        type: ServerType.BEDROCK,
+        isActive: false,
+        verification: {
+            id: '',
+            code: 'aaabbbccc',
+            expiresAt: 0,
+            verified: false,
+            server_id: '',
+        },
+        isTimedOut: false,
+        owner_id: '',
     },
     {
         id: '3',
@@ -88,6 +113,7 @@ We host community events and offer daily chances to win Cubits and exclusive pri
         votes: 128,
         ranking: 59221,
         banner: defaultServerBanner,
+        motd: 'test motd',
         description: `Welcome to BlossomCraft,
         an excellent server known for its amazing experiences. We are a laid-back, no grief, economy, SMP server where we value community above all else.
 1.20+
@@ -95,6 +121,17 @@ The server is running 1.20, and everyone is welcome as both Java and Bedrock pla
 The server offers a variety of plugins that enhance the player experience while also staying true to Minecrafts roots such as keep-inv, player warps, griefprevention, and more!
 Show your support for the server by voting to earn free ranks which grants perks such as extra homes, cool prefixes, chest shops, and more!
 Grab a seat, get comfy and stay for a while!`,
+        type: ServerType.BEDROCK,
+        isActive: false,
+        verification: {
+            id: '',
+            code: 'aaabbbccc',
+            expiresAt: 0,
+            verified: false,
+            server_id: '',
+        },
+        isTimedOut: false,
+        owner_id: '',
     },
 ];
 

@@ -1,9 +1,6 @@
 'use client';
 
-import {addNotification} from '@lib/front/components/store/notificationsSlice';
-import {useAppDispatch} from '@lib/front/components/store/store';
 import {useForm, type SubmitHandler} from 'react-hook-form';
-import {AxiosError} from 'axios';
 import {z} from 'zod';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
@@ -62,7 +59,6 @@ export type CreateServerFormData = {
 interface CreateServerModalContentsProps {
     handleClose: () => void;
     setServerResponse: (data: CreateServerResponseDto) => void;
-    setCreateDto: (data: CreateServerDto) => void;
 }
 
 const CreateServerModalContents = ({
@@ -70,9 +66,8 @@ const CreateServerModalContents = ({
     setServerResponse,
 }: CreateServerModalContentsProps) => {
     const t = useTranslations('server.add');
-    const dispatch = useAppDispatch();
 
-    const {mutateAsync: sendCreateServer, isPending} = useCreateServer();
+    const {mutateAsync: sendCreateServer} = useCreateServer();
 
     const createServerSchema = z.object({
         address: z
@@ -116,7 +111,7 @@ const CreateServerModalContents = ({
 
     const isSubmitDisabled = isSubmitting || Object.keys(errors).length > 0;
 
-    const onSubmit: SubmitHandler<CreateServerFormData> = (data) => {
+    const onSubmit: SubmitHandler<CreateServerFormData> = async (data) => {
         const pushData: CreateServerDto = {
             type: data.serverType,
             port: data.port,
@@ -128,21 +123,10 @@ const CreateServerModalContents = ({
             pushData.hostname = data.address;
         }
 
-        sendCreateServer(pushData)
-            .then((data) => {
-                setServerResponse(data);
-            })
-            .catch((error: Error) => {
-                console.error(error);
-                dispatch(
-                    addNotification({
-                        description: error.message,
-                        id: `${error.stack}`,
-                        level: 'Error',
-                        title: error.name,
-                    }),
-                );
-            });
+        const returnedData = await sendCreateServer(pushData);
+        if (returnedData && setServerResponse) {
+            setServerResponse(returnedData);
+        }
     };
 
     return (

@@ -12,7 +12,7 @@ export default function LoginWithDiscord() {
                 target="_blank"
                 rel="noreferrer"
             >
-                <DiscordIcon sx={{cursor: 'pointer'}} />
+                <DiscordIcon style={{cursor: 'pointer'}} />
             </a>
         </Tooltip>
     );

@@ -1,6 +1,5 @@
 import type {ReactNode} from 'react';
 import StyledPageContainer from '@front/components/atoms/StyledPageContainer';
-import {getHostnames} from '@front/components/actions/getHostnames';
 import type {LocaleParams} from '../layout';
 
 type HostNameLayoutProps = {
@@ -17,13 +16,7 @@ export type HostnamePageProps = {
 
 export const revalidate = 3_600;
 export const dynamicParams = true;
-
-export async function generateStaticParams() {
-    const hosts = await getHostnames();
-    return (hosts ?? []).map((host) => ({
-        hostname: host,
-    }));
-}
+export const dynamic = 'force-dynamic';
 
 async function HostNameLayout(props: HostNameLayoutProps) {
     return (

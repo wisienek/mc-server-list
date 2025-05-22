@@ -55,7 +55,7 @@ const firaMonoFont = Fira_Mono({
 });
 
 export const metadata = {
-    metadataBase: new URL('https://my-minecraft-servers.com'),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_DOMAIN),
     title: {
         default: 'Minecraft Server List - post your own server and vote on them!',
         template: '%s - Minecraft Server',

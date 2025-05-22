@@ -1,126 +1,183 @@
 {
-    "cancel": "Annulla",
-    "genericError": "Si è verificato un errore.",
-    "themes": {
-        "switchToLight": "Passa al tema chiaro",
-        "switchToDark": "Passa al tema scuro"
+  "cancel": "Annulla",
+  "genericError": "Si è verificato un errore.",
+  "resetFilters": "Reimposta filtri",
+  "themes": {
+    "switchToLight": "Passa al tema chiaro",
+    "switchToDark": "Passa al tema scuro"
+  },
+  "profile": {
+    "loginDiscord": "Accedi con Discord!",
+    "login": "Accedi con le credenziali",
+    "logout": "Disconnetti",
+    "password": {
+      "setCredentials": "Imposta le tue credenziali:",
+      "successfullySet": "Credenziali salvate con successo!",
+      "credentialsSaveError": "Errore durante il salvataggio delle credenziali.",
+      "password": "Password",
+      "passwordPlaceholder": "Inserisci una password",
+      "saving": "Salvataggio",
+      "save": "Salva credenziali"
     },
-    "profile": {
-        "loginDiscord": "Accedi con Discord!",
-        "login": "Accedi con le credenziali",
-        "logout": "Disconnetti",
-        "password": {
-            "setCredentials": "Imposta le tue credenziali:",
-            "successfullySet": "Credenziali salvate con successo!",
-            "credentialsSaveError": "Si è verificato un errore durante il salvataggio delle credenziali.",
-            "password": "Password",
-            "passwordPlaceholder": "Inserisci una password",
-            "saving": "Salvataggio",
-            "save": "Salva credenziali"
-        },
-        "loginModal": {
-            "title": "Inserisci le tue credenziali di accesso",
-            "email": "Indirizzo Email",
-            "password": "Password",
-            "submit": "Accedi",
-            "cancel": "Chiudi",
-            "invalidEmail": "Inserisci un indirizzo email valido.",
-            "invalidPassword": "La password deve contenere almeno 6 caratteri.",
-            "loginNotification": {
-                "title": "Accesso effettuato!",
-                "description": "Accesso riuscito all'account {email}"
-            }
-        }
+    "loginModal": {
+      "title": "Inserisci le credenziali di accesso",
+      "email": "Indirizzo email",
+      "password": "Password",
+      "submit": "Accedi",
+      "cancel": "Chiudi",
+      "invalidEmail": "Inserisci un indirizzo email valido.",
+      "invalidPassword": "La password deve contenere almeno 6 caratteri.",
+      "loginNotification": {
+        "title": "Accesso effettuato!",
+        "description": "Accesso riuscito all'account {email}"
+      }
+    }
+  },
+  "copy": {
+    "copied": "Copiato!",
+    "label": "Copia negli appunti"
+  },
+  "filters": {
+    "searchLabel": "Cerca nome o descrizione",
+    "showMyServers": "Mostra i miei server",
+    "categories": {
+      "show": "Mostra categorie",
+      "hide": "Nascondi categorie"
+    }
+  },
+  "footer": {
+    "credits": "Creato e progettato da <author>@Wisienek</author> 2025"
+  },
+  "page": {
+    "not-found": {
+      "title": "Non trovato",
+      "description": "La pagina richiesta non è stata trovata. Controlla l'indirizzo e riprova.",
+      "return": "Torna alla home"
     },
-    "copy": {
-        "copied": "Copiato!",
-        "label": "Copia negli appunti"
+    "seo": {
+      "description": "Sito web che offre un modo semplice per aggiungere e condividere server Minecraft!",
+      "title": "Elenco server Minecraft"
     },
-    "filters": {
-        "searchLabel": "Cerca nome o descrizione",
-        "showMyServers": "Mostra i miei server",
-        "categories": {
-            "show": "Mostra categorie",
-            "hide": "Nascondi categorie"
-        }
+    "list": {
+      "playersOnline": "Giocatori online:",
+      "version": "Versione:",
+      "verify": "Verifica il server con il codice MOTD: <code></code>",
+      "claimServer": "Il server non ha ancora un proprietario. Se sei tu, clicca questo pulsante!",
+      "refetchTimedOut": "Ricarica"
     },
-    "footer": {
-        "credits": "Creato e progettato da <author>@Wisienek</author> 2025"
+    "hostPage": {
+      "javaIP": "IP Java",
+      "bedrockIP": "IP Bedrock",
+      "serverCategories": "Categorie del server",
+      "versions": "Versioni",
+      "playersOnline": "Giocatori online",
+      "addCategory": "Aggiungi categoria",
+      "serverNamePlaceholder": "Scrivi qui il nome del tuo server!",
+      "addBanner": "Aggiungi qui il tuo banner!",
+      "categoriesModal": {
+        "title": "Scegli le categorie del server",
+        "selectedCategoriesTitle": "Categorie selezionate",
+        "showCategories": "Mostra categorie",
+        "hideCategories": "Nascondi categorie",
+        "save": "Salva modifiche"
+      },
+      "bannerModal": {
+        "title": "Aggiungi un URL immagine",
+        "description": "Incolla qui sotto l'URL dell'immagine del banner (preferibilmente da IMGUR). Il rapporto dell'immagine visualizzata è 5:1.",
+        "urlLabel": "URL immagine",
+        "invalidUrl": "URL non valido. Sono consentite solo immagini da imgur.com con estensioni jpg, jpeg, png o gif.",
+        "save": "Salva modifiche"
+      },
+      "srv": {
+        "header": "Chiave",
+        "value": "Valore"
+      },
+      "srvRecord": "Dati del record SRV",
+      "description": "Descrizione",
+      "noDescription": "Nessuna descrizione fornita.",
+      "editDescription": "Modalità modifica",
+      "saveDescription": "Salva modifiche",
+      "exitEditingDescription": "Termina modifica",
+      "descriptionSavedTitle": "Descrizione salvata!",
+      "descriptionSavedMessage": "Numero di caratteri modificato da {initial} a {changed}",
+      "descriptionSaveErrorTitle": "Qualcosa è andato storto!",
+      "descriptionSaveErrorMessage": "A causa di un errore sconosciuto, la descrizione non è stata salvata."
+    }
+  },
+  "server": {
+    "add": {
+      "newServer": "Crea un nuovo server",
+      "title": "Aggiungi server alla lista",
+      "hostName": "IP / Nome host del server",
+      "port": "Porta del server",
+      "type": "Tipo di server",
+      "isSubmitting": "Creazione...",
+      "cancel": "Annulla",
+      "addressRequired": "L'indirizzo del server è obbligatorio.",
+      "invalidAddress": "Deve essere un indirizzo IPv4 valido o un nome host.",
+      "portRequired": "La porta è obbligatoria.",
+      "portMin": "La porta deve essere almeno 1.",
+      "portMax": "La porta può essere al massimo 65535.",
+      "verificationInstructions": "Copia il codice di verifica <code></code> nel file MOTD del server, quindi clicca il pulsante qui sotto per iniziare la verifica.",
+      "expiresAt": "Scade il <expirationDate></expirationDate>",
+      "startVerification": "Avvia verifica",
+      "serverVerificationTitle": "Verifica server con codice"
     },
-    "page": {
-        "not-found": {
-            "title": "Non trovato",
-            "description": "La pagina richiesta non è stata trovata, controlla l'indirizzo e riprova.",
-            "return": "Torna alla home"
-        },
-        "seo": {
-            "description": "Sito web che offre un modo semplice per aggiungere e condividere server Minecraft!",
-            "title": "Elenco server Minecraft"
-        },
-        "list": {
-            "playersOnline": "Giocatori online:",
-            "version": "Versione:",
-            "verify": "Verifica il server con il codice MOTD: <code></code>",
-            "claimServer": "Il server non ha ancora un proprietario. Se sei tu, clicca questo pulsante!"
-        },
-        "hostPage": {
-            "javaIP": "IP Java",
-            "bedrockIP": "IP Bedrock",
-            "serverCategories": "Categorie server",
-            "versions": "Versioni",
-            "playersOnline": "Giocatori online",
-            "addCategory": "Aggiungi categoria",
-            "serverNamePlaceholder": "Scrivi qui il nome del tuo server!",
-            "addBanner": "Aggiungi il tuo banner qui!",
-            "categoriesModal": {
-                "title": "Scegli le categorie del server",
-                "selectedCategoriesTitle": "Categorie selezionate",
-                "showCategories": "Mostra categorie",
-                "hideCategories": "Nascondi categorie",
-                "save": "Salva modifiche"
-            },
-            "bannerModal": {
-                "title": "Aggiungi un URL immagine",
-                "description": "Nel campo sottostante incolla un URL dell'immagine del banner (preferibilmente su IMGUR). Il rapporto di aspetto dell'immagine visualizzata è 5:1.",
-                "urlLabel": "URL immagine",
-                "invalidUrl": "URL non valido. Sono consentite solo immagini da imgur.com con estensioni jpg, jpeg, png o gif.",
-                "save": "Salva modifiche"
-            },
-            "srv": {
-                "header": "Chiave",
-                "value": "Valore"
-            },
-            "srvRecord": "Dati record SRV",
-            "description": "Descrizione",
-            "noDescription": "Nessuna descrizione fornita.",
-            "editDescription": "Entra in modalità modifica",
-            "saveDescription": "Salva modifiche",
-            "exitEditingDescription": "Termina modifica",
-            "descriptionSavedTitle": "Descrizione salvata!",
-            "descriptionSavedMessage": "Numero di caratteri modificato da {initial} a {changed}",
-            "descriptionSaveErrorTitle": "Qualcosa è andato storto!",
-            "descriptionSaveErrorMessage": "A causa di un errore sconosciuto la descrizione non è stata salvata."
-        }
+    "created": {
+      "title": "Server aggiunto!",
+      "description": "Il server con hostname: {host} è stato aggiunto con successo!"
+    }
+  },
+  "errors": {
+    "generic": {
+      "unknown": {
+        "title": "Errore imprevisto",
+        "description": "Si è verificato un errore durante l'elaborazione della richiesta. Stato: {status}."
+      },
+      "fetchFailed": {
+        "title": "Errore di rete",
+        "description": "Impossibile connettersi al server. Riprova più tardi. Errore: {message}"
+      },
+      "tooFast": {
+        "title": "Troppo veloce!",
+        "description": "La richiesta è stata inviata troppo velocemente, attendi un attimo e riprova!"
+      }
     },
     "server": {
-        "add": {
-            "newServer": "Crea un nuovo server",
-            "title": "Aggiungi server alla lista",
-            "hostName": "IP / Nome host del server",
-            "port": "Porta del server",
-            "type": "Tipo di server",
-            "isSubmitting": "Creazione in corso...",
-            "save": "Ottieni codice di convalida",
-            "cancel": "Annulla",
-            "addressRequired": "L'indirizzo del server è obbligatorio.",
-            "invalidAddress": "Deve essere un indirizzo IPv4 valido o un nome host.",
-            "portRequired": "La porta è obbligatoria.",
-            "portMin": "La porta deve essere almeno 1.",
-            "portMax": "La porta deve essere al massimo 65535.",
-            "verificationInstructions": "Copia il codice di verifica <code></code> nel file MOTD del tuo server, quindi fai clic sul pulsante qui sotto per avviare il processo di verifica.",
-            "expiresAt": "Scade il <expirationDate></expirationDate>",
-            "startVerification": "Avvia verifica",
-            "serverVerificationTitle": "Verifica il server con il codice"
-        }
+      "alreadyGivenAVote": {
+        "title": "Voto già inviato",
+        "description": "Hai già votato per questo server."
+      },
+      "alreadyClaimed": {
+        "title": "Server già rivendicato",
+        "description": "Questo server è già stato rivendicato. Contatta l'amministratore o attendi una settimana dopo il periodo di grazia per riprovare."
+      },
+      "exists": {
+        "title": "Server già esistente",
+        "description": "Questo server è già presente. {verificationCode}"
+      },
+      "notFound": {
+        "title": "Server non trovato",
+        "description": "Nessun server trovato per host: {hostname}, porta: {port}, IP: {ip}."
+      },
+      "notOwnedByUser": {
+        "title": "Accesso negato",
+        "description": "Il server {hostName} non appartiene all'utente {userId}."
+      },
+      "verificationOffline": {
+        "title": "Server offline",
+        "description": "Il server deve essere online per la verifica."
+      },
+      "verificationUnsuccessful": {
+        "title": "Verifica fallita",
+        "description": "Il codice di verifica è scaduto o non valido. Se l'ora e il codice sono corretti, riprova tra qualche minuto."
+      }
+    },
+    "user": {
+      "notFound": {
+        "title": "Utente non trovato",
+        "description": "L'utente cercato non esiste."
+      }
     }
+  }
 }

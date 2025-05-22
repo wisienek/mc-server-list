@@ -1,13 +1,14 @@
 'use server';
 
+import {SerializedResult, serializeResult} from '@core';
 import type {CreateServerDto, CreateServerResponseDto} from '@shared/dto';
 import {revalidateTag} from 'next/cache';
 import {customFetch} from './baseFetch';
 
 export async function createServer(
     data: CreateServerDto,
-): Promise<CreateServerResponseDto> {
-    return await customFetch<CreateServerResponseDto>(
+): Promise<SerializedResult<CreateServerResponseDto>> {
+    const result = await customFetch<CreateServerResponseDto>(
         `/servers`,
         {
             method: 'POST',
@@ -19,4 +20,6 @@ export async function createServer(
             },
         },
     );
+
+    return serializeResult(result);
 }

@@ -1,7 +1,6 @@
-import {InjectMapper} from '@automapper/nestjs';
-import type {Mapper} from '@automapper/core';
 import {AuthenticatedGuard, SessionUser} from '@backend/auth';
 import {VerifyServerCommand} from '@backend/commander';
+import {serializeResult, SerializedResult, Errors} from '@core';
 import {CommandBus} from '@nestjs/cqrs';
 import {
     ApiBadRequestResponse,
@@ -21,7 +20,7 @@ import {
     Query,
     UseGuards,
 } from '@nestjs/common';
-import {User} from '@backend/db';
+import {Server, User} from '@backend/db';
 import {seconds, SkipThrottle, Throttle} from '@nestjs/throttler';
 import {
     CreateServerDto,
@@ -33,93 +32,59 @@ import {
     UpdateServerDetailsDto,
     VerifyServerDto,
 } from '@shared/dto';
-import {
-    ServerAlreadyClaimedError,
-    ServerExistsError,
-    ServerNotFoundError,
-    ServerVerificationOfflineError,
-    ServerVerificationUnsuccessfulError,
-} from './errors';
 import {ServersService} from './servers.service';
+import {Err} from 'oxide.ts';
 
 @Controller('servers')
 export class ServersController {
     constructor(
         private readonly serversService: ServersService,
-        @InjectMapper()
-        private readonly mapper: Mapper,
         private readonly commandBus: CommandBus,
     ) {}
 
-    /**
-     * For static generation
-     * @returns {Promise<void>}
-     */
     @SkipThrottle()
     @Get('hostnames')
-    async listHostnames(): Promise<string[]> {
-        return await this.serversService.listHostnames();
+    async listHostnames(): Promise<SerializedResult<string[]>> {
+        return serializeResult(await this.serversService.listHostnames());
     }
 
-    /**
-     * Public endpoint for getting list of servers
-     * @returns {Promise<Pagination<ServerSummaryDto>>} paginated list of servers
-     */
     @SkipThrottle()
     @Get()
     async listServers(
         @SessionUser() user: User,
         @Query() data: ListServersDto,
-    ): Promise<Pagination<ServerSummaryDto>> {
-        return await this.serversService.listServers(data, user?.id);
+    ): Promise<SerializedResult<Pagination<ServerSummaryDto>>> {
+        return serializeResult(
+            await this.serversService.listServers(data, user?.id),
+        );
     }
 
-    @ApiConflictResponse({
-        type: ServerAlreadyClaimedError,
-        description: `When server already exists in database as someones else`,
-    })
-    @ApiConflictResponse({
-        type: ServerExistsError,
-        description: `When server already exists in database and is owned by user`,
-    })
+    @ApiConflictResponse({description: `When server already exists in database`})
     @UseGuards(AuthenticatedGuard)
     @Post()
     async createServer(
+        @SessionUser() user: User,
         @Body() createServerDto: CreateServerDto,
-    ): Promise<CreateServerResponseDto> {
-        return await this.serversService.createServer(createServerDto);
+    ): Promise<SerializedResult<CreateServerResponseDto>> {
+        return serializeResult(
+            await this.serversService.createServer(createServerDto, user.id),
+        );
     }
 
-    @ApiParam({
-        name: 'host',
-        required: true,
-        description: 'hostname of the server',
-    })
+    @ApiParam({name: 'host', required: true, description: 'hostname of the server'})
     @Get(':host')
     async getServer(
         @SessionUser() user: User,
         @Param('host') host: string,
-    ): Promise<ServerDetailsDto> {
-        return await this.serversService.getServer(host, user?.id);
+    ): Promise<SerializedResult<ServerDetailsDto>> {
+        return serializeResult(await this.serversService.getServer(host, user?.id));
     }
 
-    @ApiParam({
-        name: 'host',
-        required: true,
-        description: 'hostname of the server',
-    })
+    @ApiParam({name: 'host', required: true, description: 'hostname of the server'})
     @ApiBadRequestResponse({
-        type: ServerVerificationOfflineError,
-        description: `When server is currently offline`,
+        description: `When server is offline or verification fails.`,
     })
-    @ApiBadRequestResponse({
-        type: ServerVerificationUnsuccessfulError,
-        description: `When server verification is unsuccessful - no code in motd, code expired or is already activated.`,
-    })
-    @ApiNotFoundResponse({
-        type: ServerNotFoundError,
-        description: `When server couldn't be found by ip or hostname`,
-    })
+    @ApiNotFoundResponse({description: `When server couldn't be found`})
     @Throttle({
         default: {
             limit: 1,
@@ -131,59 +96,72 @@ export class ServersController {
     @Patch(':host/verify')
     async verifyServer(
         @SessionUser() user: User,
+        @Param('host') host: string,
         @Body() data: VerifyServerDto,
-    ): Promise<ServerSummaryDto> {
-        await this.commandBus.execute(
-            new VerifyServerCommand(data.hostname, user.id),
-        );
+    ): Promise<SerializedResult<ServerSummaryDto>> {
+        const verifiedServers = await this.commandBus.execute<
+            VerifyServerCommand,
+            Server[]
+        >(new VerifyServerCommand(data.hostname, user.id));
+        const verifiedServer = verifiedServers.find((s) => s.host === host);
+        if (verifiedServer) {
+            return serializeResult(
+                await this.serversService.getServer(data.hostname, user.id),
+            );
+        }
 
-        return await this.serversService.getServer(data.hostname);
+        return serializeResult(Err(Errors.ServerVerificationUnsuccessful()));
     }
 
-    @ApiParam({
-        name: 'host',
-        required: true,
-        description: 'hostname of the server',
-    })
+    @ApiParam({name: 'host', required: true, description: 'hostname of the server'})
     @UseGuards(AuthenticatedGuard)
     @Patch(':host/details')
     async createDetails(
         @SessionUser() user: User,
         @Param('host') host: string,
         @Body() data: UpdateServerDetailsDto,
-    ): Promise<ServerDetailsDto> {
-        return this.serversService.updateServerDetails(host, user.id, data);
+    ): Promise<SerializedResult<ServerDetailsDto>> {
+        return serializeResult(
+            await this.serversService.updateServerDetails(host, user.id, data),
+        );
     }
 
-    @ApiParam({
-        name: 'host',
-        required: true,
-        description: 'hostname of the server',
-    })
-    @ApiOkResponse({
-        description: 'Deleted!',
-    })
-    @ApiNotFoundResponse({
-        type: ServerNotFoundError,
-        description: `When server couldn't be found by hostname`,
-    })
+    @ApiParam({name: 'host', required: true, description: 'hostname of the server'})
+    @ApiOkResponse({description: 'Deleted!'})
+    @ApiNotFoundResponse({description: `When server couldn't be found`})
     @UseGuards(AuthenticatedGuard)
     @Delete(':host')
-    async deleteServer(@SessionUser() user: User, @Param('host') host: string) {
-        await this.serversService.deleteServer(host);
+    async deleteServer(
+        @Param('host') host: string,
+    ): Promise<SerializedResult<void>> {
+        return serializeResult(await this.serversService.deleteServer(host));
     }
 
-    @ApiParam({
-        name: 'host',
-        required: true,
-        description: 'hostname of the server',
-    })
+    @ApiParam({name: 'host', required: true, description: 'hostname of the server'})
     @UseGuards(AuthenticatedGuard)
     @Post(':host/vote')
     async vote(
         @SessionUser() user: User,
         @Param('host') host: string,
-    ): Promise<number> {
-        return await this.serversService.voteForServer(host, user.email);
+    ): Promise<SerializedResult<Number>> {
+        return serializeResult(
+            await this.serversService.voteForServer(host, user.email),
+        );
+    }
+
+    @Throttle({
+        default: {
+            limit: 1,
+            ttl: seconds(30),
+            getTracker: (req) => req.user?.id || req.ip,
+        },
+    })
+    @ApiParam({name: 'host', required: true, description: 'hostname of the server'})
+    @UseGuards(AuthenticatedGuard)
+    @Post(':host/re-verify-timeout')
+    async reVerifyTimeout(
+        @Param('host') host: string,
+    ): Promise<SerializedResult<ServerDetailsDto>> {
+        return serializeResult(await this.serversService.reVerifyTimeout(host));
     }
 }

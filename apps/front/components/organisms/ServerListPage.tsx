@@ -50,7 +50,6 @@ const ServerListPage = ({initialSearchData}: ServerListPageProps) => {
                             setServerToVerify(null);
                         }}
                         modalMode={modalMode}
-                        setModalMode={setModalMode}
                         serverToVerify={serverToVerify}
                     />,
                     modalContainer,
@@ -65,6 +64,9 @@ const ServerListPage = ({initialSearchData}: ServerListPageProps) => {
                 }}
             />
             <ServerSummaryList
+                changePagination={(newPageNumber) =>
+                    setSearchData((d) => ({...d, page: newPageNumber}))
+                }
                 fetchServersQuery={fetchServersQuery}
                 setShowVerificationModal={handleOpenVerifyModal}
             />

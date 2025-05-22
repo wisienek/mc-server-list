@@ -85,6 +85,7 @@ export const useCategories = (initialCategories?: ServerCategory[]) => {
         triggerCategory,
         showCategoriesContainer,
         setShowCategoriesContainer,
+        setSelectedCategories,
     };
 };
 

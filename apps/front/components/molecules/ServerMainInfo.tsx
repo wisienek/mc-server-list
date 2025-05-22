@@ -17,6 +17,7 @@ import Image from 'next/image';
 import {useState} from 'react';
 import {ServerCategory, ServerType} from '@shared/enums';
 import {ServerDetailsDto} from '@shared/dto';
+import MinecraftMotd from '@front/components/atoms/MinecraftMOTD';
 
 type ServerMainInfoProps = {
     server: ServerDetailsDto;
@@ -61,6 +62,10 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
 
     const serverIcon = server.icon || defaultServerIcon;
 
+    const hostWithPort = `${server.host ?? server.ip_address}${
+        server?.port ? `:${server.port}` : ''
+    }`;
+
     // TODO: determine if main type is bedrock/java and add a connected server of other type.
     const IpAddresses = () => {
         return (
@@ -69,12 +74,12 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
                     {server.type === ServerType.JAVA ? t('javaIP') : t('bedrockIP')}:
                 </Typography>
                 <CopyableTypography
-                    text={server.host ?? server.ip_address}
+                    text={hostWithPort}
                     showCopyIcon={false}
                     variant="body1"
                     color="textSecondary"
                 >
-                    {server.host ?? server.ip_address}
+                    {hostWithPort}
                 </CopyableTypography>
 
                 {/*<Typography variant="body1" color="textSecondary">*/}
@@ -88,10 +93,10 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
         return (
             <LeftSection>
                 <Typography variant="subtitle1" color="textPrimary">
-                    {t('versions', {length: server.versions.length})}:
+                    {t('versions', {length: (server.versions ?? []).length})}:
                 </Typography>
 
-                {server.versions.map((v) => (
+                {(server.versions ?? []).map((v) => (
                     <Typography key={`v-${v}`} variant="body1" color="textSecondary">
                         {v}
                     </Typography>
@@ -121,16 +126,20 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
                 </Typography>
                 <SelectedCategoriesSummary
                     showAddIcon={server.owner_id === profile?.id}
-                    selectedCategories={server.categories}
+                    selectedCategories={server.categories ?? []}
                     addIconAction={() => setShowingAddCategoryModal(true)}
-                    removeIconAction={(category) =>
-                        updateDetails({
-                            categories: server.categories.filter(
-                                (c) => c !== category,
-                            ),
-                        }).then(
-                            (details) => (server.categories = details.categories),
-                        )
+                    removeIconAction={
+                        server.owner_id === profile?.id
+                            ? (category) =>
+                                  updateDetails({
+                                      categories: server.categories.filter(
+                                          (c) => c !== category,
+                                      ),
+                                  }).then(
+                                      (details) =>
+                                          (server.categories = details.categories),
+                                  )
+                            : undefined
                     }
                     bodyProps={{
                         sx: {
@@ -254,6 +263,22 @@ export default function ServerMainInfo({server}: ServerMainInfoProps) {
                     <PlayersOnline />
                 </ServerInfoContainer>
             </ServerInfoContainer>
+
+            {(server.motd || server.motdHTML) && (
+                <ServerInfoContainer
+                    direction="column"
+                    sx={{whiteSpace: 'pre-line'}}
+                >
+                    <Typography variant="subtitle1" color="textPrimary">
+                        MOTD:
+                    </Typography>
+                    <MinecraftMotd
+                        motd={server.motd}
+                        background={false}
+                        motdHtml={server.motdHTML}
+                    />
+                </ServerInfoContainer>
+            )}
 
             <ServerInfoContainer
                 direction="row"

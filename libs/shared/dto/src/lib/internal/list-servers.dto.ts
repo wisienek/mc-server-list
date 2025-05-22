@@ -1,8 +1,9 @@
 import {
-    MapperIntersectionType,
-    MapperPickType,
-} from '@automapper/classes/mapped-types';
-import {ApiPropertyOptional, PartialType} from '@nestjs/swagger';
+    ApiPropertyOptional,
+    IntersectionType,
+    PartialType,
+    PickType,
+} from '@nestjs/swagger';
 import {ServerCategory} from '@shared/enums';
 import {Transform, Type} from 'class-transformer';
 import {IsArray, IsBoolean, IsEnum, IsOptional, IsString} from 'class-validator';
@@ -10,8 +11,8 @@ import {PaginatedInputDto} from '../pagination';
 import {ServerDto} from '../servers';
 
 export class ListServersDto extends PartialType(
-    MapperIntersectionType(
-        MapperPickType(ServerDto, [
+    IntersectionType(
+        PickType(ServerDto, [
             'eula_blocked',
             'online',
             'versions',

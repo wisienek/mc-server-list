@@ -1,22 +1,20 @@
 'use server';
 
+import {SerializedResult, serializeResult} from '@core';
 import {UserDto} from '@shared/dto';
-import {CookieNames} from '@shared/enums';
-import {cookies} from 'next/headers';
+import {Ok} from 'oxide.ts';
 import {customFetch} from './baseFetch';
 
-export async function getUserData(): Promise<UserDto | null> {
-    const sessionId = (await cookies()).get(CookieNames.SESSION_ID)?.value;
-
+export async function getUserData(
+    sessionId: string,
+): Promise<SerializedResult<UserDto | null>> {
     if (!sessionId) {
-        return null;
+        return serializeResult(Ok(null));
     }
 
-    try {
-        return await customFetch<UserDto>('/users/status', {
-            next: {tags: ['/users/status'], revalidate: 300},
-        });
-    } catch (error) {
-        return null;
-    }
+    const result = await customFetch<UserDto>('/users/status', {
+        next: {tags: ['/users/status'], revalidate: 300},
+    });
+
+    return serializeResult(result);
 }
