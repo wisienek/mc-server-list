@@ -200,7 +200,11 @@ export class VerifyTimeoutsCommandHandler
         }
 
         this.logger.warn(
-            `Server ${server.host} - has been offline for ${offlineCount} / ${this.apiConfig.AUTOMATIC_SERVER_TIMEOUT_TIMES} times.`,
+            `Server ${server.host}${
+                server?.port ? `:${server.port}` : ''
+            } - has been offline for ${offlineCount} / ${
+                this.apiConfig.AUTOMATIC_SERVER_TIMEOUT_TIMES
+            } times.`,
         );
 
         await this.redisService.set(

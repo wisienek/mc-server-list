@@ -36,7 +36,6 @@ const ServerLikeButton = ({
                 }
                 size="small"
                 sx={{cursor: 'pointer'}}
-                disabled={!profile}
             >
                 <FavoriteIcon sx={{color: isLikedByUser ? 'red' : 'grey'}} />
             </IconButton>
