@@ -208,7 +208,12 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
             onClick={handleVerifyServerClick}
         >
             <Tooltip arrow title={t('claimServer')}>
-                <ErrorOutlineIcon color="warning" />
+                <ErrorOutlineIcon
+                    color="warning"
+                    sx={{
+                        opacity: profile ? 1 : 0.5,
+                    }}
+                />
             </Tooltip>
         </Box>
     );
@@ -270,15 +275,17 @@ const ServerSummaryItem: FC<ServerSummaryProps> = ({
         if (isTimedOut) {
             return (
                 <OverlayWrapper>
-                    <OverlayButton
-                        variant="outlined"
-                        color="warning"
-                        disabled={isReVerifying}
-                        size="small"
-                        onClick={() => reVerifyTimeout(server.host)}
-                    >
-                        {t('refetchTimedOut')}
-                    </OverlayButton>
+                    {profile && (
+                        <OverlayButton
+                            variant="outlined"
+                            color="warning"
+                            disabled={isReVerifying}
+                            size="small"
+                            onClick={() => reVerifyTimeout(server.host)}
+                        >
+                            {t('refetchTimedOut')}
+                        </OverlayButton>
+                    )}
                     {InnerIconSection}
                 </OverlayWrapper>
             );
